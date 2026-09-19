@@ -1,0 +1,121 @@
+/* List pages (popular, top-rated) */
+
+.list-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 32px var(--nw-side-pad) 64px;
+}
+
+.list-page__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.list-page__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--nw-text);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+/* ── Shared infinite grid ────────────────────────────────────────────────── */
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-poster-w), 1fr));
+  gap: 22px 16px;
+}
+
+.media-grid .media-card {
+  width: 100%;
+  flex: unset;
+  /* Skip rendering/painting of cards that are far off-screen — huge win for
+     long infinite-scroll grids. Layout boxes stay intact (spatial nav still
+     measures them), contain-intrinsic-size prevents scrollbar jumps. The
+     fallback must match the real card height (poster 2:3 + meta), otherwise
+     the estimated page height differs from the rendered one and scrolling back
+     up through re-rendered rows becomes jumpy/sticky. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto calc(var(--card-poster-w) * 1.5 + 64px);
+}
+
+.media-grid__status {
+  grid-column: 1 / -1;
+  padding: 32px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--nw-text-muted);
+}
+
+.media-grid__loading-more {
+  grid-column: 1 / -1;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-grid__loading-more::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.1);
+  border-top-color: var(--nw-accent);
+  border-radius: 50%;
+  animation: nw-spin 600ms linear infinite;
+}
+
+.watchlist-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  max-width: 520px;
+  padding: 12px 0 48px;
+}
+
+.watchlist-empty__text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--nw-text-muted);
+}
+
+.watchlist-empty__btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--nw-accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .list-page {
+    /* .page already pads sides */
+    padding: 4px 0 24px;
+    gap: 16px;
+  }
+
+  .list-page__header {
+    gap: 10px;
+  }
+
+  .list-page__title {
+    font-size: 18px;
+  }
+
+  .media-grid {
+    gap: 14px 10px;
+  }
+}

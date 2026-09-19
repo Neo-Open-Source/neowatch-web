@@ -1,0 +1,98 @@
+/* Страница Categories */
+
+.genre-card {
+  position: relative;
+  flex: 0 0 220px;
+  width: 220px;
+  height: 124px;
+  border: 1px solid var(--nw-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--nw-surface);
+  cursor: pointer;
+  outline: none;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.genre-card__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.genre-card__backdrop--loaded {
+  opacity: 1;
+}
+
+.genre-card__backdrop-skeleton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.genre-card__label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 28px 12px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-align: left;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.78) 100%);
+}
+
+.genre-card--skeleton {
+  flex: 0 0 220px;
+  width: 220px;
+  height: 124px;
+  border: none;
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.genre-card--skeleton .genre-card__backdrop-skeleton {
+  position: relative;
+  inset: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px !important;
+  background: var(--nw-surface);
+}
+
+:is(
+  :root[data-input-mode="mouse"] .genre-card:hover,
+  :root:not([data-input-mode="mouse"]) .genre-card--focused
+) {
+  transform: scale(1.04);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+:root:not([data-input-mode="mouse"]) .genre-card--focused {
+  box-shadow: 0 0 0 2px #fff, 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .genre-card,
+  .genre-card--skeleton {
+    flex: 0 0 168px;
+    width: 168px;
+    height: 94px;
+  }
+
+  .genre-card__label {
+    font-size: 13px;
+    padding: 20px 10px 8px;
+  }
+}

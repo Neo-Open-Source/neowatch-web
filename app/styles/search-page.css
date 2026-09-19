@@ -1,0 +1,119 @@
+/* Search results page */
+
+.search-page__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.search-page__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--nw-text);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.search-page__query-text {
+  color: var(--nw-accent);
+}
+
+/* ── People row ──────────────────────────────────────────────────────────── */
+
+.search-page__people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.search-page__person {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 80px;
+  text-align: center;
+}
+
+.search-page__person-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.search-page__person-photo--missing {
+  background: var(--nw-surface-2);
+}
+
+.search-page__person-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--nw-text);
+  line-height: 1.3;
+}
+
+.search-page__person-dept {
+  font-size: 11px;
+  color: var(--nw-text-muted);
+}
+
+.search-page__person--focused .search-page__person-photo {
+  outline: 2px solid var(--nw-accent);
+  outline-offset: 2px;
+}
+
+/* ── Results grid — shared with list pages → list-page.css (.media-grid) ──── */
+
+.search-page__status {
+  padding: 60px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--nw-text-muted);
+}
+
+@media (max-width: 768px) {
+  .search-page__header {
+    gap: 10px;
+  }
+
+  .search-page__title {
+    font-size: 18px;
+  }
+
+  .search-page__people {
+    gap: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* No -webkit-overflow-scrolling: touch — legacy property that makes this
+       nested scroller swallow vertical page gestures on iOS (see layout.css). */
+    scrollbar-width: none;
+    margin: 0 calc(var(--nw-side-pad) * -1);
+    padding: 0 var(--nw-side-pad);
+  }
+
+  .search-page__people::-webkit-scrollbar {
+    display: none;
+  }
+
+  .search-page__person {
+    width: 72px;
+    flex-shrink: 0;
+  }
+
+  .search-page__person-photo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .search-page__person--focused .search-page__person-photo {
+    outline: none;
+  }
+
+  .search-page__status {
+    padding: 40px 0;
+  }
+}

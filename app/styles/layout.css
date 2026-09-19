@@ -1,0 +1,59 @@
+main {
+  animation: page-in 200ms ease both;
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 36px var(--nw-side-pad) 80px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  /*
+   * App-shell layout:
+   * body/html do not scroll — only this pane does.
+   * Header + mobile-nav stay in flex flow and never reflow with the URL bar.
+   */
+  main.content-scroll,
+  .content-scroll {
+    animation: page-in-fade 200ms ease both;
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /*
+     * No -webkit-overflow-scrolling: touch here on purpose: that legacy
+     * property puts this pane on the old WebKit scrolling layer, which is a
+     * known source of "vertical drags over a nested horizontal scroller are
+     * swallowed" bugs on iOS. Modern iOS (13+) gives overflow scrollers
+     * momentum scrolling by default, so it's unnecessary.
+     */
+    overscroll-behavior-y: contain;
+  }
+
+  /* Detail pages use their own top breakout — tighten page gap */
+  .page:has(.detail-hero-wrap) {
+    gap: 0;
+    padding-bottom: 12px;
+  }
+
+  .page:has(.season-page),
+  .page:has(.list-page) {
+    gap: 0;
+    padding-top: 16px;
+  }
+}
+
+@keyframes page-in-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

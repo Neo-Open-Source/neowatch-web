@@ -1,0 +1,178 @@
+@media (max-width: 768px) {
+  :root {
+    --nw-side-pad: 14px;
+    --card-poster-w: 112px;
+    --card-backdrop-w: 220px;
+    --card-studio-w: 84px;
+  }
+
+  /* Bottom nav is in the flex shell — no extra page padding needed */
+  .page {
+    padding-bottom: 28px;
+    gap: 26px;
+    padding-top: 20px;
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  .media-card__title { font-size: 12px; }
+  .media-card__year { font-size: 11px; }
+  .media-card__meta { padding-top: 6px; gap: 2px; }
+
+  .media-card__poster-wrap,
+  .media-card__poster,
+  .media-card__poster--missing,
+  .media-card__poster-skeleton {
+    border-radius: 6px;
+  }
+
+  .shelf-section {
+    gap: 8px;
+  }
+
+  .shelf-section__title {
+    font-size: 17px;
+    letter-spacing: -0.02em;
+  }
+
+  .shelf-section__title-arrow {
+    width: 18px;
+    height: 18px;
+  }
+
+  /*
+   * Cards: strip the desktop hover/focus chrome on touch — it looks wrong and
+   * sticks after a tap. All card roots share the `-card` suffix and `--focused`
+   * / `__focus-indicator` markers, so one grouped rule covers every card type
+   * (media, season, studio, see-all, backdrop, genre, trailer, cast, episode).
+   */
+  [class*="__focus-indicator"] {
+    display: none !important;
+  }
+
+  :is(
+    .media-card,
+    .studio-card,
+    .see-all-card,
+    .backdrop-card,
+    .genre-card,
+    .trailer-card,
+    .cast-card,
+    .episode-card
+  ) {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :is(
+    .media-card,
+    .studio-card,
+    .see-all-card,
+    .backdrop-card,
+    .genre-card,
+    .trailer-card,
+    .cast-card,
+    .episode-card
+  ):is(:focus, :hover, [class*="--focused"]) {
+    transform: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Kill the white hover glow on poster wraps / see-all boxes */
+  :is(
+    .media-card:hover .media-card__poster-wrap,
+    .media-card--focused .media-card__poster-wrap,
+    .studio-card:hover,
+    .studio-card--focused,
+    .see-all-card:hover .see-all-card__box,
+    .see-all-card--focused .see-all-card__box
+  ) {
+    box-shadow: none !important;
+  }
+
+  .media-card:hover .media-card__poster-wrap::after,
+  .media-card--focused .media-card__poster-wrap::after {
+    background: transparent !important;
+  }
+
+  .studio-card:hover .studio-card__logo,
+  .studio-card--focused .studio-card__logo {
+    filter: brightness(0.85) !important;
+  }
+
+  /* Cast avatars use outline (not box-shadow) for selection */
+  :is(
+    .cast-card:hover .cast-card__avatar,
+    .cast-card--focused .cast-card__avatar,
+    .cast-card:active .cast-card__avatar
+  ) {
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Genre / backdrop cards use border + higher-specificity focus rules */
+  :is(.genre-card:hover, .genre-card--focused, .genre-card:active) {
+    transform: none !important;
+    border-color: var(--nw-border) !important;
+    box-shadow: none !important;
+  }
+
+  :is(.backdrop-card:hover, .backdrop-card:active, .backdrop-card--focused) {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .scroll-row__arrow {
+    display: none;
+  }
+
+  .scroll-row__track {
+    gap: 8px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --nw-side-pad: 12px;
+    --card-poster-w: 104px;
+    --card-studio-w: 76px;
+  }
+
+  .search-bar {
+    min-width: 0;
+  }
+}
+
+/* Bigger cards on big screens */
+@media (min-width: 1440px) {
+  :root { --card-poster-w: 220px; }
+  /* Scale card meta text with the enlarged poster */
+  .media-card__title { font-size: 14px; }
+  .media-card__year { font-size: 13px; }
+
+  /* Season page: scale text with the bigger layout */
+  .season-header__title { font-size: clamp(2rem, 4vw, 3.5rem); }
+  .season-header__meta { font-size: 17px; }
+  .season-header__overview { font-size: 17px; }
+  .episode-card__title { font-size: 18px; }
+  .episode-card__meta { font-size: 16px; }
+  .episode-card__overview { font-size: 16px; }
+  .episode-card__number { font-size: 14px; }
+}
+
+@media (min-width: 1920px) {
+  :root { --card-poster-w: 250px; }
+  .media-card__title { font-size: 16px; }
+  .media-card__year { font-size: 14px; }
+
+  .season-header__title { font-size: clamp(2.25rem, 3.5vw, 4.5rem); }
+  .season-header__meta { font-size: 19px; }
+  .season-header__overview { font-size: 19px; }
+  .episode-card__title { font-size: 20px; }
+  .episode-card__meta { font-size: 17px; }
+  .episode-card__overview { font-size: 17px; }
+  .episode-card__number { font-size: 15px; }
+}

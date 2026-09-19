@@ -1,0 +1,39 @@
+.scroll-top-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: #111;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 180ms, transform 180ms, background 150ms;
+}
+
+.scroll-top-btn--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+:root[data-input-mode="mouse"] .scroll-top-btn:hover {
+  background: #ececec;
+}
+
+:is(
+  :root[data-input-mode="mouse"] .media-card:hover .media-card__poster-wrap,
+  :root[data-input-mode="mouse"] .studio-card:hover,
+  :root[data-input-mode="mouse"] .see-all-card:hover .see-all-card__box
+) {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 0 12px 2px rgba(255, 255, 255, 0.15);
+}

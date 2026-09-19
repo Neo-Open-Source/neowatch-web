@@ -1,0 +1,60 @@
+/* Legal pages (Terms of Service, …) */
+
+.legal-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px var(--nw-side-pad) 72px;
+  color: var(--nw-text);
+}
+
+.legal-page__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.legal-page__updated {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: var(--nw-text-muted);
+}
+
+.legal-page__intro {
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--nw-text-muted);
+}
+
+.legal-page__section {
+  margin-bottom: 24px;
+}
+
+.legal-page__heading {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.legal-page__body {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--nw-text-muted);
+}
+
+.legal-page__body a {
+  color: var(--nw-accent);
+  text-decoration: none;
+}
+
+.legal-page__body a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .legal-page {
+    padding: 24px var(--nw-side-pad) 48px;
+  }
+}

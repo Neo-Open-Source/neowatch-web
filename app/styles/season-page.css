@@ -1,0 +1,233 @@
+/* Season page — poster left, title + episode list right (full width) */
+
+.season-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 40px var(--nw-side-pad) 72px;
+}
+
+.season-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+/* ── Poster ─────────────────────────────────────────────────────────────── */
+
+.season-poster-wrap {
+  position: relative;
+  flex: 0 0 300px;
+  width: 300px;
+  aspect-ratio: 2 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--nw-surface);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.45);
+}
+
+.season-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.season-poster--loaded { opacity: 1; }
+
+.season-poster--missing {
+  opacity: 1;
+  background: var(--nw-surface-2);
+}
+
+.season-poster-skeleton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Right column ───────────────────────────────────────────────────────── */
+
+.season-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.season-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.season-header__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.season-header__back {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--nw-text);
+  cursor: pointer;
+  outline: none;
+  transition: background 160ms ease, box-shadow 160ms ease, color 160ms ease;
+}
+
+.season-header__back:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+:root:not([data-input-mode="mouse"]) .season-header__back--focused {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 2px var(--nw-accent);
+}
+
+.season-header__title {
+  margin: 0;
+  min-width: 0;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--nw-text);
+  letter-spacing: -0.02em;
+}
+
+.season-header__sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  padding-left: 50px;
+}
+
+.season-header__meta {
+  margin: 0;
+  font-size: 15px;
+  color: var(--nw-text-muted);
+  opacity: 0.9;
+}
+
+.season-header__overview {
+  margin: 0;
+  padding-left: 50px;
+  max-width: 760px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--nw-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Episode list ───────────────────────────────────────────────────────── */
+
+.episode-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .season-layout {
+    flex-direction: column;
+  }
+
+  .season-poster-wrap {
+    flex: none;
+    width: 200px;
+    align-self: flex-start;
+  }
+}
+
+/* ── Mobile: back + title on one row ────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .season-page {
+    padding: 4px 0 24px;
+  }
+
+  .season-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .season-poster-wrap {
+    display: none;
+  }
+
+  .season-main {
+    gap: 0;
+  }
+
+  .season-header {
+    gap: 8px;
+    padding: 0 var(--nw-side-pad) 16px;
+  }
+
+  .season-header__top {
+    gap: 2px;
+  }
+
+  .season-header__back {
+    width: 40px;
+    height: 40px;
+    margin-left: -10px;
+    border-radius: 0;
+    background: transparent;
+    color: var(--nw-text);
+  }
+
+  .season-header__back:hover,
+  :root:not([data-input-mode="mouse"]) .season-header__back--focused {
+    background: transparent;
+    color: var(--nw-accent);
+    box-shadow: none;
+  }
+
+  .season-header__title {
+    font-size: 1.35rem;
+    letter-spacing: -0.03em;
+  }
+
+  .season-header__sub {
+    padding-left: 0;
+    gap: 8px 14px;
+  }
+
+  .season-header__meta {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .season-header__overview {
+    display: none;
+  }
+
+  .episode-list {
+    gap: 0;
+    margin: 0;
+    padding: 0 var(--nw-side-pad);
+    border-top: none;
+  }
+}

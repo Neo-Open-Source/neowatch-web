@@ -1,0 +1,60 @@
+"use client";
+
+import { ShelfSection } from "@/components/sections/ShelfSection";
+import { MediaCard } from "@/components/cards/MediaCard";
+import { SeeAllCard } from "@/components/cards/SeeAllCard";
+import { api } from "@/lib/api";
+import { toApiLanguage } from "@/lib/api/types";
+import type { MediaItem } from "@/lib/api/types";
+import { useI18n } from "@/lib/context/i18n-context";
+import { useInputMode } from "@/lib/context/input-mode";
+import { useAsyncResource } from "@/lib/hooks/use-async-resource";
+import { makeSkeletonKeys } from "@/lib/utils/skeletons";
+
+const SKELETONS = makeSkeletonKeys(14);
+
+export function MediaListRow({
+  title,
+  focusKey,
+  type,
+  initialData,
+}: {
+  title: string;
+  focusKey?: string;
+  type: "movie" | "tv";
+  /** SSR-fetched items — skips the post-hydration API call on first load. */
+  initialData?: MediaItem[] | null;
+}) {
+  const { t, locale } = useI18n();
+  const isSpatial = useInputMode();
+  const { data: items, error, loading } = useAsyncResource<MediaItem[]>(
+    () =>
+      type === "movie"
+        ? api.media.movieList("top-rated", { language: toApiLanguage(locale) }).then((res) => res.items)
+        : api.media.tvList("top-rated", { language: toApiLanguage(locale) }).then((res) => res.items),
+    [locale, type],
+    initialData,
+  );
+
+  const seeAllCard =
+    isSpatial && !loading && !error && focusKey ? (
+      <SeeAllCard href={`/top-rated?type=${type}`} focusKey={`${focusKey}-see-all`} />
+    ) : null;
+
+  return (
+    <ShelfSection title={title} loading={loading} href={`/top-rated?type=${type}`} focusKey={focusKey}>
+      {error ? (
+        <p className="shelf-section__error">{t.home.error}</p>
+      ) : loading ? (
+        SKELETONS.map((k) => <MediaCard key={k} />)
+      ) : (
+        <>
+          {items?.map((item, i) => (
+            <MediaCard key={item.tmdbId} item={item} mediaType={type} focusKey={focusKey ? `${focusKey}-card-${i}` : undefined} />
+          ))}
+          {seeAllCard}
+        </>
+      )}
+    </ShelfSection>
+  );
+}

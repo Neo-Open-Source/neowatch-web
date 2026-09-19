@@ -1,0 +1,118 @@
+/* StudioCard */
+
+.studio-card {
+  flex: 0 0 var(--card-studio-w);
+  width: var(--card-studio-w);
+  aspect-ratio: 1;
+  border-radius: var(--nw-radius);
+  background: var(--nw-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: background 180ms, transform 180ms;
+}
+
+.studio-card--hitbox { outline: 2px dashed rgba(0, 255, 100, 0.9) !important; }
+.studio-card--skeleton { background: var(--nw-surface-2); }
+
+.studio-card__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--nw-radius);
+  background: var(--nw-surface);
+  filter: brightness(0.85);
+  transition: filter 150ms;
+  animation: studio-logo-in 260ms ease-out;
+}
+
+.studio-card__logo-skeleton {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--nw-radius);
+}
+
+@keyframes studio-logo-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+:is(
+  :root[data-input-mode="mouse"] .studio-card:hover,
+  :root:not([data-input-mode="mouse"]) .studio-card--focused
+) {
+  background: var(--nw-surface-2);
+  transform: scale(1.04);
+}
+
+:is(
+  :root[data-input-mode="mouse"] .studio-card:hover .studio-card__logo,
+  :root:not([data-input-mode="mouse"]) .studio-card--focused .studio-card__logo
+) {
+  filter: brightness(1.1);
+}
+
+:root:not([data-input-mode="mouse"]) .studio-card--focused {
+  box-shadow: 0 0 0 2px #fff, 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Studios listing page */
+
+.studios-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 32px var(--nw-side-pad) 64px;
+}
+
+.studios-page__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.studios-page__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--nw-text);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.studios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-studio-w), 1fr));
+  gap: 16px;
+}
+
+.studios-grid .studio-card {
+  width: 100%;
+  flex: unset;
+  content-visibility: auto;
+  contain-intrinsic-size: auto calc(var(--card-studio-w) + 32px);
+}
+
+@media (max-width: 768px) {
+  .studios-page {
+    padding: 4px 0 24px;
+    gap: 16px;
+  }
+
+  .studios-page__header {
+    gap: 10px;
+  }
+
+  .studios-page__title {
+    font-size: 18px;
+  }
+
+  .studios-grid {
+    gap: 12px;
+  }
+}

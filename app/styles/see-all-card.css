@@ -1,0 +1,68 @@
+/* See All card (TV / keyboard mode only) */
+
+.see-all-card {
+  cursor: pointer;
+  position: relative;
+  color: var(--nw-text);
+  text-decoration: none;
+  display: block;
+  transition: transform 180ms ease;
+}
+
+.see-all-card--poster {
+  flex: 0 0 var(--card-poster-w);
+  width: var(--card-poster-w);
+}
+
+.see-all-card--studio {
+  flex: 0 0 var(--card-studio-w);
+  width: var(--card-studio-w);
+}
+
+.see-all-card__box {
+  position: relative;
+  width: 100%;
+  border-radius: var(--nw-radius);
+  border: 1px solid var(--nw-border);
+  background: var(--nw-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 180ms, border-color 180ms;
+}
+
+.see-all-card--poster .see-all-card__box { aspect-ratio: 2 / 3; }
+.see-all-card--studio .see-all-card__box { aspect-ratio: 1; }
+.see-all-card--studio .see-all-card__label { font-size: 13px; }
+.see-all-card--studio .see-all-card__arrow { width: 18px; height: 18px; }
+
+.see-all-card__arrow {
+  opacity: 0.7;
+  transition: opacity 180ms;
+}
+
+.see-all-card__label { font-size: 16px; font-weight: 600; }
+
+:is(
+  :root[data-input-mode="mouse"] .see-all-card:hover,
+  :root:not([data-input-mode="mouse"]) .see-all-card--focused
+) {
+  transform: scale(1.04);
+}
+
+:is(
+  :root[data-input-mode="mouse"] .see-all-card:hover .see-all-card__box,
+  :root:not([data-input-mode="mouse"]) .see-all-card--focused .see-all-card__box
+) {
+  background: var(--nw-surface-2);
+  border-color: var(--nw-text);
+}
+
+:is(
+  :root[data-input-mode="mouse"] .see-all-card:hover .see-all-card__arrow,
+  :root:not([data-input-mode="mouse"]) .see-all-card--focused .see-all-card__arrow
+) {
+  opacity: 1;
+}

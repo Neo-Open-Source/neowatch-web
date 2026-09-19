@@ -1,0 +1,147 @@
+/* Person page — profile hero + filmography shelves */
+
+.person-page {
+  width: 100%;
+}
+
+.person-page__hero {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 12px 0 8px;
+}
+
+.person-page__photo {
+  flex: 0 0 auto;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--nw-surface-2);
+}
+
+.person-page__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.person-page__photo img.person-page__photo-img--loaded {
+  opacity: 1;
+}
+
+.person-page__photo-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nw-text-muted);
+}
+
+.person-page__info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.person-page__name {
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--nw-text);
+  margin: 0;
+}
+
+.person-page__department {
+  font-size: 15px;
+  color: var(--nw-text-muted);
+  margin: 0;
+}
+
+.person-page__counts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--nw-text-muted);
+  margin: 0;
+}
+
+.person-page__status {
+  margin-top: 28px;
+  text-align: center;
+  color: var(--nw-text-muted);
+}
+
+/* ── Filmography grid — denser, smaller cards than the main shelves ──────── */
+
+.person-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 11vw, 210px), 1fr));
+  gap: 18px 14px;
+}
+
+.person-page__grid .media-card {
+  width: 100%;
+  flex: unset;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 360px;
+}
+
+@media (max-width: 768px) {
+  .person-page__hero {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 0 4px;
+  }
+
+  .person-page__photo {
+    width: 96px;
+    height: 96px;
+  }
+
+  .person-page__name {
+    font-size: clamp(1.4rem, 6vw, 1.85rem);
+  }
+
+  .person-page__department,
+  .person-page__counts {
+    font-size: 13px;
+  }
+
+  .person-page__counts {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .person-page__grid {
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 12px 8px;
+  }
+
+  .person-page__grid .media-card {
+    contain-intrinsic-size: auto 220px;
+  }
+
+  .person-page__status {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .person-page__hero {
+    gap: 14px;
+  }
+
+  .person-page__photo {
+    width: 80px;
+    height: 80px;
+  }
+}
