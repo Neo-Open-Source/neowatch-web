@@ -38,6 +38,12 @@
   aspect-ratio: auto;
 }
 
+/* Keep the viewing area distraction-free while controls are auto-hidden. */
+.player--controls-hidden,
+.player--controls-hidden * {
+  cursor: none !important;
+}
+
 /* ── Video & Poster ───────────────────────────────────────────── */
 
 .player__video {
@@ -46,6 +52,10 @@
   object-fit: contain;
   display: block;
   pointer-events: none;
+}
+
+.player:focus {
+  outline: none;
 }
 
 .player__poster {
@@ -135,6 +145,7 @@
 .player-progress-row {
   display: flex;
   align-items: center;
+  gap: 2px;
   padding-right: 18px;
 }
 
@@ -152,6 +163,11 @@
   min-width: 60px;
   text-align: right;
   font-weight: 600;
+}
+
+.player-progress-row__time--elapsed {
+  margin-left: 20px;
+  text-align: left;
 }
 
 /* Controls row */
@@ -1155,6 +1171,10 @@
   .player-progress-row__time {
     font-size: 11px;
     min-width: 42px;
+  }
+
+  .player-progress-row__time--elapsed {
+    margin-left: 12px;
   }
 
   .player-btn {

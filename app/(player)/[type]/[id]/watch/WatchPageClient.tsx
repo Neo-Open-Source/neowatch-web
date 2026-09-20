@@ -186,11 +186,6 @@ export default function WatchPageClient({
     <div
       ref={containerRef}
       className="watch-container"
-      style={{
-        width: "100vw",
-        height: "100vh",
-        background: "#000",
-      }}
     >
       <CdnPlayer {...(playerProps as CdnPlayerProps)} />
     </div>

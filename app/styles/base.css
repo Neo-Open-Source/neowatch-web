@@ -71,10 +71,25 @@ body.app-body {
 *::-webkit-scrollbar-corner { background: transparent; }
 
 /* Watch page: player fills viewport without aspect-ratio constraint */
+.watch-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+html:has(.watch-container) {
+  scrollbar-gutter: auto;
+  overflow: hidden;
+}
+
+body.app-body:has(.watch-container) {
+  overflow: hidden;
+}
+
 .watch-container .player {
   width: 100%;
   height: 100%;
   aspect-ratio: auto;
 }
-
 
