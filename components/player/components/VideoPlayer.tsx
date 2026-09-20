@@ -379,6 +379,7 @@ export function VideoPlayer({
       <video
         ref={videoRef}
         className="player__video"
+        tabIndex={-1}
         poster={poster}
         playsInline
         preload="metadata"

@@ -23,10 +23,14 @@ export function useTvFocus(
   }, [containerRef, selector])
 
   useEffect(() => {
-    if (!enabled) return
-
     const container = containerRef.current
     if (!container) return
+
+    // The player container must not be a focus stop itself. It may have kept
+    // this attribute after a hot reload from an earlier version of the hook.
+    container.removeAttribute('tabindex')
+
+    if (!enabled) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const items = getItems()
@@ -92,7 +96,6 @@ export function useTvFocus(
     }
 
     container.addEventListener('keydown', handleKeyDown)
-    container.tabIndex = -1
 
     return () => {
       container.removeEventListener('keydown', handleKeyDown)

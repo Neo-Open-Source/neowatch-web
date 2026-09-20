@@ -25,6 +25,18 @@ function formatRemaining(current: number, duration: number): string {
   return `-${m}:${s.toString().padStart(2, '0')}`
 }
 
+function formatElapsed(time: number): string {
+  if (!isFinite(time) || time < 0) return '0:00'
+  const totalSeconds = Math.floor(time)
+  const h = Math.floor(totalSeconds / 3600)
+  const m = Math.floor((totalSeconds % 3600) / 60)
+  const s = totalSeconds % 60
+  if (h > 0) {
+    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+  }
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
 function IconWrap({ size, children }: { size: number; children: React.ReactNode }) {
   return (
     <span style={{ display: 'inline-flex', fontSize: size, lineHeight: 1 }}>
@@ -174,6 +186,7 @@ export function BottomBar({
   }, [content])
 
   const isPlaying = playerState === 'playing' || playerState === 'buffering'
+  const elapsedTime = formatElapsed(currentTime)
   const remainingTime = formatRemaining(currentTime, duration)
 
   const anyMenuOpen = subtitlesActive || settingsOpen
@@ -194,6 +207,7 @@ export function BottomBar({
       </div>
 
       <div className="player-progress-row">
+        <span className="player-progress-row__time player-progress-row__time--elapsed">{elapsedTime}</span>
         <div className="player-progress-row__bar">
           <ProgressBar currentTime={currentTime} duration={duration} onSeek={onSeek} videoRef={videoRef} />
         </div>
