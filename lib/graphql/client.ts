@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { getConfig } from "@/lib/constants/config";
 import { getStoredAccessToken } from "@/lib/state/auth-session";
@@ -24,13 +23,99 @@ export function createApolloClient() {
           fields: {
             trending: {
               keyArgs: ["type"],
-              merge(existing: any, incoming: any) {
+              merge(existing, incoming) {
                 if (!existing) return incoming;
                 return {
                   ...incoming,
                   items: [...existing.items, ...incoming.items],
                 };
               },
+            },
+            movieList: {
+              keyArgs: ["list"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            tvList: {
+              keyArgs: ["list"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            search: {
+              keyArgs: ["q", "type", "genre"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            similar: {
+              keyArgs: ["type", "id"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            recommendations: {
+              keyArgs: ["type", "id"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            relatedByCast: {
+              keyArgs: ["type", "id"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            relatedByStudio: {
+              keyArgs: ["type", "id"],
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            favorites: {
+              keyArgs: false,
+              merge(existing, incoming) {
+                if (!existing) return incoming;
+                return {
+                  ...incoming,
+                  items: [...existing.items, ...incoming.items],
+                };
+              },
+            },
+            genres: {
+              merge: () => undefined,
+            },
+            categories: {
+              merge: () => undefined,
             },
           },
         },
