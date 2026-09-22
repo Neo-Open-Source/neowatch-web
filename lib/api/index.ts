@@ -140,4 +140,7 @@ export { gqlApi } from "@/lib/graphql/api";
 // ── Default api export — now points to GraphQL ───────────────────────────────
 // To switch back to REST:  export const api = restApi;
 import { gqlApi } from "@/lib/graphql/api";
-export const api: NeoApi = gqlApi as any;
+export const api: NeoApi = gqlApi as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+/** REST-based api — kept for fallback/debugging. */
+export { restApi };

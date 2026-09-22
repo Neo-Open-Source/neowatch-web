@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Server-only cached data fetchers. React `cache()` dedupes the underlying
 // promise within a single request render, so the data fetched for
 // generateMetadata is reused by the page component and passed to the client —

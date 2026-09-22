@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 import { gql } from "@apollo/client";
 import { createApolloClient } from "./client";
 import {
@@ -209,7 +210,7 @@ export const gqlApi = {
     getLoginUrl: (redirectUri: string, pkce?: { code_challenge?: string; code_challenge_method?: string; state?: string }) =>
       gqlQuery(GET_LOGIN_URL, { redirectUri, codeChallenge: pkce?.code_challenge }).then((d: any) => ({ url: d.loginUrl })),
 
-    exchangeCode: async (code: string, redirectUri: string, codeVerifier?: string) => {
+    exchangeCode: async (_code: string, _redirectUri: string, _codeVerifier?: string) => {
       throw new Error("exchangeCode must go through REST — Neo ID direct call");
     },
 

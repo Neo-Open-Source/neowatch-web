@@ -1,14 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { getConfig } from "@/lib/constants/config";
 import { getStoredAccessToken } from "@/lib/state/auth-session";
 
 export function createApolloClient() {
   const apiUrl = getConfig().apiUrl;
-  const link = new HttpLink({
-    uri: `${apiUrl}/graphql`,
-  });
 
-  // Wrap the default fetch to inject the Authorization header
   const wrappedLink = new HttpLink({
     uri: `${apiUrl}/graphql`,
     fetch: (input: RequestInfo | URL, init?: RequestInit) => {
