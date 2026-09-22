@@ -128,8 +128,16 @@ async function tryRefreshSession(): Promise<boolean> {
   return refreshPromise;
 }
 
-export const api = createNeoApi({
+const restApi = createNeoApi({
   baseUrl: getConfig().apiUrl,
   accessToken: () => accessToken ?? getStoredAccessToken(),
   onUnauthorized: tryRefreshSession,
 });
+
+// ── GraphQL API (drop-in replacement) ────────────────────────────────────────
+export { gqlApi } from "@/lib/graphql/api";
+
+// ── Default api export — now points to GraphQL ───────────────────────────────
+// To switch back to REST:  export const api = restApi;
+import { gqlApi } from "@/lib/graphql/api";
+export const api: NeoApi = gqlApi as any;

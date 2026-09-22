@@ -9,9 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@apollo/client": "^4.3.1",
     "@noriginmedia/norigin-spatial-navigation": "^3.3.0",
     "@noriginmedia/norigin-spatial-navigation-core": "4.1.0",
     "@noriginmedia/norigin-spatial-navigation-react": "3.3.0",
+    "graphql": "^16.14.2",
     "hls.js": "^1.6.16",
     "jimp": "^1.6.1",
     "lucide-react": "^1.28.0",

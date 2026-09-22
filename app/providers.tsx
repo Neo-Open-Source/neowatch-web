@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import { I18nProvider } from "@/lib/context/i18n-context";
 import { InputModeProvider } from "@/lib/context/input-mode";
 import { AuthProvider } from "@/lib/context/auth-context";
+import { GraphQLProvider } from "@/lib/graphql/provider";
 import { NAVBAR_SEARCH_FOCUS_KEY, CONTENT_FOCUS_KEY } from "@/components/Header";
 import { getReturnFocusKey } from "@/lib/state/focus-return";
 import { consumeHeaderNav } from "@/lib/state/navigation-source";
@@ -94,7 +95,9 @@ export function Providers({
   return (
     <InputModeProvider>
       <I18nProvider initialLocale={initialLocale}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <GraphQLProvider>{children}</GraphQLProvider>
+        </AuthProvider>
       </I18nProvider>
       {/* Global toasts (link copied, watchlist changes). Dark + rich colors so
           success/error is unmistakable; offset clears the mobile nav. */}
