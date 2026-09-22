@@ -25,10 +25,21 @@ export const MEDIA_ITEM_FRAGMENT = gql`
 
 export const TRENDING_ITEM_FRAGMENT = gql`
   fragment TrendingItemFields on TrendingItem {
-    ...MediaItemFields
+    tmdbId
+    title
+    originalTitle
+    overview
+    poster
+    backdrop
+    releaseDate
+    genres { id name }
+    voteAverage
+    voteCount
+    popularity
+    certification
+    imdbRating
     mediaType
   }
-  ${MEDIA_ITEM_FRAGMENT}
 `;
 
 // ── Media ───────────────────────────────────────────────────────────────────

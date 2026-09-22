@@ -68,6 +68,10 @@ function withDefaults(opts?: { language?: string; page?: number }) {
   };
 }
 
+function toGraphQLList(list: string): string {
+  return list.replace(/-/g, "_");
+}
+
 export const gqlApi = {
   media: {
     movieDetail: (id: number, opts?: { language?: string; page?: number }) =>
@@ -101,10 +105,10 @@ export const gqlApi = {
       gqlQuery(GET_SEASON, { tvId, season: seasonNumber, ...withDefaults(opts) }).then((d: any) => d.season),
 
     movieList: (list: string, opts?: { language?: string; page?: number }) =>
-      gqlQuery(GET_MOVIE_LIST, { list, ...withDefaults(opts) }).then((d: any) => d.movieList),
+      gqlQuery(GET_MOVIE_LIST, { list: toGraphQLList(list), ...withDefaults(opts) }).then((d: any) => d.movieList),
 
     tvList: (list: string, opts?: { language?: string; page?: number }) =>
-      gqlQuery(GET_TV_LIST, { list, ...withDefaults(opts) }).then((d: any) => d.tvList),
+      gqlQuery(GET_TV_LIST, { list: toGraphQLList(list), ...withDefaults(opts) }).then((d: any) => d.tvList),
 
     trending: (opts: { language?: string; page?: number; type?: string } = {}) =>
       gqlQuery(GET_TRENDING, { type: opts.type, ...withDefaults(opts) }).then((d: any) => d.trending),
