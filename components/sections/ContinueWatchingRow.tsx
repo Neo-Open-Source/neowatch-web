@@ -9,6 +9,7 @@ import type { EnrichedSyncProgressItem } from "@/lib/api/types";
 import { useAuth } from "@/lib/context/auth-context";
 import { useI18n } from "@/lib/context/i18n-context";
 import { useAsyncResource } from "@/lib/hooks/use-async-resource";
+import { getHomePersonal } from "@/lib/state/home-bootstrap";
 
 /** Minimum items to show the row on the home page. */
 const MIN_ITEMS = 3;
@@ -54,13 +55,17 @@ export function ContinueWatchingRow({
   const enabled = !authLoading && isAuthenticated;
 
   const cached = enabled ? getSnapshot() : null;
+  const personal = enabled ? getHomePersonal() : null;
+  const personalItems = personal?.syncProgress ?? null;
 
+  // personalItems in deps: pick up home.personal when it arrives post-unlock.
   const { data, error, loading } = useAsyncResource<EnrichedSyncProgressItem[]>(
     () =>
       enabled
         ? api.user.getSyncProgress({ language: toApiLanguage(locale) })
         : Promise.resolve([]),
-    [locale, enabled],
+    [locale, enabled, personalItems],
+    personalItems,
   );
 
   // Write-through cache

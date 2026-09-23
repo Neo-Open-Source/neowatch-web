@@ -9,7 +9,7 @@ import { useI18n } from "@/lib/context/i18n-context";
 import { api } from "@/lib/api";
 import { toApiLanguage } from "@/lib/api/types";
 import type { CategoryItem, CategorySection } from "@/lib/api/types";
-import { useAsyncResource } from "@/lib/hooks/use-async-resource";
+import { getHomeCategories, setHomeCategories } from "@/lib/state/home-bootstrap";
 import { CONTENT_FOCUS_KEY } from "@/components/Header";
 import { markHeaderNav } from "@/lib/state/navigation-source";
 import { cx } from "@/lib/utils/cx";
@@ -96,15 +96,31 @@ export function CategoriesNavItem({ active = false }: { active?: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const language = toApiLanguage(locale);
 
-  const { data: sections } = useAsyncResource<CategorySection[]>(
-    () => api.categories.list(toApiLanguage(locale)),
-    [locale],
+  // Lazy: only hit the API when the menu opens, and prefer the home bootstrap
+  // snapshot so the first open after landing on / is free.
+  const [sections, setSections] = useState<CategorySection[] | null>(
+    () => getHomeCategories(language),
   );
   const genres = useMemo(
     () => sections?.find((s) => s.section === GENRES_SECTION)?.items ?? [],
     [sections],
   );
+
+  useEffect(() => {
+    if (!open) return;
+    if (getHomeCategories(language) || sections) return;
+    let cancelled = false;
+    api.categories.list(language)
+      .then((next) => {
+        if (cancelled) return;
+        setHomeCategories(language, next);
+        setSections(next);
+      })
+      .catch(() => { /* keep empty */ });
+    return () => { cancelled = true; };
+  }, [open, language, sections]);
 
   const { ref: triggerRef, focused: triggerFocused } = useFocusable({
     focusKey: TRIGGER_KEY,

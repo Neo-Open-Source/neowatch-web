@@ -315,22 +315,20 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
   // On TV, land focus on the Play button as soon as the hero renders.
   useInitialFocus(["detail-play"]);
 
-  // Logo: try to load from API, fall back to text title
-  const logoUrl = (!isNaN(id) && type) ? api.media.logoUrl(id, type, lang) : null;
+  // Logo comes directly from the GraphQL media query as data.logo
   const [logoFailed, setLogoFailed] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const logoRef = useRef<HTMLImageElement | null>(null);
 
+  // Reset logo state whenever the media changes
   useEffect(() => {
     startTransition(() => {
       setLogoFailed(false);
       setLogoLoaded(false);
     });
-  }, [logoUrl]);
+  }, [id, type]);
 
-  // A cached image can complete before React hydrates and attaches onLoad (SSR
-  // paint vs hydration) — without this check the logo stays at opacity 0 on
-  // reload. Detect the already-complete case and reveal it immediately.
+  // Cached images can complete before React attaches onLoad — detect and reveal immediately
   useEffect(() => {
     const img = logoRef.current;
     if (!img || !img.complete) return;
@@ -338,7 +336,7 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
       if (img.naturalWidth > 0) setLogoLoaded(true);
       else setLogoFailed(true);
     });
-  }, [logoUrl]);
+  });
 
   const { data, loading, error } = useAsyncResource<MovieDetails | TVDetails>(
     () =>
@@ -434,12 +432,12 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
               </div>
             ) : data ? (
               <div className="detail-hero-reveal">
-                {logoUrl && !logoFailed ? (
+                {data.logo && !logoFailed ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    key={logoUrl}
+                    key={data.logo}
                     ref={logoRef}
-                    src={logoUrl}
+                    src={data.logo}
                     alt={data.title}
                     className={`detail-logo${logoLoaded ? " detail-logo--loaded" : ""}`}
                     onLoad={() => setLogoLoaded(true)}

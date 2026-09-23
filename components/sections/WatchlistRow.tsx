@@ -11,7 +11,9 @@ import { useAuth } from "@/lib/context/auth-context";
 import { useI18n } from "@/lib/context/i18n-context";
 import { useInputMode } from "@/lib/context/input-mode";
 import { useAsyncResource } from "@/lib/hooks/use-async-resource";
+import { getStoredAccessToken } from "@/lib/state/auth-session";
 import { getFavoritesSnapshot, setFavoritesSnapshot } from "@/lib/state/favorites-cache";
+import { getHomePersonal } from "@/lib/state/home-bootstrap";
 import { makeSkeletonKeys } from "@/lib/utils/skeletons";
 
 /** Home shelf only when the list has at least 3 titles. */
@@ -28,13 +30,17 @@ export function WatchlistRow({ title, focusKey }: { title: string; focusKey?: st
   // Best-known snapshot — lets the row render instantly (real cards) on repeat
   // visits; the site "knows" the count up front instead of waiting for the fetch.
   const cached = enabled ? getFavoritesSnapshot() : null;
+  const personal = enabled ? getHomePersonal() : null;
+  const personalFavorites = personal?.favorites ?? null;
 
+  // personalFavorites in deps: adopt home.personal when it lands after unlock.
   const { data, error, loading } = useAsyncResource<Paginated<FavoriteItem> | null>(
     () =>
       enabled
         ? api.user.listFavorites({ language: toApiLanguage(locale) })
         : Promise.resolve(null),
-    [locale, enabled],
+    [locale, enabled, personalFavorites],
+    personalFavorites,
   );
 
   // Write-through: keep the snapshot fresh for the next visit.
@@ -44,7 +50,28 @@ export function WatchlistRow({ title, focusKey }: { title: string; focusKey?: st
     }
   }, [data, enabled]);
 
-  if (!enabled) return null;
+  if (!enabled) {
+    // Auth still resolving: show the local snapshot as soon as a session is
+    // likely (token present) instead of leaving a blank gap.
+    const hasToken = typeof window !== "undefined" && !!getStoredAccessToken();
+    if (authLoading && hasToken) {
+      const snap = getFavoritesSnapshot();
+      if (snap && snap.totalResults >= MIN_HOME_ITEMS && snap.items.length > 0) {
+        return (
+          <ShelfSection title={title} href="/watchlist" focusKey={focusKey}>
+            {snap.items.map((item, i) => (
+              <MediaCard
+                key={`${item.mediaType}-${item.tmdbId}`}
+                item={item}
+                focusKey={focusKey ? `${focusKey}-card-${i}` : undefined}
+              />
+            ))}
+          </ShelfSection>
+        );
+      }
+    }
+    return null;
+  }
 
   const freshTotal = data?.totalResults ?? 0;
   const freshItems = data?.items ?? [];

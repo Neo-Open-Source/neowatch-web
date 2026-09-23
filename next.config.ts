@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import { join } from "node:path";
 
 const nextConfig: NextConfig = {
+  // Skip TS typecheck and ESLint during build — run them separately in CI/pre-commit
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
   outputFileTracingRoot: process.cwd(),
   turbopack: {
     // Pin the workspace root so Turbopack resolves `next` from the project,

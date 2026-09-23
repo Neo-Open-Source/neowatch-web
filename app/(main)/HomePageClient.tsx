@@ -1,12 +1,15 @@
 "use client";
 
-import type { MediaItem, Studio, TrendingItem } from "@/lib/api/types";
+import { useEffect } from "react";
+import type { CategorySection, MediaItem, Studio, TrendingItem } from "@/lib/api/types";
 import { StudiosRow } from "@/components/sections/StudiosRow";
 import { WatchlistRow } from "@/components/sections/WatchlistRow";
 import { TrendingRow } from "@/components/sections/TrendingRow";
 import { MediaListRow } from "@/components/sections/MediaListRow";
 import { ContinueWatchingRow } from "@/components/sections/ContinueWatchingRow";
 import { useI18n } from "@/lib/context/i18n-context";
+import { toApiLanguage } from "@/lib/api/types";
+import { setHomeCategories } from "@/lib/state/home-bootstrap";
 import { PageTitle } from "@/components/ui/PageTitle";
 import { useInitialFocus } from "@/lib/hooks/use-initial-focus";
 
@@ -15,10 +18,18 @@ export interface HomeInitialData {
   topMovies: MediaItem[];
   topSeries: MediaItem[];
   studios: Studio[];
+  categories?: CategorySection[];
 }
 
 export function HomePageClient({ initial }: { initial: HomeInitialData | null }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+
+  // Seed the client categories cache so the header dropdown skips its own fetch.
+  useEffect(() => {
+    if (initial?.categories?.length) {
+      setHomeCategories(toApiLanguage(locale), initial.categories);
+    }
+  }, [initial?.categories, locale]);
 
   // Приоритет фокуса: continue watching → watchlist → студии.
   useInitialFocus(["row-continue-card-0", "row-watchlist-card-0", "row-studios-card-0"]);

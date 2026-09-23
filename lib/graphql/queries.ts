@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 // ── Fragments ───────────────────────────────────────────────────────────────
 
 export const MEDIA_ITEM_FRAGMENT = gql`
-  fragment MediaItemFields on MediaItem {
+  fragment MediaItemFields on MediaFields {
     tmdbId
     title
     originalTitle
@@ -54,6 +54,7 @@ export const GET_MEDIA = gql`
         overview
         poster
         backdrop
+        logo
         releaseDate
         genres { id name }
         voteAverage
@@ -84,6 +85,7 @@ export const GET_MEDIA = gql`
         overview
         poster
         backdrop
+        logo
         releaseDate
         genres { id name }
         voteAverage
@@ -145,6 +147,72 @@ export const GET_SEASON = gql`
 `;
 
 // ── Lists ───────────────────────────────────────────────────────────────────
+
+export const HOME_BOOTSTRAP = gql`
+  query HomeBootstrap($language: String) {
+    trending(page: 1, language: $language) {
+      items { ...TrendingItemFields }
+      page
+      totalPages
+      totalResults
+    }
+    topMovies: movieList(list: top_rated, page: 1, language: $language) {
+      items { ...MediaItemFields }
+      page
+      totalPages
+      totalResults
+    }
+    topSeries: tvList(list: top_rated, page: 1, language: $language) {
+      items { ...MediaItemFields }
+      page
+      totalPages
+      totalResults
+    }
+    categories(language: $language) {
+      section
+      items { id name slug type backdrop }
+    }
+  }
+  ${TRENDING_ITEM_FRAGMENT}
+  ${MEDIA_ITEM_FRAGMENT}
+`;
+
+export const HOME_PERSONAL = gql`
+  query HomePersonal($page: Int, $language: String) {
+    me {
+      id
+      email
+      displayName
+      avatar
+      role
+    }
+    syncProgress {
+      mediaId
+      mediaType
+      season
+      episode
+      progress
+      updatedAt
+      title
+      poster
+      backdrop
+      episodeName
+      episodeStill
+    }
+    favorites(page: $page, language: $language) {
+      items {
+        ...MediaItemFields
+        mediaId
+        mediaType
+        createdAt
+      }
+      page
+      totalPages
+      totalResults
+    }
+  }
+  ${MEDIA_ITEM_FRAGMENT}
+`;
 
 export const GET_TRENDING = gql`
   query GetTrending($type: MediaType, $page: Int, $language: String) {
@@ -391,9 +459,31 @@ export const GET_COLLECTION = gql`
 
 // ── Auth / User ─────────────────────────────────────────────────────────────
 
+export const GET_ME = gql`
+  query GetMe {
+    me {
+      id
+      email
+      displayName
+      avatar
+      role
+    }
+  }
+`;
+
 export const GET_LOGIN_URL = gql`
-  query GetLoginUrl($redirectUri: String, $codeChallenge: String) {
-    loginUrl(redirectUri: $redirectUri, codeChallenge: $codeChallenge)
+  query GetLoginUrl(
+    $redirectUri: String
+    $codeChallenge: String
+    $codeChallengeMethod: String
+    $state: String
+  ) {
+    loginUrl(
+      redirectUri: $redirectUri
+      codeChallenge: $codeChallenge
+      codeChallengeMethod: $codeChallengeMethod
+      state: $state
+    )
   }
 `;
 
@@ -432,6 +522,11 @@ export const GET_SYNC_PROGRESS = gql`
       episode
       progress
       updatedAt
+      title
+      poster
+      backdrop
+      episodeName
+      episodeStill
     }
   }
 `;
@@ -510,6 +605,12 @@ export const UPSERT_PROGRESS = gql`
       progress
       updatedAt
     }
+  }
+`;
+
+export const DELETE_PROGRESS = gql`
+  mutation DeleteProgress($mediaId: Int!, $mediaType: MediaType, $season: Int, $episode: Int) {
+    deleteProgress(mediaId: $mediaId, mediaType: $mediaType, season: $season, episode: $episode)
   }
 `;
 

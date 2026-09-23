@@ -114,7 +114,6 @@
   /* Genre / backdrop cards use border + higher-specificity focus rules */
   :is(.genre-card:hover, .genre-card--focused, .genre-card:active) {
     transform: none !important;
-    border-color: var(--nw-border) !important;
     box-shadow: none !important;
   }
 

@@ -27,12 +27,8 @@ function GenreCardReal({
   onActivate?: () => void;
 }) {
   const { ref, focused } = useCardNavigation({ focusKey, onEnterPress: onActivate });
-  const { showHitboxes, apiUrl } = getConfig();
-
-  // The API returns category backdrops as relative paths (e.g.
-  // /api/v1/images/backdrop/123?type=movie) — expand to an absolute URL.
-  // getConfig() already strips any trailing slash from the origin.
-  const src = backdrop ? `${apiUrl}${backdrop}` : null;
+  const { showHitboxes } = getConfig();
+  const src = backdrop || null;
 
   return (
     <div
@@ -55,6 +51,7 @@ function GenreCardReal({
         decoding="async"
       />
       <span className="genre-card__label">{name}</span>
+      {focused && <div className="genre-card__focus-indicator" aria-hidden="true" />}
     </div>
   );
 }

@@ -21,7 +21,9 @@ import {
   persistUser,
 } from "@/lib/state/auth-session";
 import { clearFavoriteChecks, clearFavoritesSnapshot } from "@/lib/state/favorites-cache";
+import { clearHomePersonal, setHomePersonal } from "@/lib/state/home-bootstrap";
 import { getConfig } from "@/lib/constants/config";
+import { toApiLanguage } from "@/lib/api/types";
 import {
   codeChallengeFromVerifier,
   consumeOAuthState,
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!token) {
       setUser(null);
       setAccessToken(null);
+      clearHomePersonal();
       return;
     }
     setAccessToken(token);
@@ -71,14 +74,72 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = getStoredAccessToken();
     const cached = getStoredUser();
     if (!token) {
+      clearHomePersonal();
       startTransition(() => setLoading(false));
       return;
     }
     setAccessToken(token);
-    if (cached) startTransition(() => setUser(cached));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    refreshProfile().finally(() => startTransition(() => setLoading(false)));
-  }, [refreshProfile]);
+
+    let cancelled = false;
+
+    // Unblock rows immediately: cached profile (or a fast /me) must not wait
+    // on home.personal — that document also carries syncProgress, which does
+    // N TMDB lookups and can take seconds. Favorites/progress load below.
+    const unlock = (profile: AuthUser | null) => {
+      if (cancelled) return;
+      if (profile) {
+        persistUser(profile);
+        startTransition(() => setUser(profile));
+      }
+      startTransition(() => setLoading(false));
+    };
+
+    if (cached) {
+      unlock(cached);
+    } else {
+      api.auth
+        .profile()
+        .then((profile) => unlock(profile))
+        .catch(() => {
+          if (!cancelled) startTransition(() => setLoading(false));
+        });
+    }
+
+    // Personal document (me + syncProgress + favorites) in the background —
+    // rows consume getHomePersonal() when it lands (deps include the snapshot).
+    (async () => {
+      try {
+        const locale =
+          typeof document !== "undefined"
+            ? document.documentElement.lang || "ru"
+            : "ru";
+        const language = toApiLanguage(locale);
+        const data = await api.home.personal({ language, page: 1 });
+        if (cancelled) return;
+        const profile: AuthUser = {
+          id: data.me.id,
+          email: data.me.email ?? null,
+          displayName: data.me.displayName ?? null,
+          avatar: data.me.avatar ?? null,
+          role: data.me.role ?? null,
+        };
+        setHomePersonal({
+          user: profile,
+          syncProgress: data.syncProgress ?? [],
+          favorites: data.favorites ?? { items: [], page: 1, totalPages: 1, totalResults: 0 },
+          language,
+        });
+        // Re-render consumers so rows pick up getHomePersonal().
+        unlock(profile);
+      } catch {
+        // Personal may 401 mid-refresh — keep whatever profile already unlocked.
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const signIn = useCallback(async () => {
     const redirectUri = getAuthRedirectUri();
@@ -120,6 +181,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     clearSession();
     clearFavoritesSnapshot();
     clearFavoriteChecks();
+    clearHomePersonal();
     setAccessToken(null);
     setUser(null);
   }, []);

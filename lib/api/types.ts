@@ -135,6 +135,7 @@ export interface MediaDetails {
   imdbRating?: number | null;
   imdbVotes?: number | null;
   certification: string | null;
+  logo: string | null;
   trailers: string[];
   credits: Credits;
 }

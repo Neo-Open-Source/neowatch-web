@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Server-only cached data fetchers. React `cache()` dedupes the underlying
 // promise within a single request render, so the data fetched for
 // generateMetadata is reused by the page component and passed to the client —
@@ -8,6 +7,7 @@ import { cache } from "react";
 import { gqlApi } from "@/lib/graphql/api";
 import type {
   ApiLanguage,
+  CategorySection,
   MediaItem,
   MovieDetails,
   PersonDetails,
@@ -46,28 +46,29 @@ export const getSeasonBundle = cache(
 );
 
 /** Home page rows, fetched once on the server and passed to the client rows as
- *  initialData — removes the post-hydration API waterfall on first load. */
+ *  initialData — removes the post-hydration API waterfall on first load.
+ *  Single GraphQL document with aliases (trending + topMovies + topSeries + categories). */
 export const getHomeRows = cache(
   async (lang: ApiLanguage): Promise<{
     trending: TrendingItem[];
     topMovies: MediaItem[];
     topSeries: MediaItem[];
     studios: Studio[];
+    categories: CategorySection[];
   }> => {
-    const [trending, topMovies, topSeries, sections] = await Promise.all([
-      gqlApi.media.trending({ language: lang }).then((r: any) => r.items),
-      gqlApi.media.movieList("top-rated", { language: lang }).then((r: any) => r.items),
-      gqlApi.media.tvList("top-rated", { language: lang }).then((r: any) => r.items),
-      gqlApi.categories.list(lang),
-    ]);
+    const data = await gqlApi.home.bootstrap({ language: lang });
+    const trending = (data?.trending?.items ?? []) as TrendingItem[];
+    const topMovies = (data?.topMovies?.items ?? []) as MediaItem[];
+    const topSeries = (data?.topSeries?.items ?? []) as MediaItem[];
+    const categories = (data?.categories ?? []) as CategorySection[];
 
     const { STUDIO_LOGOS } = await import("@/lib/constants/studios");
-    const studios = sections
-      .find((s: any) => s.section === "Studios")
+    const studios = categories
+      .find((s) => s.section === "Studios")
       ?.items
-      .map((c: any) => ({ id: c.id, name: c.name, logoUrl: STUDIO_LOGOS[c.id] }))
-      .filter((s: any): s is Studio => Boolean(s.logoUrl)) ?? [];
+      .map((c) => ({ id: c.id, name: c.name, logoUrl: STUDIO_LOGOS[c.id] }))
+      .filter((s): s is Studio => Boolean(s.logoUrl)) ?? [];
 
-    return { trending, topMovies, topSeries, studios };
+    return { trending, topMovies, topSeries, studios, categories };
   },
 );
