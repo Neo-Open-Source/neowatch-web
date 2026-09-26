@@ -220,7 +220,17 @@ export const gqlApi = {
         variables[paramKey] = value;
       }
       if (!variables.language) variables.language = "ru-RU";
-      return gqlQuery(SEARCH, variables).then((d: any) => d.search);
+      return gqlQuery(SEARCH, variables).then((d: any) => {
+        const res = d.search;
+        // PersonSearchItem can't expose mediaType alongside MediaItem's
+        // MediaType! enum in one union selection — tag persons client-side.
+        res.items = res.items.map((it: any) =>
+          it.mediaType == null && (it.__typename === "PersonSearchItem" || (it.name && !it.title))
+            ? { ...it, mediaType: "person" }
+            : it,
+        );
+        return res;
+      });
     },
 
     logoUrl: () => "",

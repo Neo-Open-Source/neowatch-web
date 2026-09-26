@@ -1,9 +1,7 @@
-// Server-only cached data fetchers. React `cache()` dedupes the underlying
-// promise within a single request render, so the data fetched for
-// generateMetadata is reused by the page component and passed to the client —
-// no duplicate API calls for the same media/person/season.
-
+// Server-only data fetchers. React cache() dedupes within one render,
+// unstable_cache persists across requests.
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { gqlApi } from "@/lib/graphql/api";
 import type {
   ApiLanguage,
@@ -19,15 +17,26 @@ import type {
 
 export const getMediaDetail = cache(
   async (type: "movie" | "tv", tmdbId: number, lang: ApiLanguage): Promise<MovieDetails | TVDetails> => {
-    return type === "movie"
-      ? await gqlApi.media.movieDetail(tmdbId, { language: lang })
-      : await gqlApi.media.tvDetail(tmdbId, { language: lang });
+    const fetchDetail = unstable_cache(
+      async () =>
+        type === "movie"
+          ? await gqlApi.media.movieDetail(tmdbId, { language: lang })
+          : await gqlApi.media.tvDetail(tmdbId, { language: lang }),
+      ["media-detail", type, String(tmdbId), lang],
+      { revalidate: 3600 },
+    );
+    return fetchDetail();
   },
 );
 
 export const getPersonDetail = cache(
   async (personId: number, lang: ApiLanguage): Promise<PersonDetails> => {
-    return await gqlApi.people.detail(personId, { language: lang });
+    const fetchPerson = unstable_cache(
+      async () => await gqlApi.people.detail(personId, { language: lang }),
+      ["person-detail", String(personId), lang],
+      { revalidate: 3600 },
+    );
+    return fetchPerson();
   },
 );
 
@@ -37,11 +46,18 @@ export const getSeasonBundle = cache(
     seasonNumber: number,
     lang: ApiLanguage,
   ): Promise<{ tv: TVDetails; season: SeasonDetails }> => {
-    const [tv, season] = await Promise.all([
-      gqlApi.media.tvDetail(tvId, { language: lang }) as Promise<TVDetails>,
-      gqlApi.media.season(tvId, seasonNumber, { language: lang }) as Promise<SeasonDetails>,
-    ]);
-    return { tv, season };
+    const fetchSeason = unstable_cache(
+      async () => {
+        const [tv, season] = await Promise.all([
+          gqlApi.media.tvDetail(tvId, { language: lang }) as Promise<TVDetails>,
+          gqlApi.media.season(tvId, seasonNumber, { language: lang }) as Promise<SeasonDetails>,
+        ]);
+        return { tv, season };
+      },
+      ["season-bundle", String(tvId), String(seasonNumber), lang],
+      { revalidate: 3600 },
+    );
+    return fetchSeason();
   },
 );
 
@@ -56,7 +72,12 @@ export const getHomeRows = cache(
     studios: Studio[];
     categories: CategorySection[];
   }> => {
-    const data = await gqlApi.home.bootstrap({ language: lang });
+    const fetchBootstrap = unstable_cache(
+      async () => await gqlApi.home.bootstrap({ language: lang }),
+      ["home-bootstrap", lang],
+      { revalidate: 600 },
+    );
+    const data = await fetchBootstrap();
     const trending = (data?.trending?.items ?? []) as TrendingItem[];
     const topMovies = (data?.topMovies?.items ?? []) as MediaItem[];
     const topSeries = (data?.topSeries?.items ?? []) as MediaItem[];

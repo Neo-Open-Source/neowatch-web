@@ -5,6 +5,7 @@ import { gql } from "@apollo/client";
 export const MEDIA_ITEM_FRAGMENT = gql`
   fragment MediaItemFields on MediaFields {
     tmdbId
+    mediaType
     title
     originalTitle
     overview
@@ -327,7 +328,6 @@ export const SEARCH = gql`
           ...MediaItemFields
         }
         ... on PersonSearchItem {
-          mediaType
           tmdbId
           name
           profile

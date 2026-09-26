@@ -7,7 +7,6 @@ function NeoLogo() {
   return (
     <svg
       viewBox="10 4 306 119"
-      width="auto"
       height="24"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"

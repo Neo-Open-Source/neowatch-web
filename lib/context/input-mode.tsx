@@ -36,6 +36,11 @@ function subscribe(onStoreChange: () => void) {
   onStoreChange();
 
   const onKeyDown = (e: KeyboardEvent) => {
+    // Typing in inputs (search etc.) must not flip the app into spatial mode:
+    // Backspace/arrows/Enter are normal text-editing keys there.
+    const t = e.target as HTMLElement | null;
+    const tag = t?.tagName?.toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select" || t?.isContentEditable) return;
     if (SPATIAL_KEYS.has(e.key)) {
       isSpatial = true;
       onStoreChange();

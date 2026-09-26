@@ -4,8 +4,6 @@ html {
   color-scheme: dark;
   scrollbar-gutter: stable;
   height: 100%;
-  /* Cover the status-bar strip under the viewport-fit=cover safe area so no
-     transparent/empty band shows at the very top (especially after rotation). */
   background: var(--nw-bg);
 }
 
@@ -20,7 +18,6 @@ body.app-body {
   min-height: 100dvh;
 }
 
-/* App chrome: header + scrollable main + footer/nav */
 .app-shell {
   display: flex;
   flex-direction: column;
@@ -31,10 +28,6 @@ body.app-body {
 @media (max-width: 768px) {
   html {
     scrollbar-gutter: auto;
-    /* JS keeps --app-height in sync with the real viewport; 100dvh is the
-       fallback for the brief moment before hydration. Using a JS-driven value
-       (rather than bare 100dvh) fixes iOS Safari leaving a stale height / gap
-       after device rotation. */
     height: var(--app-height, 100dvh);
     overflow: hidden;
   }
@@ -55,7 +48,6 @@ body.app-body {
   }
 }
 
-/* Кастомный скроллбар — глобально */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--nw-surface-2) transparent;
@@ -70,7 +62,6 @@ body.app-body {
 *::-webkit-scrollbar-thumb:hover { background: #505050; }
 *::-webkit-scrollbar-corner { background: transparent; }
 
-/* Watch page: player fills viewport without aspect-ratio constraint */
 .watch-container {
   position: fixed;
   inset: 0;

@@ -15,7 +15,6 @@ import { consumeHeaderNav } from "@/lib/state/navigation-source";
 import { useScrollRestore } from "@/lib/hooks/use-scroll-restoration";
 import type { Locale } from "@/lib/i18n";
 
-// Key codes for TV remotes (Back button)
 const BACK_KEY_CODES = new Set([
   "Escape",
   "GoBack",
@@ -40,7 +39,6 @@ function useEscapeToNavbar() {
       const active = document.activeElement;
       const navbar = document.querySelector("[data-site-header]");
 
-      // Already in navbar → return to the card we came from
       if (navbar?.contains(active)) {
         const returnKey = getReturnFocusKey();
         e.preventDefault();
@@ -52,13 +50,7 @@ function useEscapeToNavbar() {
         return;
       }
 
-      // An open dialog (e.g. trailer) owns Back/Esc — let it close itself.
       if (document.querySelector('[role="dialog"]')) return;
-
-      // On any page except the home page, Back/ESC depends on where the page
-      // opened from: a page reached via the header (nav link / categories /
-      // search) returns focus to the header; a page opened from content goes
-      // back to the previous page (category → category list, etc.).
       if (pathnameRef.current !== "/") {
         e.preventDefault();
         if (cameFromHeaderRef.current) {
@@ -99,8 +91,6 @@ export function Providers({
           <GraphQLProvider>{children}</GraphQLProvider>
         </AuthProvider>
       </I18nProvider>
-      {/* Global toasts (link copied, watchlist changes). Dark + rich colors so
-          success/error is unmistakable; offset clears the mobile nav. */}
       <Toaster
         theme="dark"
         richColors

@@ -4,7 +4,6 @@
   border-radius: var(--nw-radius);
 }
 
-/* Shared dropdown enter — soft fade + slight rise */
 @keyframes nw-dropdown-in {
   from {
     opacity: 0;
@@ -90,12 +89,10 @@
   font-size: 12px;
 }
 
-/* Focus hitbox — включается через NEXT_PUBLIC_SHOW_HITBOXES=true */
 .show-focus-hitbox [class*="--focused"] {
   outline: 2px dashed rgba(255, 200, 0, 0.9) !important;
   outline-offset: 3px;
 }
-/* Hero action buttons mark "expanded" via --active, not --focused */
 .show-focus-hitbox .detail-hero-action--active {
   outline: 2px dashed rgba(255, 200, 0, 0.9) !important;
   outline-offset: 3px;
