@@ -45,6 +45,11 @@ const COMMUNITY_LINKS: { labelKey: "telegram" | "github"; href: string }[] = [
   { labelKey: "github", href: "https://github.com/Neo-Open-Source" },
 ];
 
+const LEGAL_LINKS: { labelKey: "tos" | "privacy"; href: string }[] = [
+  { labelKey: "tos", href: "/terms" },
+  { labelKey: "privacy", href: "https://id.neome.uk/privacy" },
+];
+
 function TelegramIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -74,20 +79,28 @@ function FooterCol({
     <div className="site-footer__col">
       <h3 className="site-footer__heading">{title}</h3>
       <ul className="site-footer__list">
-        {links.map((l) => (
-          <li key={l.href}>
-            <a
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="site-footer__link"
-            >
-              {l.labelKey === "telegram" && <TelegramIcon />}
-              {l.labelKey === "github" && <GitHubIcon />}
-              <span>{t(l.labelKey)}</span>
-            </a>
-          </li>
-        ))}
+        {links.map((l) =>
+          l.href.startsWith("/") ? (
+            <li key={l.href}>
+              <Link href={l.href} className="site-footer__link">
+                <span>{t(l.labelKey)}</span>
+              </Link>
+            </li>
+          ) : (
+            <li key={l.href}>
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="site-footer__link"
+              >
+                {l.labelKey === "telegram" && <TelegramIcon />}
+                {l.labelKey === "github" && <GitHubIcon />}
+                <span>{t(l.labelKey)}</span>
+              </a>
+            </li>
+          ),
+        )}
       </ul>
     </div>
   );
@@ -103,6 +116,8 @@ export function Footer() {
       : key === "api" ? footer.api
       : key === "neoid" ? footer.neoid
       : key === "telegram" ? footer.telegram
+      : key === "tos" ? footer.tos
+      : key === "privacy" ? footer.privacy
       : footer.github;
 
   return (
@@ -113,15 +128,13 @@ export function Footer() {
           <div className="site-footer__cols">
             <FooterCol title={footer.ecosystem} links={ECOSYSTEM_LINKS} t={label} />
             <FooterCol title={footer.community} links={COMMUNITY_LINKS} t={label} />
+            <FooterCol title={footer.legal} links={LEGAL_LINKS} t={label} />
           </div>
         </div>
         <div className="site-footer__bottom">
           <span className="site-footer__copyright">
             © 2024–{currentYear} Neo-Open-Source
           </span>
-          <Link href={t.terms.url} className="site-footer__link">
-            {footer.tos}
-          </Link>
         </div>
       </div>
     </footer>

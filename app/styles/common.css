@@ -4,6 +4,76 @@
   border-radius: var(--nw-radius);
 }
 
+/* Route loading fallbacks — fully self-contained: own markup + literal
+   layout values, zero imports from page components, so the fallback cannot
+   inherit page layout bugs. */
+.nw-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 16px 24px 48px;
+  min-height: 80vh;
+}
+.nw-loading__title {
+  width: 200px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--nw-surface);
+}
+.nw-loading-shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.nw-loading-shelf__title {
+  width: 180px;
+  height: 20px;
+  border-radius: 8px;
+  background: var(--nw-surface);
+}
+.nw-loading-shelf__row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  overflow: hidden;
+}
+.nw-loading-card {
+  flex: 0 0 160px;
+  width: 160px;
+  min-width: 0;
+}
+.nw-loading-card__poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: 12px;
+  background: var(--nw-surface);
+}
+.nw-loading-card__line {
+  height: 11px;
+  border-radius: 6px;
+  margin-top: 9px;
+  background: var(--nw-surface);
+}
+.nw-loading-card__line--title { width: 70%; }
+.nw-loading-card__line--sub { width: 45%; height: 9px; margin-top: 5px; }
+.nw-loading-hero {
+  height: min(52vh, 420px);
+  border-radius: 16px;
+  background: var(--nw-surface);
+}
+@keyframes nw-loading-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@media (max-width: 480px) {
+  .nw-loading-card {
+    flex-basis: 104px;
+    width: 104px;
+  }
+}
+
 @keyframes nw-dropdown-in {
   from {
     opacity: 0;

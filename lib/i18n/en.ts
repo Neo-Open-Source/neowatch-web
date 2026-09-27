@@ -168,12 +168,14 @@ export const en: Dict = {
   footer: {
     ecosystem: "Ecosystem",
     community: "Community",
+    legal: "Legal",
     blog: "Blog",
     api: "API",
     neoid: "NeoID",
     telegram: "Telegram",
     github: "GitHub",
     tos: "Terms of Service",
+    privacy: "Privacy Policy",
     copyright: "© 2024–2026 Neo-Open-Source",
   },
 };

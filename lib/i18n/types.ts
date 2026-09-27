@@ -193,12 +193,14 @@ export interface Dict {
   footer: {
     ecosystem: string;
     community: string;
+    legal: string;
     blog: string;
     api: string;
     neoid: string;
     telegram: string;
     github: string;
     tos: string;
+    privacy: string;
     copyright: string;
   };
 }

@@ -98,8 +98,15 @@ function ProfileMenu() {
     const onDoc = (e: MouseEvent) => {
       if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
     };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
     document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   const label = user?.displayName || user?.email || t.nav.profile;
@@ -123,6 +130,15 @@ function ProfileMenu() {
       {open && (
         <div className="site-header__profile-menu nw-dropdown-anim" role="menu">
           <p className="site-header__profile-name">{label}</p>
+          <a
+            href="https://id.neome.uk/profile"
+            className="site-header__profile-item"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+          >
+            <User size={16} aria-hidden="true" />
+            {t.nav.profile}
+          </a>
           <button
             type="button"
             className="site-header__profile-item"

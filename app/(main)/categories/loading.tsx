@@ -1,0 +1,6 @@
+// Intentionally empty: this is a fully client-side page, so the route's
+// own skeleton state (genre + media rows) shows immediately on mount.
+// A route fallback here would only add a redundant flash of fake skeletons.
+export default function CategoriesLoading() {
+  return null;
+}

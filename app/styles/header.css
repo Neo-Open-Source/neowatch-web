@@ -181,6 +181,11 @@
   background: rgba(255, 255, 255, 0.06);
 }
 
+a.site-header__profile-item {
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
 .auth-callback {
   display: flex;
   flex-direction: column;

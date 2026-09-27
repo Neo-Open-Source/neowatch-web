@@ -180,12 +180,14 @@ export const ru: Dict = {
   footer: {
     ecosystem: "Экосистема",
     community: "Сообщество",
+    legal: "Право",
     blog: "Блог",
     api: "API",
     neoid: "NeoID",
     telegram: "Telegram",
     github: "GitHub",
     tos: "Пользовательское соглашение",
+    privacy: "Политика конфиденциальности",
     copyright: "© 2024–2026 Neo-Open-Source",
   },
 };
