@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, startTransition } from "react";
-import { useParams, useRouter, notFound } from "next/navigation";
-import { Bookmark, Clapperboard, Play, Share2 } from "lucide-react";
+import { useEffect, useRef, useState, startTransition } from "react";
+import { useParams, notFound } from "next/navigation";
+import { Bookmark, Clapperboard, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { FocusContext, useFocusable, setFocus } from "@noriginmedia/norigin-spatial-navigation";
 import { useI18n } from "@/lib/context/i18n-context";
@@ -32,8 +32,9 @@ import { CastCard } from "@/components/cards/CastCard";
 import { SeasonCard } from "@/components/cards/SeasonCard";
 import { TrailerCard } from "@/components/cards/TrailerCard";
 import { TrailerModal } from "@/components/TrailerModal";
+import { WatchActions } from "@/components/watch/WatchActions";
 import { PageTitle } from "@/components/ui/PageTitle";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { DetailHeroSkeleton } from "@/components/skeletons/DetailHeroSkeleton";
 import { ImdbBadge, TmdbBadge } from "@/components/ui/RatingBadges";
 import { makeSkeletonKeys } from "@/lib/utils/skeletons";
 
@@ -96,6 +97,8 @@ function DetailHeroActions({
   mediaType,
   title,
   locale,
+  kpId,
+  imdbId,
   watchLabel,
   watchlistLabel,
   inWatchlistLabel,
@@ -111,6 +114,8 @@ function DetailHeroActions({
   mediaType: "movie" | "tv";
   title: string;
   locale: Locale;
+  kpId: number | null;
+  imdbId: string | null;
   watchLabel: string;
   watchlistLabel: string;
   inWatchlistLabel: string;
@@ -225,17 +230,7 @@ function DetailHeroActions({
     }
   };
 
-  const handleWatch = useCallback(() => {
-    const params = new URLSearchParams();
-    if (mediaType === "tv") {
-      // Start from S1E1 — the player handles navigation between episodes
-      params.set("season", "1");
-      params.set("episode", "1");
-    }
-    window.location.href = `/${mediaType}/${mediaId}/watch?${params.toString()}`;
-  }, [mediaType, mediaId]);
-
-  const { ref, focusKey, focused: panelFocused, hasFocusedChild } = useFocusable({
+  const { ref, focusKey } = useFocusable({
     focusKey: DETAIL_HERO_FOCUS_KEY,
     trackChildren: true,
     saveLastFocusedChild: true,
@@ -250,19 +245,17 @@ function DetailHeroActions({
     },
     onFocus: () => scrollToHero(),
   });
-  const inPanel = panelFocused || hasFocusedChild;
 
   return (
     <FocusContext.Provider value={focusKey}>
       <div ref={ref as React.RefObject<HTMLDivElement>} className="detail-actions">
-        {/* When focus leaves the panel, Watch becomes the default big pill again. */}
-        <HeroActionButton
-          focusKey="detail-play"
-          className="detail-hero-action--primary"
+        <WatchActions
+          mediaType={mediaType}
+          tmdbId={mediaId}
+          kpId={kpId}
+          imdbId={imdbId}
+          title={title}
           label={watchLabel}
-          icon={<Play size={18} fill="currentColor" strokeWidth={0} />}
-          active={!inPanel}
-          onActivate={handleWatch}
         />
 
         <div className="detail-actions__secondary">
@@ -303,7 +296,6 @@ function DetailHeroActions({
 
 export default function DetailPage({ initialData }: { initialData?: MovieDetails | TVDetails | null }) {
   const params = useParams<{ type: string; id: string }>();
-  const router = useRouter();
   const { t, locale } = useI18n();
   const lang = toApiLanguage(locale);
 
@@ -423,28 +415,25 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
 
           <div className="detail-hero-content">
             {loading ? (
-              <div className="flex flex-col gap-3">
-                <Skeleton className="h-14 w-64 rounded-lg" />
-                <Skeleton className="h-4 w-48" />
-                <Skeleton className="h-4 w-36" />
-                <Skeleton className="h-3.5 w-80" />
-                <Skeleton className="h-3.5 w-72" />
-              </div>
+              <DetailHeroSkeleton />
             ) : data ? (
               <div className="detail-hero-reveal">
                 {data.logo && !logoFailed ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={data.logo}
-                    ref={logoRef}
-                    src={data.logo}
-                    alt={data.title}
-                    className={`detail-logo${logoLoaded ? " detail-logo--loaded" : ""}`}
-                    onLoad={() => setLogoLoaded(true)}
-                    onError={() => setLogoFailed(true)}
-                    draggable={false}
-                    decoding="async"
-                  />
+                  <>
+                    <h1 className="visually-hidden">{data.title}</h1>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      key={data.logo}
+                      ref={logoRef}
+                      src={data.logo}
+                      alt=""
+                      className={`detail-logo${logoLoaded ? " detail-logo--loaded" : ""}`}
+                      onLoad={() => setLogoLoaded(true)}
+                      onError={() => setLogoFailed(true)}
+                      draggable={false}
+                      decoding="async"
+                    />
+                  </>
                 ) : (
                   <h1 className="detail-title">
                     {data.title}
@@ -483,6 +472,8 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
                   mediaType={type}
                   title={data.title}
                   locale={locale}
+                  kpId={data.kpId}
+                  imdbId={data.imdbId}
                   watchLabel={t.detail.watch}
                   watchlistLabel={t.detail.addToWatchlist}
                   inWatchlistLabel={t.detail.inWatchlist}
@@ -527,7 +518,6 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
                       season={s}
                       episodesLabel={t.detail.episodes}
                       focusKey={`detail-season-${i}`}
-                      onActivate={() => router.push(`/${type}/${id}/season/${s.seasonNumber}`)}
                     />
                   ))}
             </ShelfSection>

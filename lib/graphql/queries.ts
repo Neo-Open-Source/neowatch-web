@@ -417,11 +417,50 @@ export const GET_CATEGORY_COLLECTION = gql`
 // ── Players ─────────────────────────────────────────────────────────────────
 
 export const GET_PLAYER = gql`
-  query GetPlayer($provider: PlayerProvider!, $kpId: Int, $tmdbId: Int, $imdbId: String, $season: Int, $episode: Int) {
-    player(provider: $provider, kpId: $kpId, tmdbId: $tmdbId, imdbId: $imdbId, season: $season, episode: $episode) {
+  query GetPlayer($provider: PlayerProvider!, $kpId: Int, $tmdbId: Int, $imdbId: String, $season: Int, $episode: Int, $translation: Int) {
+    player(provider: $provider, kpId: $kpId, tmdbId: $tmdbId, imdbId: $imdbId, season: $season, episode: $episode, translation: $translation) {
       provider
       url
       type
+    }
+  }
+`;
+
+export const GET_KODIK = gql`
+  query GetKodik($kpId: Int, $imdbId: String, $shikimoriId: Int) {
+    kodik(kpId: $kpId, imdbId: $imdbId, shikimoriId: $shikimoriId) {
+      provider
+      total
+      results {
+        id
+        title
+        year
+        lastSeason
+        quality
+        kinopoiskId
+        imdbId
+        translations {
+          id
+          title
+          type
+          link
+          seasons {
+            number
+            link
+            episodes { number link }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_PLAYER_AVAILABILITY = gql`
+  query PlayerAvailability($kpId: Int, $tmdbId: Int, $imdbId: String) {
+    playerAvailability(kpId: $kpId, tmdbId: $tmdbId, imdbId: $imdbId) {
+      kodik
+      alloha
+      collaps
     }
   }
 `;

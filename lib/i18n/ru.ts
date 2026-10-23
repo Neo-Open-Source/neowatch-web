@@ -36,7 +36,7 @@ export const ru: Dict = {
     watchlist: "Избранное",
     topMovies: "Топ фильмов",
     topSeries: "Топ сериалов",
-    error: "Не удалось загрузить",
+    error: "Не удалось загрузить ряд. Проверьте соединение и попробуйте снова.",
     seeAll: "Смотреть все",
   },
   watchlist: {
@@ -56,9 +56,9 @@ export const ru: Dict = {
     submit: "Найти",
     clear: "Очистить",
     resultsFor: "Результаты по запросу",
-    noResults: "Ничего не найдено",
+    noResults: "Ничего не найдено. Попробуйте другое название или сбросьте фильтры.",
     loading: "Поиск…",
-    error: "Не удалось загрузить результаты",
+    error: "Не удалось загрузить результаты. Проверьте соединение и попробуйте снова.",
     seeAll: "Все результаты",
     filters: {
       type: "Тип",
@@ -79,6 +79,7 @@ export const ru: Dict = {
     tmdb: "TMDB",
     imdb: "IMDb",
     resume: "Продолжить",
+    unknownTitle: "Без названия",
   },
   detail: {
     watch: "Смотреть",
@@ -114,6 +115,10 @@ export const ru: Dict = {
       return "эпизодов";
     },
     episodes: "эп.",
+    watchEpisode: "Серия",
+    watchError: "Не удалось запустить. Попробуйте другой источник.",
+    watchLoading: "Загрузка…",
+    watchUnavailable: "Недоступно",
   },
   og: {
     movie: "Фильм",
@@ -163,19 +168,17 @@ export const ru: Dict = {
       },
     ],
   },
-  player: {
-    episodes: "Эпизоды",
-    season: "Сезон",
-    loading: "Загрузка…",
-    close: "Закрыть",
-    noEpisodes: "Эпизоды пока недоступны",
-  },
   a11y: {
     logo: "NeoWatch",
     scrollLeft: "Прокрутить влево",
     scrollRight: "Прокрутить вправо",
     langPicker: "Выбор языка",
     back: "Назад",
+    mainNav: "Основная навигация",
+    mobileNav: "Мобильная навигация",
+    scrollTop: "Наверх",
+    close: "Закрыть",
+    clearFilters: "Сбросить фильтры",
   },
   footer: {
     ecosystem: "Экосистема",

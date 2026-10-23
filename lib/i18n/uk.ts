@@ -36,7 +36,7 @@ export const uk: Dict = {
     watchlist: "Обране",
     topMovies: "Топ фільмів",
     topSeries: "Топ серіалів",
-    error: "Не вдалося завантажити",
+    error: "Не вдалося завантажити ряд. Перевірте з'єднання та спробуйте ще раз.",
     seeAll: "Дивитись все",
   },
   watchlist: {
@@ -56,9 +56,9 @@ export const uk: Dict = {
     submit: "Знайти",
     clear: "Очистити",
     resultsFor: "Результати за запитом",
-    noResults: "Нічого не знайдено",
+    noResults: "Нічого не знайдено. Спробуйте іншу назву або скиньте фільтри.",
     loading: "Пошук…",
-    error: "Не вдалося завантажити результати",
+    error: "Не вдалося завантажити результати. Перевірте з'єднання та спробуйте ще раз.",
     seeAll: "Всі результати",
     filters: {
       type: "Тип",
@@ -79,6 +79,7 @@ export const uk: Dict = {
     tmdb: "TMDB",
     imdb: "IMDb",
     resume: "Продовжити",
+    unknownTitle: "Без назви",
   },
   detail: {
     watch: "Дивитись",
@@ -114,6 +115,10 @@ export const uk: Dict = {
       return "епізодів";
     },
     episodes: "еп.",
+    watchEpisode: "Серія",
+    watchError: "Не вдалося запустити. Спробуйте інше джерело.",
+    watchLoading: "Завантаження…",
+    watchUnavailable: "Недоступно",
   },
   og: {
     movie: "Фільм",
@@ -163,19 +168,17 @@ export const uk: Dict = {
       },
     ],
   },
-  player: {
-    episodes: "Епізоди",
-    season: "Сезон",
-    loading: "Завантаження…",
-    close: "Закрити",
-    noEpisodes: "Епізоди поки недоступні",
-  },
   a11y: {
     logo: "NeoWatch",
     scrollLeft: "Прокрутити вліво",
     scrollRight: "Прокрутити вправо",
     langPicker: "Вибір мови",
     back: "Назад",
+    mainNav: "Основна навігація",
+    mobileNav: "Мобільна навігація",
+    scrollTop: "Догори",
+    close: "Закрити",
+    clearFilters: "Скинути фільтри",
   },
   footer: {
     ecosystem: "Екосистема",

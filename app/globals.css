@@ -23,8 +23,8 @@
 @import "./styles/responsive.css";
 @import "./styles/detail-page.css";
 @import "./styles/person-page.css";
-@import "./styles/season-page.css";
-@import "./styles/episode-card.css";
+@import "./styles/watch.css";
 @import "./styles/mobile-nav.css";
 @import "./styles/legal-page.css";
+@import "./styles/skeletons.css";
 @import "tailwindcss";

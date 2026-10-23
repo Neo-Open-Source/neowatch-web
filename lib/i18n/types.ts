@@ -122,6 +122,7 @@ export interface Dict {
     tmdb: string;
     imdb: string;
     resume: string;
+    unknownTitle: string;
   };
   detail: {
     watch: string;
@@ -145,6 +146,10 @@ export interface Dict {
     season: string;
     episodeLabel: (n: number) => string;
     episodes: string;
+    watchEpisode: string;
+    watchError: string;
+    watchLoading: string;
+    watchUnavailable: string;
   };
   /** Share-preview (OG image) labels. */
   og: {
@@ -176,19 +181,17 @@ export interface Dict {
     intro: string;
     sections: Array<{ heading: string; body: string }>;
   };
-  player: {
-    episodes: string;
-    season: string;
-    loading: string;
-    close: string;
-    noEpisodes: string;
-  };
   a11y: {
     logo: string;
     scrollLeft: string;
     scrollRight: string;
     langPicker: string;
     back: string;
+    mainNav: string;
+    mobileNav: string;
+    scrollTop: string;
+    clearFilters: string;
+    close: string;
   };
   footer: {
     ecosystem: string;

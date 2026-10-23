@@ -1,5 +1,5 @@
 .detail-hero-wrap {
-  --detail-hero-bg: #454b52;
+  --detail-hero-bg: var(--nw-detail-hero-bg);
   --detail-shelves-bg: var(--nw-bg);
 
   width: calc(100% + 2 * var(--nw-side-pad));
@@ -97,6 +97,12 @@
   animation: detail-fade-in 450ms ease both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .detail-hero-reveal {
+    animation: none;
+  }
+}
+
 .detail-logo {
   max-width: 340px;
   max-height: 140px;
@@ -151,15 +157,11 @@
 }
 
 .detail-overview {
+  margin: 0;
   max-width: 500px;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.65;
   font-size: 15px;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 6;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .detail-actions {
@@ -199,6 +201,11 @@
 
 .detail-hero-action:active {
   transform: scale(0.98);
+}
+
+.detail-hero-action:focus-visible {
+  outline: 2px solid var(--nw-accent) !important;
+  outline-offset: 3px;
 }
 
 .detail-hero-action__icon {
@@ -284,6 +291,12 @@
   transition: transform 150ms ease;
 }
 
+.cast-card:focus-visible {
+  outline: 2px solid var(--nw-accent) !important;
+  outline-offset: 3px;
+  border-radius: var(--nw-radius);
+}
+
 .cast-card__avatar {
   width: 128px;
   height: 128px;
@@ -366,6 +379,11 @@
 .cast-card__role-skeleton {
   height: 11px;
   width: 64px;
+}
+
+.cast-card--skeleton {
+  cursor: default;
+  pointer-events: none;
 }
 
 :root:not([data-input-mode="mouse"]) .trailer-card--focused {

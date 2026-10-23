@@ -31,9 +31,9 @@ export function ShelfSection({
   return (
     <section className="shelf-section" data-shelf>
       <div className="shelf-section__header">
-        {loading ? (
+        {loading && !title ? (
           <Skeleton className="shelf-section__title-skeleton" />
-        ) : href ? (
+        ) : href && !loading ? (
           <Link href={href} className="shelf-section__title-link">
             <h2 className="shelf-section__title">{title}</h2>
             <ChevronRight size={18} className="shelf-section__title-arrow" />

@@ -223,6 +223,48 @@ export interface PlayerResponse {
   type: "iframe" | "hls" | "mp4";
 }
 
+export interface KodikEpisode {
+  number: number;
+  link: string;
+}
+
+export interface KodikSeason {
+  number: number;
+  link: string | null;
+  episodes: KodikEpisode[];
+}
+
+export interface KodikTranslation {
+  id: number;
+  title: string;
+  type: string;
+  link: string | null;
+  seasons: KodikSeason[];
+}
+
+export interface KodikSearchResult {
+  id: string;
+  title: string;
+  year: number | null;
+  lastSeason: number | null;
+  quality: string | null;
+  kinopoiskId: string | null;
+  imdbId: string | null;
+  translations: KodikTranslation[];
+}
+
+export interface PlayerAvailability {
+  kodik: boolean;
+  alloha: boolean;
+  collaps: boolean;
+}
+
+export interface KodikPlaylist {
+  provider: string;
+  total: number;
+  results: KodikSearchResult[];
+}
+
 export interface HealthResponse {
   status: string;
   version: string;

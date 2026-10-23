@@ -9,7 +9,6 @@ import type {
   MediaItem,
   MovieDetails,
   PersonDetails,
-  SeasonDetails,
   Studio,
   TrendingItem,
   TVDetails,
@@ -37,27 +36,6 @@ export const getPersonDetail = cache(
       { revalidate: 3600 },
     );
     return fetchPerson();
-  },
-);
-
-export const getSeasonBundle = cache(
-  async (
-    tvId: number,
-    seasonNumber: number,
-    lang: ApiLanguage,
-  ): Promise<{ tv: TVDetails; season: SeasonDetails }> => {
-    const fetchSeason = unstable_cache(
-      async () => {
-        const [tv, season] = await Promise.all([
-          gqlApi.media.tvDetail(tvId, { language: lang }) as Promise<TVDetails>,
-          gqlApi.media.season(tvId, seasonNumber, { language: lang }) as Promise<SeasonDetails>,
-        ]);
-        return { tv, season };
-      },
-      ["season-bundle", String(tvId), String(seasonNumber), lang],
-      { revalidate: 3600 },
-    );
-    return fetchSeason();
   },
 );
 

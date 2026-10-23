@@ -7,6 +7,7 @@ import { createApiClient } from "@/lib/api/client";
 import { getAccessToken } from "@/lib/auth/token";
 import { getStoredAccessToken } from "@/lib/state/auth-session";
 import { getConfig } from "@/lib/constants/config";
+import type { PlayerOptions } from "@/lib/api/players";
 import {
   GET_MEDIA,
   GET_MEDIA_CREDITS,
@@ -25,6 +26,8 @@ import {
   GET_CATEGORIES,
   GET_CATEGORY_COLLECTION,
   GET_PLAYER,
+  GET_KODIK,
+  GET_PLAYER_AVAILABILITY,
   GET_CDN_PLAYER,
   GET_COLLECTION,
   GET_ME,
@@ -257,19 +260,40 @@ export const gqlApi = {
   },
 
   players: {
-    allohaByTmdb: (tmdbId: number, opts?: { season?: number; episode?: number }) =>
+    availability: (ids: { kpId?: number; tmdbId?: number; imdbId?: string }) =>
+      gqlQuery(GET_PLAYER_AVAILABILITY, ids).then((d: any) => d.playerAvailability),
+
+    allohaByTmdb: (tmdbId: number, opts?: PlayerOptions) =>
       gqlQuery(GET_PLAYER, { provider: "alloha", tmdbId, ...opts }).then((d: any) => d.player),
 
-    allohaByKp: (kpId: number, opts?: { season?: number; episode?: number }) =>
+    allohaByKp: (kpId: number, opts?: PlayerOptions) =>
       gqlQuery(GET_PLAYER, { provider: "alloha", kpId, ...opts }).then((d: any) => d.player),
 
-    cdn: (cdnId: number, opts?: { season?: number; episode?: number }) =>
+    allohaByImdb: (imdbId: string, opts?: PlayerOptions) =>
+      gqlQuery(GET_PLAYER, { provider: "alloha", imdbId, ...opts }).then((d: any) => d.player),
+
+    collapsByKp: (kpId: number, opts?: PlayerOptions) =>
+      gqlQuery(GET_PLAYER, { provider: "collaps", kpId, ...opts }).then((d: any) => d.player),
+
+    collapsByImdb: (imdbId: string, opts?: PlayerOptions) =>
+      gqlQuery(GET_PLAYER, { provider: "collaps", imdbId, ...opts }).then((d: any) => d.player),
+
+    kodik: (ids: { kpId?: number; imdbId?: string; shikimoriId?: number }) =>
+      gqlQuery(GET_KODIK, ids).then((d: any) => d.kodik),
+
+    kodikByKp: (kpId: number, opts?: PlayerOptions) =>
+      gqlQuery(GET_PLAYER, { provider: "kodik", kpId, ...opts }).then((d: any) => d.player),
+
+    kodikByImdb: (imdbId: string, opts?: PlayerOptions) =>
+      gqlQuery(GET_PLAYER, { provider: "kodik", imdbId, ...opts }).then((d: any) => d.player),
+
+    cdn: (cdnId: number, opts?: PlayerOptions) =>
       gqlQuery(GET_CDN_PLAYER, { cdnId, ...opts }).then((d: any) => d.cdnPlayer),
 
-    cdnByImdb: (imdbId: string, opts?: { season?: number; episode?: number }) =>
+    cdnByImdb: (imdbId: string, opts?: PlayerOptions) =>
       gqlQuery(GET_CDN_PLAYER, { imdbId, ...opts }).then((d: any) => d.cdnPlayer),
 
-    cdnByKp: (kpId: number, opts?: { season?: number; episode?: number }) =>
+    cdnByKp: (kpId: number, opts?: PlayerOptions) =>
       gqlQuery(GET_CDN_PLAYER, { kpId, ...opts }).then((d: any) => d.cdnPlayer),
   },
 

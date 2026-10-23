@@ -78,7 +78,7 @@ export async function mediaJsonLd({ type, data, locale, path }: MediaLdInput) {
       "@type": "TVSeason",
       name: s.name,
       seasonNumber: s.seasonNumber,
-      url: new URL(`/tv/${data.tmdbId}/season/${s.seasonNumber}`, base).toString(),
+      url,
     })),
   };
 }
