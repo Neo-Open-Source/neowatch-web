@@ -1,27 +1,47 @@
-function PosterCard() {
-  return (
-    <div className="nw-loading-card" aria-hidden="true">
-      <div className="nw-loading-card__poster" />
-      <div className="nw-loading-card__line nw-loading-card__line--title" />
-      <div className="nw-loading-card__line nw-loading-card__line--sub" />
-    </div>
-  );
-}
+import { PosterCardSkeleton } from "@/components/cards/PosterCardSkeleton";
+import { CastCardSkeleton } from "@/components/skeletons/CastCardSkeleton";
+import { DetailHeroSkeleton } from "@/components/skeletons/DetailHeroSkeleton";
+import { ShelfSkeleton } from "@/components/skeletons/ShelfSkeleton";
+import { makeSkeletonKeys } from "@/lib/utils/skeletons";
+
+const SEASONS = makeSkeletonKeys(6);
+const CAST = makeSkeletonKeys(10);
+const SIMILAR = makeSkeletonKeys(10);
 
 export default function DetailLoading() {
   return (
-    <div className="nw-loading">
-      <div className="nw-loading-hero" aria-hidden="true" />
-      {[0, 1, 2].map((shelf) => (
-        <div key={shelf} className="nw-loading-shelf" aria-hidden="true">
-          <div className="nw-loading-shelf__title" />
-          <div className="nw-loading-shelf__row">
-            {Array.from({ length: 10 }, (_, i) => (
-              <PosterCard key={i} />
-            ))}
+    <>
+      <div className="detail-hero-wrap">
+        <div className="detail-hero-card" aria-hidden="true">
+          <div className="detail-hero-backdrop">
+            <div className="skeleton detail-hero-backdrop__skeleton" />
+          </div>
+
+          <div className="detail-hero-content">
+            <DetailHeroSkeleton />
           </div>
         </div>
-      ))}
-    </div>
+
+        <div className="detail-shelves-layer">
+          <ShelfSkeleton titleWidth={96}>
+            {SEASONS.map((key) => (
+              <PosterCardSkeleton key={key} />
+            ))}
+          </ShelfSkeleton>
+
+          <ShelfSkeleton titleWidth={72}>
+            {CAST.map((key) => (
+              <CastCardSkeleton key={key} />
+            ))}
+          </ShelfSkeleton>
+
+          <ShelfSkeleton titleWidth={84}>
+            {SIMILAR.map((key) => (
+              <PosterCardSkeleton key={`similar-${key}`} />
+            ))}
+          </ShelfSkeleton>
+        </div>
+      </div>
+    </>
   );
 }

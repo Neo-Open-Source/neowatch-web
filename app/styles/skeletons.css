@@ -1,0 +1,151 @@
+/* Placeholder sizes for fallbacks that reuse loaded component wrappers. */
+
+.shelf-section__title-skeleton {
+  height: 22px;
+  border-radius: 5px;
+}
+
+.list-page__title-skeleton {
+  height: 24px;
+  border-radius: 5px;
+}
+
+.nw-chip-skeleton {
+  width: 64px;
+  height: 30px;
+  border-radius: 999px;
+}
+
+.search-page__title-skeleton {
+  width: 130px;
+  height: 24px;
+  border-radius: 5px;
+}
+
+.studios-page__title-skeleton {
+  width: 96px;
+  height: 24px;
+  border-radius: 5px;
+}
+
+.detail-hero-backdrop__skeleton {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+
+.nw-hero-skeleton {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.nw-hero-skeleton__title {
+  width: min(320px, 82%);
+  height: 56px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.nw-hero-skeleton__meta-item {
+  height: 14px;
+  border-radius: 5px;
+}
+
+.nw-hero-skeleton__meta-item--age {
+  width: 34px;
+  height: 22px;
+  border-radius: 4px;
+}
+
+.nw-hero-skeleton__meta-item--year { width: 42px; }
+.nw-hero-skeleton__meta-item--runtime { width: 58px; }
+.nw-hero-skeleton__meta-item--genres { width: 128px; }
+
+.nw-hero-skeleton__badge {
+  width: 78px;
+  height: 22px;
+  border-radius: 6px;
+}
+
+.nw-hero-skeleton__watch {
+  width: 176px;
+  height: 42px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.nw-hero-skeleton__secondary {
+  display: contents;
+}
+
+.nw-hero-skeleton__action {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nw-hero-skeleton__overview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.nw-hero-skeleton__overview-line {
+  width: 100%;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.nw-hero-skeleton__overview-line--long { width: 94%; }
+.nw-hero-skeleton__overview-line--medium { width: 88%; }
+.nw-hero-skeleton__overview-line--short { width: 62%; }
+
+@media (max-width: 768px) {
+  .nw-hero-skeleton {
+    align-items: center;
+  }
+
+  .nw-hero-skeleton__title {
+    width: min(280px, 78vw);
+    height: 40px;
+    margin-bottom: 16px;
+  }
+
+  .nw-hero-skeleton__meta {
+    justify-content: center;
+  }
+
+  .nw-hero-skeleton__meta-item--genres { width: 108px; }
+
+  .nw-hero-skeleton__watch {
+    width: 100%;
+    height: 48px;
+  }
+
+  .nw-hero-skeleton__secondary {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 22px;
+    width: 100%;
+  }
+
+  .nw-hero-skeleton__action {
+    width: 48px;
+    height: 48px;
+  }
+
+  .nw-hero-skeleton__overview {
+    max-width: none;
+  }
+
+  .nw-hero-skeleton__overview-line {
+    height: 11px;
+  }
+
+  .nw-hero-skeleton__overview-line--short { width: 72%; }
+}

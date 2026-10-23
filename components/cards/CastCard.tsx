@@ -3,7 +3,7 @@
 import { memo } from "react";
 import { useRouter } from "next/navigation";
 import { useCardNavigation } from "@/lib/hooks/use-card-navigation";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { CastCardSkeleton } from "@/components/skeletons/CastCardSkeleton";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { onCardKeyDown } from "@/lib/utils/keyboard";
 import { cx } from "@/lib/utils/cx";
@@ -12,16 +12,6 @@ import type { CastMember } from "@/lib/api/types";
 interface CastCardProps {
   member?: CastMember;
   focusKey?: string;
-}
-
-function CastCardSkeleton() {
-  return (
-    <div className="cast-card">
-      <Skeleton className="cast-card__avatar" rounded="full" />
-      <Skeleton className="cast-card__name-skeleton" />
-      <Skeleton className="cast-card__role-skeleton" />
-    </div>
-  );
 }
 
 function CastCardReal({ member, focusKey }: { member: CastMember; focusKey?: string }) {

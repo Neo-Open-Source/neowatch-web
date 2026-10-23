@@ -2,6 +2,7 @@
 
 import { memo, useState } from "react";
 import { useCardNavigation } from "@/lib/hooks/use-card-navigation";
+import { useI18n } from "@/lib/context/i18n-context";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { onCardKeyDown } from "@/lib/utils/keyboard";
 import { cx } from "@/lib/utils/cx";
@@ -14,6 +15,7 @@ interface TrailerCardProps {
 }
 
 export const TrailerCard = memo(function TrailerCard({ youtubeId, title, focusKey }: TrailerCardProps) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const { ref, focused } = useCardNavigation({ focusKey, onEnterPress: () => setOpen(true) });
 
@@ -33,7 +35,7 @@ export const TrailerCard = memo(function TrailerCard({ youtubeId, title, focusKe
         <div className="relative">
           <SmartImage
             src={`https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`}
-            alt={title ?? "Trailer"}
+            alt={title ?? t.detail.watchTrailer}
             className="w-full aspect-video object-cover block transition-opacity duration-300 opacity-0"
             loadedClassName="opacity-100"
             draggable={false}

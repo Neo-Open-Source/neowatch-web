@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { GenreCardSkeleton } from "@/components/skeletons/GenreCardSkeleton";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { useCardNavigation } from "@/lib/hooks/use-card-navigation";
 import { onCardKeyDown } from "@/lib/utils/keyboard";
@@ -62,12 +63,6 @@ export const GenreCard = memo(function GenreCard({
   focusKey,
   onActivate,
 }: GenreCardProps) {
-  if (!name) {
-    return (
-      <div className="genre-card genre-card--skeleton">
-        <Skeleton className="genre-card__backdrop-skeleton" rounded="lg" />
-      </div>
-    );
-  }
+  if (!name) return <GenreCardSkeleton />;
   return <GenreCardReal name={name} backdrop={backdrop} focusKey={focusKey} onActivate={onActivate} />;
 });

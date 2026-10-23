@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import type { Studio } from "@/lib/api/types";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { StudioCardSkeleton } from "@/components/skeletons/StudioCardSkeleton";
 import { useCardNavigation } from "@/lib/hooks/use-card-navigation";
 import { getConfig } from "@/lib/constants/config";
 import { cx } from "@/lib/utils/cx";
@@ -38,12 +38,6 @@ function StudioCardReal({ item, focusKey, onActivate }: { item: Studio; focusKey
 }
 
 export const StudioCard = memo(function StudioCard({ item, focusKey, onActivate }: StudioCardProps) {
-  if (!item) {
-    return (
-      <div className="studio-card studio-card--skeleton">
-        <Skeleton className="studio-card__logo-skeleton" />
-      </div>
-    );
-  }
+  if (!item) return <StudioCardSkeleton />;
   return <StudioCardReal item={item} focusKey={focusKey} onActivate={onActivate} />;
 });

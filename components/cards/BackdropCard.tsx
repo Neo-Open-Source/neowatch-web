@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { getConfig } from "@/lib/constants/config";
-import { Skeleton } from "@/components/ui/Skeleton";
+import { BackdropCardSkeleton } from "@/components/skeletons/BackdropCardSkeleton";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { cx } from "@/lib/utils/cx";
 
@@ -16,14 +16,7 @@ interface BackdropCardProps {
 }
 
 export const BackdropCard = memo(function BackdropCard({ item }: BackdropCardProps) {
-  if (!item) {
-    return (
-      <div className="backdrop-card backdrop-card--skeleton">
-        <Skeleton className="backdrop-card__img-skeleton" />
-        <Skeleton className="backdrop-card__label-skeleton" />
-      </div>
-    );
-  }
+  if (!item) return <BackdropCardSkeleton />;
 
   const { showHitboxes } = getConfig();
 
