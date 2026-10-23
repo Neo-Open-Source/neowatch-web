@@ -1,7 +1,0 @@
-allowBuilds:
-  esbuild: true
-  sharp: true
-  unrs-resolver: true
-permissions:
-  '@apollo/client':
-    skills: true
