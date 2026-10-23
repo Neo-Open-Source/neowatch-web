@@ -43,11 +43,6 @@
   margin: 0;
 }
 
-.shelf-section__title-skeleton {
-  height: 20px;
-  width: 140px;
-}
-
 .shelf-section__error {
   color: var(--nw-text-muted);
   font-size: 15px;

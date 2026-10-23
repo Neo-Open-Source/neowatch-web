@@ -30,6 +30,11 @@
     min-width: 0;
     flex-shrink: 1;
   }
+
+  /* 16px prevents iOS Safari from zooming the page on focus. */
+  .search-bar__input {
+    font-size: 16px;
+  }
 }
 
 .search-bar--focused,
@@ -68,13 +73,18 @@
 .search-bar__input::-webkit-search-cancel-button { display: none; }
 .search-bar__input::placeholder { color: var(--nw-text-muted); }
 
+:is(.search-bar--focused, .search-bar:focus-within, .search-bar--spatial) .search-bar__input::placeholder {
+  color: #666;
+}
+
 .search-bar__clear {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
+  margin-right: -4px;
   border: none;
   cursor: pointer;
   color: rgba(255, 255, 255, 0.45);
@@ -198,7 +208,7 @@
 }
 
 .search-bar__result-subtitle {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--nw-text-muted);
   white-space: nowrap;
   overflow: hidden;

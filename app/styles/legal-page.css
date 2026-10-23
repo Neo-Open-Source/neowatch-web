@@ -3,7 +3,6 @@
 .legal-page {
   max-width: 760px;
   margin: 0 auto;
-  padding: 40px var(--nw-side-pad) 72px;
   color: var(--nw-text);
 }
 
@@ -51,10 +50,4 @@
 
 .legal-page__body a:hover {
   text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-  .legal-page {
-    padding: 24px var(--nw-side-pad) 48px;
-  }
 }

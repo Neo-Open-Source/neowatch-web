@@ -77,9 +77,14 @@
 }
 
 .chip-select:hover,
-.chip-select:focus {
+.chip-select:focus-visible {
   border-color: rgba(255, 255, 255, 0.18);
   color: var(--nw-text);
+}
+
+.chip-select:focus-visible {
+  outline: 2px solid var(--nw-accent);
+  outline-offset: 2px;
 }
 
 .chip-select--active {

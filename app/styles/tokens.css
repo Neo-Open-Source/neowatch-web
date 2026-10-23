@@ -4,12 +4,14 @@
   --nw-surface-2: #333333;
   --nw-border: rgba(255, 255, 255, 0.07);
   --nw-text: #e8e8e8;
-  --nw-text-muted: #777777;
+  --nw-text-muted: #a3a3a3;
   --nw-accent: #c3dbe3;
   --nw-radius: 6px;
   --nw-header-h: 52px;
   --nw-header-bg: #242424;
   --nw-side-pad: 48px;
+  /* Detail hero base tone, matched to the average TMDB backdrop while it loads. */
+  --nw-detail-hero-bg: #454b52;
 
   --card-poster-w: 200px;
   --card-backdrop-w: 300px;

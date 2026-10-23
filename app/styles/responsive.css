@@ -57,8 +57,7 @@
     .backdrop-card,
     .genre-card,
     .trailer-card,
-    .cast-card,
-    .episode-card
+    .cast-card
   ) {
     -webkit-tap-highlight-color: transparent;
   }
@@ -70,8 +69,7 @@
     .backdrop-card,
     .genre-card,
     .trailer-card,
-    .cast-card,
-    .episode-card
+    .cast-card
   ):is(:focus, :hover, [class*="--focused"]) {
     transform: none !important;
     outline: none !important;
@@ -151,27 +149,10 @@
   /* Scale card meta text with the enlarged poster */
   .media-card__title { font-size: 14px; }
   .media-card__year { font-size: 13px; }
-
-  /* Season page: scale text with the bigger layout */
-  .season-header__title { font-size: clamp(2rem, 4vw, 3.5rem); }
-  .season-header__meta { font-size: 17px; }
-  .season-header__overview { font-size: 17px; }
-  .episode-card__title { font-size: 18px; }
-  .episode-card__meta { font-size: 16px; }
-  .episode-card__overview { font-size: 16px; }
-  .episode-card__number { font-size: 14px; }
 }
 
 @media (min-width: 1920px) {
   :root { --card-poster-w: 250px; }
   .media-card__title { font-size: 16px; }
   .media-card__year { font-size: 14px; }
-
-  .season-header__title { font-size: clamp(2.25rem, 3.5vw, 4.5rem); }
-  .season-header__meta { font-size: 19px; }
-  .season-header__overview { font-size: 19px; }
-  .episode-card__title { font-size: 20px; }
-  .episode-card__meta { font-size: 17px; }
-  .episode-card__overview { font-size: 17px; }
-  .episode-card__number { font-size: 15px; }
 }

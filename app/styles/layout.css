@@ -46,7 +46,6 @@ main {
     padding-bottom: 12px;
   }
 
-  .page:has(.season-page),
   .page:has(.list-page) {
     gap: 0;
     padding-top: 16px;
@@ -56,4 +55,12 @@ main {
 @keyframes page-in-fade {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main,
+  main.content-scroll,
+  .content-scroll {
+    animation: none;
+  }
 }
