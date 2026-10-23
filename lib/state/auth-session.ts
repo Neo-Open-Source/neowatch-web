@@ -53,6 +53,8 @@ export function clearSession() {
 
 /** Canonical OAuth redirect URI for this origin (must match Neo ID app config). */
 export function getAuthRedirectUri(): string {
-  if (typeof window === "undefined") return "";
-  return `${window.location.origin}/auth/callback`;
+  const base =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (typeof window !== "undefined" ? window.location.origin : "");
+  return `${base}/auth/callback`;
 }
