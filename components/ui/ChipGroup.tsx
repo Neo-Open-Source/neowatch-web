@@ -76,10 +76,11 @@ interface ChipProps {
   focusKey: string;
   active?: boolean;
   onClick: () => void;
+  ariaLabel?: string;
   children: React.ReactNode;
 }
 
-export function Chip({ focusKey, active, onClick, children }: ChipProps) {
+export function Chip({ focusKey, active, onClick, ariaLabel, children }: ChipProps) {
   const { onDown } = useContext(ChipNavContext);
   const { ref, focused } = useFocusable({
     focusKey,
@@ -93,6 +94,7 @@ export function Chip({ focusKey, active, onClick, children }: ChipProps) {
       ref={ref as React.RefObject<HTMLButtonElement>}
       type="button"
       className={cx("chip", active && "chip--active", focused && "chip--nav-focused")}
+      aria-label={ariaLabel}
       onClick={onClick}
     >
       {children}

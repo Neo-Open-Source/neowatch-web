@@ -128,12 +128,11 @@ function ProfileMenu() {
       </FocusableButton>
 
       {open && (
-        <div className="site-header__profile-menu nw-dropdown-anim" role="menu">
+        <div className="site-header__profile-menu nw-dropdown-anim">
           <p className="site-header__profile-name">{label}</p>
           <a
             href="https://id.neome.uk/profile"
             className="site-header__profile-item"
-            role="menuitem"
             onClick={() => setOpen(false)}
           >
             <User size={16} aria-hidden="true" />
@@ -142,7 +141,6 @@ function ProfileMenu() {
           <button
             type="button"
             className="site-header__profile-item"
-            role="menuitem"
             onClick={() => {
               setOpen(false);
               void signOut();
@@ -189,7 +187,7 @@ export function Header() {
 
           <SearchBar />
 
-          <nav className="site-header__nav" aria-label="Main navigation">
+          <nav className="site-header__nav" aria-label={t.a11y.mainNav}>
             {navLinks.map(({ label, href, focusKey: fk }) => (
               <FocusableLink key={href} href={href} className="site-header__nav-link" focusKey={fk} active={isActive(href)}>
                 {label}

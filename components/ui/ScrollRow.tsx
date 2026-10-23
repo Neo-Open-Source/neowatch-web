@@ -7,7 +7,7 @@ import { FocusContext, useFocusable, setFocus } from "@noriginmedia/norigin-spat
 import { useI18n } from "@/lib/context/i18n-context";
 import { NAVBAR_SEARCH_FOCUS_KEY } from "@/components/Header";
 import { getHeaderOffset, scrollToTop } from "@/lib/utils/scroll-into-view";
-import { getScrollRoot, scrollRootBy } from "@/lib/state/scroll-root";
+import { getScrollRoot, preferredScrollBehavior, scrollRootBy } from "@/lib/state/scroll-root";
 
 interface ScrollRowProps {
   children: ReactNode;
@@ -84,7 +84,7 @@ export function ScrollRow({ children, focusKey, navigable = true }: ScrollRowPro
     const viewport = viewportRef.current;
     offsetRef.current = offset;
     if (nativeSwipe && viewport) {
-      if (animate) viewport.scrollTo({ left: offset, behavior: "smooth" });
+      if (animate) viewport.scrollTo({ left: offset, behavior: preferredScrollBehavior() });
       else viewport.scrollLeft = offset;
       return;
     }

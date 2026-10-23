@@ -19,10 +19,10 @@ const MAX_RESULTS = 6;
 const itemLabel = (item: SearchItem) =>
   item.mediaType === "person" ? item.name : item.title;
 
-const itemSubtitle = (item: SearchItem) => {
+const itemSubtitle = (item: SearchItem, movieLabel: string, tvLabel: string) => {
   if (item.mediaType === "person") return item.department ?? "";
   const year = releaseYear(item.releaseDate);
-  const typeLabel = item.mediaType === "movie" ? "Movie" : "TV";
+  const typeLabel = item.mediaType === "movie" ? movieLabel : tvLabel;
   return [year, typeLabel].filter(Boolean).join(" · ");
 };
 
@@ -188,7 +188,7 @@ export function SearchBar() {
                   </span>
                   <span className="search-bar__result-meta">
                     <span className="search-bar__result-title">{itemLabel(item)}</span>
-                    <span className="search-bar__result-subtitle">{itemSubtitle(item)}</span>
+                    <span className="search-bar__result-subtitle">{itemSubtitle(item, t.og.movie, t.og.tv)}</span>
                   </span>
                 </button>
               ))}

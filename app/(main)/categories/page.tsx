@@ -142,6 +142,7 @@ export default function CategoriesPage() {
   return (
     <>
       <PageTitle>{t.meta.categories}</PageTitle>
+      <h1 className="visually-hidden">{t.meta.categories}</h1>
 
       <div className="flex flex-col gap-10">
         <ShelfSection title={t.home.genres} loading={sectionsLoading} focusKey="cat-genres">

@@ -24,6 +24,8 @@ function LangOption({
   return (
     <button
       ref={ref as React.RefObject<HTMLButtonElement>}
+      type="button"
+      aria-current={active ? "true" : undefined}
       className={cx(
         "lang-picker__option",
         active && "lang-picker__option--active",
@@ -61,16 +63,22 @@ function LangDropdown({
   );
   const top = anchor.bottom + 6;
 
+  useEffect(() => {
+    const active =
+      document.querySelector<HTMLElement>(".lang-picker__dropdown .lang-picker__option--active") ??
+      document.querySelector<HTMLElement>(".lang-picker__dropdown .lang-picker__option");
+    active?.focus();
+  }, []);
+
   return (
     <FocusContext.Provider value={focusKey}>
       <ul
         ref={ref as React.RefObject<HTMLUListElement>}
-        role="listbox"
         className="lang-picker__dropdown lang-picker__dropdown--portal"
         style={{ top, left, minWidth }}
       >
         {languages.map((lang) => (
-          <li key={lang.code} role="option" aria-selected={lang.code === locale}>
+          <li key={lang.code}>
             <LangOption
               code={lang.code}
               label={lang.label}
@@ -147,11 +155,24 @@ export function LangPicker() {
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      setFocus(FOCUS_KEY_LANG_TRIGGER);
+      triggerRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, triggerRef]);
+
   const current = languages.find((l) => l.code === locale) ?? languages[0];
 
   const handleSelect = (code: Locale) => {
     setOpen(false);
     setFocus(FOCUS_KEY_LANG_TRIGGER);
+    triggerRef.current?.focus();
     // Switch instantly, then put the language into the URL (?lang=xx-XX) so
     // the server renders (and crawlers index) each language at its own URL.
     setLocale(code);

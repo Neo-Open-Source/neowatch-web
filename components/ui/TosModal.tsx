@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, startTransition } from "react";
+import { useEffect, useRef, useState, startTransition, type KeyboardEvent } from "react";
 import { FocusContext, useFocusable, setFocus } from "@noriginmedia/norigin-spatial-navigation";
 import { useI18n } from "@/lib/context/i18n-context";
 import { NAVBAR_SEARCH_FOCUS_KEY } from "@/components/Header";
@@ -73,6 +73,28 @@ function TosModalDialog({
     return () => clearTimeout(id);
   }, []);
 
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const first = document.querySelector<HTMLElement>(".tos-modal button, .tos-modal a[href]");
+    first?.focus();
+    return () => previouslyFocused?.focus?.();
+  }, []);
+
+  const handleTab = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key !== "Tab") return;
+    const nodes = e.currentTarget.querySelectorAll<HTMLElement>("button, a[href]");
+    if (nodes.length === 0) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
     <FocusContext.Provider value={modalFocusKey}>
       <aside
@@ -81,6 +103,7 @@ function TosModalDialog({
         role="dialog"
         aria-modal="true"
         aria-label={t.terms.title}
+        onKeyDown={handleTab}
       >
         <h2 className="tos-modal__title">{t.terms.title}</h2>
         <p className="tos-modal__text">

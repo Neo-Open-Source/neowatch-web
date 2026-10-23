@@ -37,6 +37,7 @@ export function HomePageClient({ initial }: { initial: HomeInitialData | null })
   return (
     <>
       <PageTitle>{t.meta.home}</PageTitle>
+      <h1 className="visually-hidden">{t.meta.home}</h1>
 
       {/* 1. Continue Watching — auth required, 3+ items minimum */}
       <ContinueWatchingRow title={t.home.continueWatching} focusKey="row-continue" />

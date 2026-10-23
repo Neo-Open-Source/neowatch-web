@@ -32,7 +32,7 @@ export default async function TermsPage() {
   const t = dicts[locale].termsPage;
 
   return (
-    <main className="legal-page">
+    <article className="legal-page">
       <h1 className="legal-page__title">{t.title}</h1>
       <p className="legal-page__updated">{t.updated}</p>
       <p className="legal-page__intro">{t.intro}</p>
@@ -42,6 +42,6 @@ export default async function TermsPage() {
           <p className="legal-page__body">{renderBody(section.body)}</p>
         </section>
       ))}
-    </main>
+    </article>
   );
 }

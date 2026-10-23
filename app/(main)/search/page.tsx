@@ -167,7 +167,7 @@ function SearchPageInner() {
           </div>
 
           {hasActiveFilters && (
-            <Chip focusKey="FILTER_RESET" onClick={() => { setGenreId(""); setYearFrom(""); setYearTo(""); }}>✕</Chip>
+            <Chip focusKey="FILTER_RESET" ariaLabel={t.a11y.clearFilters} onClick={() => { setGenreId(""); setYearFrom(""); setYearTo(""); }}>✕</Chip>
           )}
         </ChipGroup>
       </div>

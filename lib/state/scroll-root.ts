@@ -29,22 +29,30 @@ export function getScrollMaxY(): number {
   return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 }
 
+/** Respect the user's motion preference for programmatic scrolling. */
+export function preferredScrollBehavior(behavior: ScrollBehavior = "smooth"): ScrollBehavior {
+  if (behavior !== "smooth" || typeof window === "undefined") return behavior;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
 export function scrollRootTo(top: number, behavior: ScrollBehavior = "auto"): void {
   const root = getScrollRoot();
+  const resolved = preferredScrollBehavior(behavior);
   if (root) {
-    root.scrollTo({ top, behavior });
+    root.scrollTo({ top, behavior: resolved });
     return;
   }
-  window.scrollTo({ top, behavior });
+  window.scrollTo({ top, behavior: resolved });
 }
 
 export function scrollRootBy(top: number, behavior: ScrollBehavior = "auto"): void {
   const root = getScrollRoot();
+  const resolved = preferredScrollBehavior(behavior);
   if (root) {
-    root.scrollBy({ top, behavior });
+    root.scrollBy({ top, behavior: resolved });
     return;
   }
-  window.scrollBy({ top, behavior });
+  window.scrollBy({ top, behavior: resolved });
 }
 
 /** Absolute Y of `el` inside the active scroll root (or the document). */

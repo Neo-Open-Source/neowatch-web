@@ -50,7 +50,7 @@ export function ContinueWatchingRow({
   title: string;
   focusKey?: string;
 }) {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const { isAuthenticated, loading: authLoading } = useAuth();
   const enabled = !authLoading && isAuthenticated;
 
@@ -93,8 +93,8 @@ export function ContinueWatchingRow({
     // Label: show name + episode info for TV, movie title for movies
     const label =
       item.mediaType === "tv"
-        ? `${item.title ?? "Unknown"}${item.season != null && item.episode != null ? ` · S${item.season} E${item.episode}` : ""}${item.episodeName ? ` — ${item.episodeName}` : ""}`
-        : item.title ?? "Unknown";
+        ? `${item.title ?? t.card.unknownTitle}${item.season != null && item.episode != null ? ` · S${item.season} E${item.episode}` : ""}${item.episodeName ? ` — ${item.episodeName}` : ""}`
+        : item.title ?? t.card.unknownTitle;
 
     return { item, imageUrl, label };
   });
@@ -113,8 +113,8 @@ export function ContinueWatchingRow({
                 : item.backdrop ?? item.poster ?? null;
             const label =
               item.mediaType === "tv"
-                ? `${item.title ?? "Unknown"}${item.season != null && item.episode != null ? ` · S${item.season} E${item.episode}` : ""}`
-                : item.title ?? "Unknown";
+                ? `${item.title ?? t.card.unknownTitle}${item.season != null && item.episode != null ? ` · S${item.season} E${item.episode}` : ""}`
+                : item.title ?? t.card.unknownTitle;
             return (
               <BackdropCard
                 key={`${item.mediaId}-${item.season}-${item.episode}`}

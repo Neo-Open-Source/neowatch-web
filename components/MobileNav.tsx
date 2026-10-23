@@ -28,7 +28,7 @@ export function MobileNav() {
   ];
 
   return (
-    <nav className="mobile-nav" aria-label="Mobile navigation">
+    <nav className="mobile-nav" aria-label={t.a11y.mobileNav}>
       <div className="mobile-nav__inner">
         {navItems.map(({ label, href, icon }) => {
           const active = isActive(href);
