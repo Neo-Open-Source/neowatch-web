@@ -83,11 +83,13 @@ function WatchMainButton({
   label,
   busy,
   expanded,
+  hasChoices,
   onPress,
 }: {
   label: string;
   busy: boolean;
   expanded: boolean;
+  hasChoices: boolean;
   onPress: () => void;
 }) {
   const { ref, focused } = useFocusable({ focusKey: "detail-play", onEnterPress: onPress });
@@ -102,7 +104,8 @@ function WatchMainButton({
       )}
       onClick={onPress}
       aria-label={label}
-      aria-expanded={expanded}
+      aria-expanded={hasChoices ? expanded : undefined}
+      aria-haspopup={hasChoices ? "menu" : undefined}
     >
       <span className="detail-hero-action__icon">
         {busy ? (
@@ -112,7 +115,7 @@ function WatchMainButton({
         )}
       </span>
       <span className="detail-hero-action__label">{label}</span>
-      <ChevronDown size={16} className="detail-watch__chevron" aria-hidden="true" />
+      {hasChoices && <ChevronDown size={16} className="detail-watch__chevron" aria-hidden="true" />}
     </button>
   );
 }
@@ -143,10 +146,24 @@ export function WatchActions({
     preferredChildFocusKey: "detail-play",
   });
 
-  const expanded = hovered || tapExpanded || hasFocusedChild;
   const canKodik = Boolean(kpId || imdbId);
   const canCollaps = Boolean(kpId || imdbId);
   const busy = busySource != null;
+
+  const sources = useMemo(
+    () =>
+      [
+        { id: "kodik" as const, label: "Kodik", available: availability?.kodik },
+        { id: "alloha" as const, label: "Alloha", available: availability?.alloha },
+        { id: "collaps" as const, label: "Collaps", available: availability?.collaps },
+      ].filter((source) => source.available),
+    [availability],
+  );
+
+  const hasChoices = sources.length > 1;
+  // A focused Play button only means "open the source menu" on remote/TV.
+  // With a mouse, stale spatial focus after navigation must not pin it open.
+  const expanded = hasChoices && (hovered || tapExpanded || (isSpatial && hasFocusedChild));
 
   useEffect(() => {
     let cancelled = false;
@@ -243,7 +260,9 @@ export function WatchActions({
 
   useEffect(() => clearHoverClose, [clearHoverClose]);
 
-  const handlePointerEnter = useCallback(() => {
+  // Open on actual pointer movement, not a synthetic pointerenter after route
+  // navigation — the cursor may already sit where the new button appears.
+  const handlePointerMove = useCallback(() => {
     clearHoverClose();
     if (window.matchMedia("(hover: hover)").matches) setHovered(true);
   }, [clearHoverClose]);
@@ -253,22 +272,20 @@ export function WatchActions({
     hoverTimeout.current = window.setTimeout(() => setHovered(false), 160);
   }, [clearHoverClose]);
 
-  const sources = useMemo(
-    () =>
-      [
-        { id: "kodik" as const, label: "Kodik", available: availability?.kodik },
-        { id: "alloha" as const, label: "Alloha", available: availability?.alloha },
-        { id: "collaps" as const, label: "Collaps", available: availability?.collaps },
-      ].filter((source) => source.available),
-    [availability],
-  );
-
   const handleMainClick = useCallback(() => {
     if (busy) return;
+    const first = sources[0]?.id;
+    if (!first) return;
+
+    // A single source has nothing to choose — start it immediately instead of
+    // opening a menu with one item and no obvious way to dismiss it.
+    if (sources.length === 1) {
+      void startSource(first);
+      return;
+    }
 
     if (isSpatial) {
-      const first = sources[0]?.id;
-      if (hasFocusedChild && first) setFocus(`detail-source-${first}`);
+      if (hasFocusedChild) setFocus(`detail-source-${first}`);
       else setTapExpanded(true);
       return;
     }
@@ -279,8 +296,7 @@ export function WatchActions({
       setTapExpanded(true);
       return;
     }
-    const first = sources[0]?.id;
-    if (first) void startSource(first);
+    void startSource(first);
   }, [busy, hasFocusedChild, isSpatial, tapExpanded, startSource, sources]);
 
   return (
@@ -288,7 +304,7 @@ export function WatchActions({
       <div
         ref={rootRef}
         className={cx("detail-watch", expanded && "detail-watch--expanded")}
-        onPointerEnter={handlePointerEnter}
+        onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
         <div ref={groupRef as React.RefObject<HTMLDivElement>} className="detail-watch__pill">
@@ -296,6 +312,7 @@ export function WatchActions({
             label={label}
             busy={busy}
             expanded={expanded}
+            hasChoices={hasChoices}
             onPress={handleMainClick}
           />
         </div>
@@ -318,7 +335,8 @@ export function WatchActions({
                 disabled={busy}
                 focusable={expanded}
                 onClick={() => {
-                  setTapExpanded(true);
+                  setTapExpanded(false);
+                  setHovered(false);
                   void startSource(source.id);
                 }}
               />
