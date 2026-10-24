@@ -107,6 +107,8 @@ export const en: Dict = {
     watchError: "Couldn't start playback. Try another source.",
     watchLoading: "Loading…",
     watchUnavailable: "Not available",
+    showMore: "Read more",
+    showLess: "Show less",
   },
   og: {
     movie: "Movie",

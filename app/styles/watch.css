@@ -46,7 +46,7 @@
 
 .detail-watch__sources {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   left: 0;
   z-index: 40;
   display: flex;
@@ -225,14 +225,19 @@
   display: block;
 }
 
-.watch-modal__toolbar {
-  position: absolute;
-  top: -48px;
-  left: 0;
-  z-index: 3;
+.watch-modal__header {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 8px;
+}
+
+.watch-modal__toolbar {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
 }
 
 .watch-modal__menu {
@@ -242,18 +247,18 @@
 .watch-modal__menu-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 34px;
+  gap: 5px;
+  height: 32px;
   max-width: 220px;
-  padding: 0 12px;
+  padding: 0 8px;
   border: none;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
+  border-radius: 7px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 150ms ease;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 .watch-modal__menu-label {
@@ -264,7 +269,8 @@
 
 :root[data-input-mode="mouse"] .watch-modal__menu-trigger:hover,
 .watch-modal__menu-trigger--open {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 .watch-modal__menu-trigger svg {
@@ -329,35 +335,30 @@
 }
 
 .watch-modal__error {
-  position: absolute;
-  bottom: -28px;
-  left: 0;
-  margin: 0;
+  margin: 0 0 8px;
   font-size: 13px;
   color: #ff8f8f;
 }
 
 .watch-modal__close {
-  position: absolute;
-  top: -48px;
-  right: 0;
-  z-index: 2;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
   cursor: pointer;
-  transition: background 150ms ease;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 :root[data-input-mode="mouse"] .watch-modal__close:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 .watch-modal__close:focus-visible {
@@ -367,24 +368,43 @@
 
 @media (max-width: 768px) {
   .detail-watch {
-    width: 100%;
+    width: min(100%, 380px);
+    margin-inline: auto;
   }
 
   .detail-watch__pill {
     width: 100%;
-    border-radius: 16px;
+    border-radius: 14px;
   }
 
   .detail-watch__main {
+    display: grid !important;
+    grid-template-columns: 24px 1fr 24px;
+    align-items: center;
     width: 100% !important;
-    height: 48px !important;
-    border-radius: 16px !important;
-    justify-content: flex-start;
-    padding-left: 16px !important;
+    height: 52px !important;
+    padding: 0 16px !important;
+    border-radius: 14px !important;
+    justify-content: stretch;
+  }
+
+  .detail-watch__main .detail-hero-action__icon {
+    width: 24px !important;
+    height: 52px !important;
+    justify-self: center;
   }
 
   .detail-watch__main .detail-hero-action__label {
-    margin-right: auto;
+    max-width: 100% !important;
+    margin: 0 !important;
+    justify-self: center;
+    text-align: center;
+    font-size: 15px !important;
+  }
+
+  .detail-watch__chevron {
+    margin: 0;
+    justify-self: center;
   }
 
   .detail-watch__source {
@@ -395,25 +415,20 @@
     padding: 12px;
   }
 
+  .watch-modal__header {
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
   .watch-modal__toolbar {
-    top: 8px;
-    left: 8px;
-    right: 56px;
-    flex-wrap: wrap;
-    gap: 6px;
+    gap: 2px;
   }
 
   .watch-modal__menu-trigger {
-    height: 32px;
-    max-width: 140px;
+    height: 30px;
+    max-width: 128px;
+    padding: 0 6px;
     font-size: 12px;
-    background: rgba(0, 0, 0, 0.6);
-  }
-
-  .watch-modal__close {
-    top: 8px;
-    right: 8px;
-    background: rgba(0, 0, 0, 0.6);
   }
 }
 

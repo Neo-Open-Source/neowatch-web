@@ -181,22 +181,24 @@ export function WatchModal({ url, title, kodik, onClose }: WatchModalProps) {
         onClick={handleBackdropClick}
       />
       <div ref={panelRef} className="watch-modal__panel">
-        <div className="watch-modal__toolbar">
-          {kodik && kodik.seasons.length > 0 &&
-            menuButton("season", `${t.detail.season} ${currentSeason?.number ?? ""}`)}
-          {kodik && currentSeason && currentSeason.episodes.length > 0 &&
-            menuButton("episode", `${t.detail.watchEpisode} ${currentEpisode ?? ""}`)}
-          {busy && <Loader2 size={16} className="watch-modal__spinner" aria-hidden="true" />}
-        </div>
+        <div className="watch-modal__header">
+          <div className="watch-modal__toolbar">
+            {kodik && kodik.seasons.length > 0 &&
+              menuButton("season", `${t.detail.season} ${currentSeason?.number ?? ""}`)}
+            {kodik && currentSeason && currentSeason.episodes.length > 0 &&
+              menuButton("episode", `${t.detail.watchEpisode} ${currentEpisode ?? ""}`)}
+            {busy && <Loader2 size={16} className="watch-modal__spinner" aria-hidden="true" />}
+          </div>
 
-        <button
-          type="button"
-          className="watch-modal__close"
-          onClick={onClose}
-          aria-label={t.a11y.close}
-        >
-          <X size={22} aria-hidden="true" />
-        </button>
+          <button
+            type="button"
+            className="watch-modal__close"
+            onClick={onClose}
+            aria-label={t.a11y.close}
+          >
+            <X size={20} aria-hidden="true" />
+          </button>
+        </div>
 
         {error && <p className="watch-modal__error" role="alert">{error}</p>}
 

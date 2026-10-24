@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, startTransition } from "react";
 import { useParams, notFound } from "next/navigation";
-import { Bookmark, Clapperboard, Share2 } from "lucide-react";
+import { Bookmark, ChevronDown, Clapperboard, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { FocusContext, useFocusable, setFocus } from "@noriginmedia/norigin-spatial-navigation";
 import { useI18n } from "@/lib/context/i18n-context";
@@ -89,6 +89,51 @@ function HeroActionButton({ focusKey, className, label, onActivate, icon, active
       <span className="detail-hero-action__icon">{icon}</span>
       <span className="detail-hero-action__label">{label}</span>
     </button>
+  );
+}
+
+function DetailOverview({ text }: { text: string }) {
+  const { t } = useI18n();
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [canExpand, setCanExpand] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const measure = () => {
+      if (!expanded) setCanExpand(element.scrollHeight > element.clientHeight + 1);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [expanded, text]);
+
+  const collapsible = canExpand || text.length > 500;
+
+  return (
+    <div className="detail-overview-wrap">
+      <p
+        ref={ref}
+        className={`detail-overview${collapsible && !expanded ? " detail-overview--clamped" : ""}`}
+      >
+        {text}
+      </p>
+      {collapsible && (
+        <button
+          type="button"
+          className={`detail-overview__toggle${expanded ? " detail-overview__toggle--expanded" : ""}`}
+          aria-expanded={expanded}
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? t.detail.showLess : t.detail.showMore}
+          <ChevronDown size={14} aria-hidden="true" />
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -486,11 +531,7 @@ export default function DetailPage({ initialData }: { initialData?: MovieDetails
                   trailerYoutubeId={availableTrailers[0]}
                 />
 
-                {data.overview && (
-                  <p className="detail-overview">
-                    {data.overview}
-                  </p>
-                )}
+                {data.overview && <DetailOverview text={data.overview} />}
               </div>
             ) : null}
           </div>

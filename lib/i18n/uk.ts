@@ -119,6 +119,8 @@ export const uk: Dict = {
     watchError: "Не вдалося запустити. Спробуйте інше джерело.",
     watchLoading: "Завантаження…",
     watchUnavailable: "Недоступно",
+    showMore: "Читати далі",
+    showLess: "Згорнути",
   },
   og: {
     movie: "Фільм",

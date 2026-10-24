@@ -150,6 +150,8 @@ export interface Dict {
     watchError: string;
     watchLoading: string;
     watchUnavailable: string;
+    showMore: string;
+    showLess: string;
   };
   /** Share-preview (OG image) labels. */
   og: {
