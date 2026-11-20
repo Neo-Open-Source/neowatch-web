@@ -1,0 +1,111 @@
+---
+import { Icon } from "astro-icon/components";
+import type { User } from "../lib/api/account-types";
+import { text } from "../lib/text";
+
+interface Props {
+  user: User | null;
+}
+
+const { user } = Astro.props;
+const name = user ? user.displayName || user.username : text.nav.guest;
+
+const items = user
+  ? [
+      { href: "/settings/info", icon: "solar:user-bold", label: text.nav.profile },
+      { href: "/favorites", icon: "solar:heart-bold", label: text.nav.favorites },
+      { href: "/notifications", icon: "solar:bell-bold", label: text.nav.notifications },
+      { href: "/history", icon: "solar:clock-circle-bold", label: text.home.history },
+    ]
+  : [{ href: "/auth/login", icon: "solar:user-bold", label: text.nav.signIn }];
+---
+
+<div class="relative shrink-0" data-user-menu>
+  <button
+    class="relative z-menu grid size-9 max-lg:size-11 place-items-center rounded-md text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+    type="button"
+    data-user-menu-trigger
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-label={name}
+  >
+    <span class="flex items-center gap-1">
+      {
+        user ? (
+          <span class="grid size-7 place-items-center rounded-md bg-surface text-caption font-semibold">
+            {(user.displayName || user.username || "?").slice(0, 1).toUpperCase()}
+          </span>
+        ) : (
+          <Icon name="solar:user-bold" width="18" height="18" />
+        )
+      }
+      <Icon name="solar:alt-arrow-down-linear" width="11" height="11" class="text-faint" data-chevron />
+    </span>
+  </button>
+
+  <div
+    class="invisible absolute top-full right-0 z-menu pt-2 opacity-0 transition-[opacity,visibility] duration-150 data-[open=true]:visible data-[open=true]:opacity-100"
+    data-user-menu-panel
+    inert
+  >
+    <div class="w-64 max-w-[calc(100vw-2rem)] rounded-md bg-surface p-1 shadow-panel" role="menu">
+      {
+        items.map((item) => (
+          <a
+            class="flex h-8 w-full select-none items-center gap-2.5 rounded-sm px-2.5 text-ui text-ink transition-colors hover:bg-surface-hover"
+            href={item.href}
+            role="menuitem"
+          >
+            <Icon name={item.icon} width="16" height="16" class="shrink-0 text-muted" />
+            {item.label}
+          </a>
+        ))
+      }
+
+      <div class="my-1 h-px bg-line" role="separator"></div>
+
+      <a
+        class="flex h-8 w-full select-none items-center gap-2.5 rounded-sm px-2.5 text-ui text-ink transition-colors hover:bg-surface-hover"
+        href="/settings"
+        role="menuitem"
+      >
+        <Icon name="solar:settings-bold" width="16" height="16" class="shrink-0 text-muted" />
+        {text.nav.settings}
+      </a>
+
+      <div
+        class="flex h-8 items-center gap-2.5 rounded-sm px-2.5 text-ui text-ink"
+        data-theme-row
+        data-label={text.theme.label}
+        data-system={text.theme.system}
+        data-dark={text.theme.dark}
+        data-light={text.theme.light}
+        role="menuitem"
+      >
+        <Icon name="solar:contrast-bold" width="16" height="16" class="shrink-0 text-muted" />
+        <span class="min-w-0 flex-1 truncate" data-theme-label>{text.theme.label}</span>
+        <button class="group/switch relative ml-auto h-5 w-9 shrink-0 rounded-full bg-line-strong transition-colors aria-checked:bg-accent aria-[checked=mixed]:bg-accent" type="button" role="switch" aria-checked="mixed" data-theme-switch>
+          <span class="absolute top-0.5 left-0.5 size-4 rounded-full bg-white transition-transform duration-150 group-aria-[checked=mixed]/switch:translate-x-2 group-aria-checked/switch:translate-x-4"></span>
+        </button>
+      </div>
+
+      {
+        user && (
+          <>
+            <div class="my-1 h-px bg-line" role="separator"></div>
+            <form method="post" action="/auth/logout">
+              <button
+                class="flex h-8 w-full select-none items-center gap-2.5 rounded-sm px-2.5 text-ui text-ink transition-colors hover:bg-surface-hover"
+                type="submit"
+                role="menuitem"
+              >
+                <Icon name="solar:logout-bold" width="16" height="16" class="shrink-0 text-muted" />
+                {text.nav.signOut}
+              </button>
+            </form>
+          </>
+        )
+      }
+    </div>
+  </div>
+</div>

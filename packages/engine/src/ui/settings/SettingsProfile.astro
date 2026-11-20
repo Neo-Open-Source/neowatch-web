@@ -1,0 +1,55 @@
+---
+import { Icon } from "astro-icon/components";
+import type { User } from "../../lib/api/account-types";
+import { text } from "../../lib/text";
+
+interface Props {
+  user: User | null;
+}
+
+const { user } = Astro.props;
+const initial = user ? (user.displayName || user.username || "?").slice(0, 1).toUpperCase() : "";
+---
+
+<section class="rounded-md bg-elevated p-4" aria-label={text.settings.profile}>
+  <h2 class="pb-4 text-heading font-semibold text-ink">{text.settings.profile}</h2>
+  {
+    user ? (
+      <>
+        <div class="flex items-center gap-4">
+          {user.avatar ? (
+            <img class="size-16 rounded-md bg-surface object-cover" src={user.avatar} alt="" width="64" height="64" />
+          ) : (
+            <span class="grid size-16 place-items-center rounded-md bg-surface text-heading font-semibold text-muted">
+              {initial}
+            </span>
+          )}
+          <div class="min-w-0">
+            <p class="truncate text-subtitle font-semibold text-ink">{user.displayName || user.username}</p>
+            <p class="truncate text-ui text-muted">@{user.username}</p>
+          </div>
+        </div>
+
+        <dl class="mt-5 grid gap-4">
+          <div class="grid gap-1">
+            <dt class="text-caption font-medium text-faint">{text.settings.username}</dt>
+            <dd class="text-ui text-ink">@{user.username}</dd>
+          </div>
+          <div class="grid gap-1">
+            <dt class="text-caption font-medium text-faint">{text.settings.displayName}</dt>
+            <dd class="text-ui text-ink">{user.displayName || "—"}</dd>
+          </div>
+          <div class="grid gap-1">
+            <dt class="text-caption font-medium text-faint">{text.settings.bio}</dt>
+            <dd class="text-ui text-ink">{user.bio || text.settings.bioEmpty}</dd>
+          </div>
+        </dl>
+      </>
+    ) : (
+      <div class="flex items-center gap-3 rounded-sm bg-surface p-4 text-ui text-muted">
+        <Icon name="solar:user-bold" width="24" height="24" class="shrink-0" />
+        {text.settings.signInRequired}
+      </div>
+    )
+  }
+</section>

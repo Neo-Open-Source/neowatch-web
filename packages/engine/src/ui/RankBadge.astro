@@ -1,0 +1,21 @@
+---
+import { text } from "../lib/text";
+
+interface Props {
+  rank: number;
+}
+
+const { rank } = Astro.props;
+const medal =
+  rank === 1 ? "bg-gold" : rank === 2 ? "bg-silver" : rank === 3 ? "bg-bronze" : null;
+---
+
+<span
+  class:list={[
+    "inline-flex h-[24px] items-center justify-center rounded-sm px-1.5 text-meta font-semibold",
+    medal ? `${medal} text-on-medal` : "bg-scrim text-white",
+  ]}
+>
+  <span class="sr-only">{text.card.rank}: {rank}</span>
+  <span aria-hidden="true">#{rank}</span>
+</span>

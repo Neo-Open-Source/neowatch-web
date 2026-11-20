@@ -1,0 +1,29 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"button"> {
+  side: "prev" | "next";
+  offset: string;
+}
+
+const { side, offset, ...rest } = Astro.props;
+---
+
+<button
+  class:list={[
+    "absolute top-1/2 z-20 flex h-[51px] w-[35px] cursor-pointer items-center justify-center rounded-[15px] bg-elevated/90 text-ink opacity-0 shadow-[0_2px_6px_-2px_rgb(0_0_0/0.45),0_6px_12px_-10px_rgb(0_0_0/0.3)] transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 focus-visible:opacity-100 hover:bg-elevated [&[hidden]]:hidden",
+    side === "prev" ? "left-0" : "right-0",
+    offset,
+  ]}
+  type="button"
+  aria-label={side === "prev" ? text.nav.prev : text.nav.next}
+  {...rest}
+>
+  <Icon
+    name={side === "prev" ? "solar:alt-arrow-left-linear" : "solar:alt-arrow-right-linear"}
+    width="20"
+    height="20"
+  />
+</button>

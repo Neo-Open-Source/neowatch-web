@@ -1,0 +1,30 @@
+---
+import CarouselArrow from "./CarouselArrow.astro";
+
+interface Props {
+  ariaHidden?: boolean;
+  wide?: boolean;
+}
+
+const { ariaHidden = false, wide = false } = Astro.props;
+const liWidth = wide
+  ? "[&>li]:w-[260px] sm:[&>li]:w-[280px] lg:[&>li]:w-[300px]"
+  : "[&>li]:w-[150px] sm:[&>li]:w-[168px] lg:[&>li]:w-[184px]";
+const arrowOffset = wide ? "-translate-y-[calc(50%+14px)]" : "-translate-y-[calc(50%+31px)]";
+---
+
+<div class="group/carousel relative -mx-4 mt-1" data-carousel data-wide={wide || undefined} aria-hidden={ariaHidden || undefined}>
+  <CarouselArrow side="prev" offset={arrowOffset} data-carousel-prev hidden />
+
+  <ul
+    class:list={[
+      "flex gap-3 overflow-x-auto scroll-smooth py-1 px-4 [scrollbar-width:none] [scroll-padding-inline:var(--nw-space-4)] [scroll-snap-type:x_mandatory] [&::-webkit-scrollbar]:hidden [&>li]:shrink-0",
+      liWidth,
+    ]}
+    data-carousel-track
+  >
+    <slot />
+  </ul>
+
+  <CarouselArrow side="next" offset={arrowOffset} data-carousel-next hidden />
+</div>

@@ -1,0 +1,48 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../../lib/text";
+
+const buttonClass =
+  "grid h-8 flex-1 place-items-center text-muted transition-colors hover:bg-surface-hover";
+---
+
+<div class="flex items-center border-b border-line rounded-t-md overflow-hidden">
+  <button
+    class={buttonClass}
+    type="button"
+    aria-label={text.detail.favorite}
+    title={text.detail.favorite}
+    aria-pressed="false"
+    data-notify-button
+  >
+    <Icon name="solar:bell-bold" width="17" height="17" />
+  </button>
+  <button
+    class={buttonClass}
+    type="button"
+    aria-label={text.detail.openEdit}
+    title={text.detail.openEdit}
+    data-edit-button
+  >
+    <Icon name="solar:align-left-bold" width="17" height="17" />
+  </button>
+  <button
+    class={buttonClass}
+    type="button"
+    aria-label={text.detail.comment}
+    title={text.detail.comment}
+    data-comments-button
+  >
+    <Icon name="solar:chat-round-dots-bold" width="17" height="17" />
+  </button>
+  <button
+    class:list={[buttonClass, "aria-pressed:text-danger"]}
+    type="button"
+    aria-label={text.detail.like}
+    title={text.detail.like}
+    aria-pressed="false"
+    data-entry-like
+  >
+    <Icon name="solar:heart-bold" width="17" height="17" />
+  </button>
+</div>

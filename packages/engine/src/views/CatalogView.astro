@@ -1,0 +1,30 @@
+---
+import type { PosterItem } from "../lib/poster-item";
+import CatalogGrid from "../ui/CatalogGrid.astro";
+import CatalogToolbar from "../ui/CatalogToolbar.astro";
+import type { SortKey } from "../ui/SortButton.astro";
+import FilterRail from "../ui/FilterRail.astro";
+
+interface Props {
+  sort: SortKey;
+  cards?: PosterItem[];
+  query?: Record<string, string> | undefined;
+}
+
+const { sort, cards = [], query } = Astro.props;
+---
+
+<div class="grid items-start gap-4 py-5 pb-10 lg:grid-cols-[minmax(0,1fr)_280px]" data-catalog>
+  <section class="overflow-hidden rounded-md bg-elevated">
+    <CatalogToolbar sort={sort} query={query} />
+    <div class="px-4 pb-4">
+      <CatalogGrid cards={cards} ranked={sort === "top_rating"} />
+    </div>
+  </section>
+
+  <FilterRail className="max-h-[calc(100dvh-6rem)] rounded-md lg:sticky lg:top-16" />
+</div>
+
+<script>
+  import "../scripts/catalog-sort.ts";
+</script>

@@ -1,0 +1,23 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import HomeView from "@neowatch/engine/views/HomeView.astro";
+import type { HomeData } from "@neowatch/engine/data/types";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { module } from "@neowatch/module";
+
+const { site } = await requestContext(Astro);
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: "/",
+  title: module.title,
+  description: module.description,
+});
+const data: HomeData | null = null;
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <HomeView module={module} data={data} />
+</Page>

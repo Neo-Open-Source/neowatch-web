@@ -1,0 +1,26 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import CalendarView from "@neowatch/engine/views/CalendarView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { text } from "@neowatch/engine/lib/text";
+import { module } from "@neowatch/module";
+
+const sorts = Object.keys(text.sorts) as (keyof typeof text.sorts)[];
+const rawSort = Astro.url.searchParams.get("sort") ?? "";
+const sort = sorts.find((key) => key === rawSort) ?? "created_at";
+
+const { site } = await requestContext(Astro);
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: sort === "created_at" ? "/calendar" : `/calendar?sort=${sort}`,
+  title: sort === "created_at" ? text.pages.calendar : `${text.pages.calendar} — ${text.sorts[sort]}`,
+  description: module.description,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <CalendarView sort={sort} />
+</Page>

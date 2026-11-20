@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+  poster?: string | undefined;
+}
+
+const { title, poster } = Astro.props;
+---
+
+<figure class="-mt-20 overflow-hidden rounded-poster bg-skeleton md:-mt-24">
+  {
+    poster ? (
+      <img
+        class="aspect-[5/7] w-full object-cover"
+        src={poster}
+        alt={title}
+        width="260"
+        height="364"
+      />
+    ) : (
+      <div class="aspect-[5/7] w-full" />
+    )
+  }
+</figure>

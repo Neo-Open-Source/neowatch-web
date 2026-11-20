@@ -1,0 +1,97 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import { dateKey } from "../lib/dates";
+import DayStrip from "../ui/DayStrip.astro";
+import SkeletonRow from "../ui/SkeletonRow.astro";
+import SortButton, { type SortKey } from "../ui/SortButton.astro";
+
+interface Props {
+  sort: SortKey;
+}
+
+const { sort } = Astro.props;
+
+const weekdayFmt = new Intl.DateTimeFormat("ru-RU", { weekday: "short" });
+const monthFmt = new Intl.DateTimeFormat("ru-RU", { month: "short" });
+const capital = (value: string): string => value.charAt(0).toUpperCase() + value.slice(1);
+
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const todayKey = dateKey(today);
+const start = new Date(today);
+start.setDate(today.getDate() - 7);
+
+const days = Array.from({ length: 14 }, (_, index) => {
+  const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + index);
+  return {
+    key: dateKey(date),
+    weekday: capital(weekdayFmt.format(date).replace(".", "")),
+    day: String(date.getDate()),
+    month: date.getDate() === 1 ? capital(monthFmt.format(date).replace(".", "")) : undefined,
+    today: date.getTime() === today.getTime(),
+  };
+});
+---
+
+<div class="py-3 pb-6">
+  <section class="overflow-hidden rounded-md bg-elevated">
+    <div class="relative flex h-11 items-center justify-center px-4">
+      <h1 class="text-heading font-bold">{text.nav.calendar}</h1>
+      <div class="absolute top-1/2 right-4 flex -translate-y-1/2 items-center gap-2">
+        <SortButton current={sort} basePath="/calendar" defaultSort="created_at" />
+        <div
+          class="relative"
+          data-date-picker
+          data-date-id="calendar-jump"
+          data-date-hide-clear
+          data-date-min={days[0]?.key}
+          data-date-max={days[days.length - 1]?.key}
+        >
+          <button
+            class="flex h-8 w-[172px] items-center gap-1.5 rounded-sm bg-surface px-2.5 text-ui font-medium text-ink transition-colors hover:bg-surface-hover aria-expanded:bg-surface-hover"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-label={text.calendar.pickDate}
+            data-date-trigger
+          >
+            <Icon name="solar:calendar-bold" width="16" height="16" class="text-accent" />
+            <span class="flex-1 text-start" data-date-label />
+            <Icon
+              name="solar:alt-arrow-down-linear"
+              width="13"
+              height="13"
+              class="text-faint"
+              data-chevron
+            />
+          </button>
+          <input type="hidden" value={todayKey} data-date-value />
+          <div
+            class="fixed inset-auto m-0 w-[288px] flex-col overflow-hidden rounded-md border border-line bg-panel p-3 shadow-panel backdrop:bg-transparent [&:popover-open]:flex"
+            popover="manual"
+            role="dialog"
+            aria-label={text.calendar.pickDate}
+            data-date-popup
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 pb-4" data-calendar data-today={todayKey}>
+      <DayStrip days={days} activeKey={todayKey} />
+
+      <ul
+        class="mt-4 grid grid-cols-1 gap-x-6 border-t border-line sm:grid-cols-2 xl:grid-cols-3"
+        data-calendar-list
+      >
+        {Array.from({ length: 6 }, () => <SkeletonRow />)}
+      </ul>
+    </div>
+  </section>
+</div>
+
+<script>
+  import "../scripts/sort-menu";
+  import "../scripts/date-picker";
+</script>

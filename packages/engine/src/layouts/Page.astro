@@ -1,0 +1,89 @@
+---
+import { ClientRouter } from "astro:transitions";
+import AppHeader from "../ui/AppHeader.astro";
+import Footer from "../ui/Footer.astro";
+import SearchOverlay from "../ui/SearchOverlay.astro";
+import ToTop from "../ui/ToTop.astro";
+import type { ModuleConfig } from "../module";
+import type { MetaResult } from "../lib/seo/head";
+import { text } from "../lib/text";
+import "../styles/app.css";
+
+interface Props {
+  meta: MetaResult;
+  module: ModuleConfig;
+  build?: string;
+  jsonLd?: Record<string, unknown>[];
+  toTop?: boolean;
+}
+
+const { meta, module, build = "", jsonLd = [], toTop = true } = Astro.props;
+const accent = `--nw-accent-brand:${module.accent.base};--nw-accent-brand-strong:${module.accent.strong};--nw-on-accent:${module.accent.on}`;
+---
+
+<!doctype html>
+<html lang="ru" data-build={build} data-module={module.id} style={accent}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1e1e20" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#e9e9ee" media="(prefers-color-scheme: light)" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <meta name="robots" content={meta.robots} />
+    <link rel="canonical" href={meta.canonical} />
+    {
+      ["regular", "medium", "semibold", "bold"].map((weight) => (
+        <link
+          rel="preload"
+          href={`/fonts/onest-${weight}.woff2`}
+          as="font"
+          type="font/woff2"
+          crossorigin
+        />
+      ))
+    }
+    {Object.entries(meta.og).map(([property, content]) => <meta property={property} content={content} />)}
+    {jsonLd.map((schema) => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}
+    <ClientRouter />
+    <script>
+      import "../scripts/register-update.ts";
+    </script>
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("nw_theme");
+        const light =
+          stored === "light" ||
+          (stored !== "dark" && matchMedia("(prefers-color-scheme: light)").matches);
+        document.documentElement.dataset.theme = light ? "light" : "dark";
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-overlay focus:rounded-sm focus:bg-accent focus:px-3 focus:py-2 focus:text-on-accent"
+      href="#main"
+    >
+      {text.nav.skipToContent}
+    </a>
+    <AppHeader module={module} />
+    <main id="main" class="flex-1">
+      <div class="mx-auto w-full max-w-page px-4 py-3">
+        <slot />
+      </div>
+    </main>
+    <Footer module={module} build={build} />
+    {toTop && <ToTop />}
+    <SearchOverlay placeholder={module.searchPlaceholder} />
+    <script>
+      import "../scripts/user-menu.ts";
+      import "../scripts/carousel.ts";
+      import "../scripts/card-actions.ts";
+      import "../scripts/catalog-filters.ts";
+      import "../scripts/theme-toggle.ts";
+      import "../scripts/calendar-widget.ts";
+      import "../scripts/search-overlay.ts";
+      import "../scripts/to-top.ts";
+    </script>
+  </body>
+</html>

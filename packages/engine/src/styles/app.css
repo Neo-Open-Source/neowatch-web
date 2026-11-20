@@ -1,0 +1,119 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@source "../../../";
+
+@keyframes nw-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.985);
+  }
+}
+
+@keyframes nw-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  body,
+  input,
+  textarea,
+  select,
+  button {
+    font-variant-numeric: normal;
+  }
+
+  button {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  [data-chevron] {
+    transition: transform var(--nw-duration-base) var(--nw-ease);
+  }
+
+  .nw-banner-fade {
+    background: linear-gradient(to top, var(--nw-banner-fade), transparent 66%);
+  }
+
+  [aria-expanded="true"] [data-chevron] {
+    transform: rotate(180deg);
+  }
+
+  [data-menu] {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px) scale(0.98);
+    transition:
+      opacity 140ms var(--nw-ease),
+      transform 140ms var(--nw-ease),
+      visibility 140ms allow-discrete;
+  }
+
+  [data-menu][data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-chevron],
+    [data-menu],
+    .animate-pop-in {
+      transition: none;
+      animation: none;
+    }
+  }
+
+  dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    opacity: 1;
+    transition:
+      opacity var(--nw-duration-base) var(--nw-ease),
+      transform var(--nw-duration-base) var(--nw-ease),
+      overlay var(--nw-duration-base) allow-discrete,
+      display var(--nw-duration-base) allow-discrete;
+  }
+
+  dialog:not([open]) {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.985);
+  }
+
+  dialog[open] {
+    animation: nw-dialog-in var(--nw-duration-base) var(--nw-ease);
+  }
+
+  dialog::backdrop {
+    background: var(--nw-scrim-strong);
+    opacity: 1;
+    transition:
+      opacity var(--nw-duration-base) linear,
+      overlay var(--nw-duration-base) allow-discrete,
+      display var(--nw-duration-base) allow-discrete;
+  }
+
+  dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+
+  dialog[open]::backdrop {
+    animation: nw-backdrop-in var(--nw-duration-base) linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog,
+    dialog::backdrop {
+      animation: none;
+      transition: none;
+    }
+  }
+}

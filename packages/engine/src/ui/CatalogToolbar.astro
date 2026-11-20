@@ -1,0 +1,26 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import SortButton, { type SortKey } from "./SortButton.astro";
+import ViewToggle from "./ViewToggle.astro";
+
+interface Props {
+  sort: SortKey;
+  query?: Record<string, string> | undefined;
+}
+
+const { sort, query } = Astro.props;
+---
+
+<div class="relative flex h-11 items-center justify-center gap-2 px-4">
+  <Icon name="solar:widget-bold" width="20" height="20" class="text-accent" />
+  <h1 class="text-heading font-bold">{text.nav.catalog}</h1>
+  <div class="absolute top-1/2 right-4 flex -translate-y-1/2 items-center gap-3">
+    <SortButton current={sort} basePath="/catalog" query={query} />
+    <ViewToggle />
+  </div>
+</div>
+
+<script>
+  import "../scripts/sort-menu";
+</script>

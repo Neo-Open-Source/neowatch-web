@@ -1,0 +1,62 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+
+export type SortKey = keyof typeof text.sorts;
+
+interface Props {
+  current: SortKey;
+  basePath: string;
+  defaultSort?: SortKey | undefined;
+  query?: Record<string, string> | undefined;
+}
+
+const { current, basePath, defaultSort, query } = Astro.props;
+
+const hrefFor = (key: SortKey): string => {
+  const params = new URLSearchParams(query ?? {});
+  if (defaultSort && key === defaultSort) params.delete("sort");
+  else params.set("sort", key);
+  const qs = params.toString();
+  return qs ? `${basePath}?${qs}` : basePath;
+};
+
+const keys = Object.keys(text.sorts) as SortKey[];
+---
+
+<div class="relative" data-sort>
+  <button
+    class="inline-flex items-center gap-1.5 rounded-sm px-1.5 py-1 text-meta font-semibold text-accent transition-colors hover:bg-surface-hover"
+    type="button"
+    data-sort-button
+    aria-haspopup="menu"
+    aria-expanded="false"
+  >
+    <Icon name="solar:sort-bold" width="15" height="15" class="shrink-0" />
+    {text.sorts[current]}
+    <Icon name="solar:alt-arrow-down-bold" width="12" height="12" class="shrink-0" data-chevron />
+  </button>
+
+  <div
+    class="fixed inset-auto m-0 w-48 flex-col overflow-hidden rounded-md border border-line bg-panel p-1 shadow-panel [&:popover-open]:flex"
+    role="menu"
+    popover="manual"
+    data-sort-menu
+  >
+    {
+      keys.map((key) => (
+        <a
+          class="flex items-center justify-between gap-2 rounded-sm px-2.5 py-1.5 text-ui font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink aria-[current=page]:text-ink"
+          href={hrefFor(key)}
+          role="menuitem"
+          aria-current={key === current ? "page" : undefined}
+        >
+          {text.sorts[key]}
+          {key === current ? (
+            <Icon name="solar:check-bold" width="14" height="14" class="shrink-0 text-accent" />
+          ) : null}
+        </a>
+      ))
+    }
+  </div>
+</div>

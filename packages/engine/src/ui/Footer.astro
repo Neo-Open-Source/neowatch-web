@@ -1,0 +1,106 @@
+---
+import { Icon } from "astro-icon/components";
+import type { ModuleConfig } from "../module";
+import { text } from "../lib/text";
+import NeoLogo from "./NeoLogo.astro";
+
+interface Props {
+  module: ModuleConfig;
+  build?: string | undefined;
+}
+
+const { module, build } = Astro.props;
+const year = new Date().getFullYear();
+
+const groups = [
+  {
+    title: text.footer.ecosystem,
+    links: [
+      { label: text.footer.blog, href: "https://blog.neome.uk", icon: "solar:book-bold" },
+      { label: text.footer.api, href: "https://api.neome.uk", icon: "solar:code-bold" },
+      { label: text.footer.id, href: "https://id.neome.uk", icon: "solar:user-circle-bold" },
+    ],
+  },
+  {
+    title: text.footer.community,
+    links: [
+      { label: text.footer.telegram, href: "https://t.me/neomovies_news", icon: "solar:plane-bold" },
+      { label: text.footer.source, href: "https://git.neome.uk/Neo", icon: "solar:git-branch-bold" },
+    ],
+  },
+  {
+    title: text.footer.legal,
+    links: [
+      { label: text.footer.about, href: "/about", icon: "solar:info-circle-bold" },
+      { label: text.footer.tos, href: "/terms", icon: "solar:file-text-bold" },
+      { label: text.footer.privacy, href: "https://id.neome.uk/privacy", icon: "solar:shield-bold" },
+    ],
+  },
+];
+
+const internal = [
+  { label: text.nav.catalog, href: "/catalog", icon: "solar:widget-bold" },
+  { label: text.nav.calendar, href: "/calendar", icon: "solar:calendar-bold" },
+  { label: text.nav.collections, href: "/collections", icon: "solar:bookmark-square-bold" },
+];
+---
+
+<footer class="mt-8 bg-elevated">
+  <div class="mx-auto w-full max-w-page px-4 py-8">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <a class="inline-flex transition-opacity hover:opacity-80" href="/" aria-label={module.title}>
+          <NeoLogo />
+        </a>
+        <nav class="mt-4 flex flex-col gap-1.5" aria-label={module.title}>
+          {
+            internal.map((item) => (
+              <a
+                class="flex items-center gap-2 text-ui text-muted transition-colors hover:text-accent"
+                href={item.href}
+              >
+                <Icon name={item.icon} width="16" height="16" class="shrink-0 text-faint" />
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+
+      {
+        groups.map((group) => (
+          <div>
+            <h3 class="pb-2 text-caption font-semibold text-ink">{group.title}</h3>
+            <ul class="flex flex-col gap-1.5">
+              {group.links.map((link) => (
+                <li>
+                  <a
+                    class="flex items-center gap-2 text-ui text-muted transition-colors hover:text-accent"
+                    href={link.href}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  >
+                    <Icon name={link.icon} width="16" height="16" class="shrink-0 text-faint" />
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="bg-footer-bottom">
+    <div
+      class="mx-auto flex w-full max-w-page flex-col gap-1 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] text-caption text-faint sm:flex-row sm:items-center sm:justify-between"
+    >
+      <span>© 2024–{year} {text.footer.copyright}</span>
+      <span>
+        {module.title}
+        {build && <span class="text-faint"> · {text.footer.build} {build}</span>}
+      </span>
+    </div>
+  </div>
+</footer>

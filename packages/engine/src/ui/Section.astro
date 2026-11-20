@@ -1,0 +1,27 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  title: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { title, href, linkLabel } = Astro.props;
+---
+
+<div class="flex items-end justify-between gap-4 border-b border-line pb-2">
+  <h2 class="text-subtitle font-semibold">{title}</h2>
+  {
+    href && linkLabel && (
+      <a
+        class="inline-flex items-center gap-1 pb-0.5 text-xs text-muted transition-colors hover:text-ink"
+        href={href}
+      >
+        <span>{linkLabel}</span>
+        <Icon name="solar:alt-arrow-right-bold" width="12" height="12" />
+      </a>
+    )
+  }
+</div>
+<slot />

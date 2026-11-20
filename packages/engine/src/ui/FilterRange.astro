@@ -1,0 +1,16 @@
+---
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="py-2.5">
+  <p class="pb-2 text-meta font-semibold text-muted">{label}</p>
+  <div class="flex items-center gap-2" aria-hidden="true">
+    <span class="h-8 flex-1 animate-pulse rounded-sm border border-line bg-skeleton" />
+    <span class="text-meta text-faint">—</span>
+    <span class="h-8 flex-1 animate-pulse rounded-sm border border-line bg-skeleton" />
+  </div>
+</div>

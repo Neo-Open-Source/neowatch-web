@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../../lib/text";
+import RatingBadge from "../RatingBadge.astro";
+
+interface Props {
+  title: string;
+  meta: string;
+  rating: number;
+  votes: string;
+  poster?: string | undefined;
+  slug: string;
+}
+
+const { title, meta, rating, votes, poster, slug } = Astro.props;
+---
+
+<header class="flex h-[72px] shrink-0 items-center gap-3 bg-elevated px-4 sm:px-6">
+  <a
+    class="grid size-10 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+    href={`/${slug}`}
+    aria-label={text.watch.back}
+  >
+    <Icon name="solar:arrow-left-linear" width="22" height="22" />
+  </a>
+  {
+    poster && (
+      <img
+        class="aspect-[2/3] h-[54px] shrink-0 rounded-sm bg-skeleton object-cover"
+        src={poster}
+        alt=""
+        width="36"
+        height="54"
+      />
+    )
+  }
+  <div class="min-w-0 flex-1">
+    <h1 class="truncate text-heading leading-tight font-semibold text-ink">{title}</h1>
+    <p class="truncate text-ui text-muted">{meta}</p>
+  </div>
+  <div class="flex shrink-0 items-center gap-2">
+    <RatingBadge rating={rating} />
+    <span class="hidden text-ui text-muted sm:inline">{votes}</span>
+  </div>
+</header>

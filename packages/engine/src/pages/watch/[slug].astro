@@ -1,0 +1,39 @@
+---
+import WatchLayout from "@neowatch/engine/layouts/WatchLayout.astro";
+import WatchView from "@neowatch/engine/views/WatchView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { module } from "@neowatch/module";
+import { detailMock, detailSlug, detailAliases } from "@neowatch/data";
+
+export function getStaticPaths() {
+  return [detailSlug, ...detailAliases].map((slug) => ({ params: { slug } }));
+}
+
+const { site } = await requestContext(Astro);
+const slug = Astro.params.slug ?? "";
+const info = new Map(detailMock.info);
+const metaLine = [info.get("Тип"), info.get("Статус"), info.get("Выпуск")]
+  .filter(Boolean)
+  .join(" · ");
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: `/watch/${slug}`,
+  title: detailMock.title,
+  description: module.description,
+});
+---
+
+<WatchLayout meta={meta} module={module} build={buildId()}>
+  <WatchView
+    title={detailMock.title}
+    meta={metaLine}
+    rating={detailMock.rating}
+    votes={detailMock.votes}
+    poster={detailMock.poster}
+    banner={detailMock.banner}
+    slug={slug}
+  />
+</WatchLayout>

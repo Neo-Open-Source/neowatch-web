@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../../lib/text";
+
+interface Props {
+  active: string;
+}
+
+const { active } = Astro.props;
+const items = [
+  { id: "info", icon: "solar:user-bold", label: text.settings.profile },
+  { id: "appearance", icon: "solar:contrast-bold", label: text.settings.appearance },
+  { id: "notifications", icon: "solar:bell-bold", label: text.settings.notifications },
+];
+---
+
+<nav class="flex flex-col gap-0.5 rounded-md bg-elevated p-1" aria-label={text.settings.title}>
+  {
+    items.map((item) => (
+      <a
+        class:list={[
+          "flex h-10 items-center gap-2.5 rounded-sm px-3 text-ui transition-colors",
+          active === item.id
+            ? "bg-surface font-semibold text-ink"
+            : "font-medium text-muted hover:bg-surface-hover hover:text-ink",
+        ]}
+        href={`/settings/${item.id}`}
+        aria-current={active === item.id ? "page" : undefined}
+      >
+        <Icon name={item.icon} width="18" height="18" class="shrink-0" />
+        {item.label}
+      </a>
+    ))
+  }
+</nav>

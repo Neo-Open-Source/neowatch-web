@@ -1,0 +1,31 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import CollectionTile from "../ui/CollectionTile.astro";
+---
+
+<div class="py-5 pb-10">
+  <section class="overflow-hidden rounded-md bg-elevated">
+    <div class="relative flex h-11 items-center justify-center gap-2 px-4">
+      <Icon name="solar:bookmark-square-bold" width="20" height="20" class="text-accent" />
+      <h1 class="text-heading font-bold">{text.nav.collections}</h1>
+      <div class="absolute top-1/2 right-4 flex -translate-y-1/2 items-center gap-4">
+        <label
+          class="flex h-8 w-[260px] max-w-[40vw] items-center gap-2 rounded-md border border-line bg-bg px-2.5 transition-colors focus-within:border-line-strong"
+        >
+          <Icon name="solar:magnifier-linear" width="14" height="14" class="shrink-0 text-faint" />
+          <input
+            class="min-w-0 flex-1 bg-transparent text-meta text-ink outline-none placeholder:text-faint"
+            type="search"
+            placeholder={text.filters.searchTitle}
+            aria-label={text.filters.searchTitle}
+          />
+        </label>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-3 px-4 pt-2 pb-4 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 9 }, () => <CollectionTile collection={null} />)}
+    </div>
+  </section>
+</div>

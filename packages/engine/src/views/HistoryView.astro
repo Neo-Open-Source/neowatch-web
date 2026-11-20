@@ -1,0 +1,13 @@
+---
+import { text } from "../lib/text";
+import Section from "../ui/Section.astro";
+import SkeletonRail from "../ui/SkeletonRail.astro";
+---
+
+<div class="py-5 pb-10">
+  <Section title={text.home.history}>
+    <div class="pt-2">
+      <SkeletonRail count={12} backdrop />
+    </div>
+  </Section>
+</div>

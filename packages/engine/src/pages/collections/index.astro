@@ -1,0 +1,21 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import CollectionsView from "@neowatch/engine/views/CollectionsView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { module } from "@neowatch/module";
+
+const { site } = await requestContext(Astro);
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: "/collections",
+  title: module.title,
+  description: module.description,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <CollectionsView />
+</Page>

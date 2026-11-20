@@ -1,0 +1,38 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  title: string;
+  icon?: string;
+  href?: string;
+  class?: string;
+}
+
+const { title, icon, href, class: className = "" } = Astro.props;
+---
+
+<section class:list={["overflow-hidden rounded-md bg-elevated", className]}>
+  <header class="flex h-9 items-center justify-center gap-2 px-4">
+    {icon && <Icon name={icon} width="20" height="20" class="text-accent" />}
+    {
+      href ? (
+        <a class="group/link inline-flex min-w-0 items-center gap-1" href={href}>
+          <h2 class="truncate text-heading font-bold transition-colors group-hover/link:text-accent">
+            {title}
+          </h2>
+          <Icon
+            name="solar:alt-arrow-right-linear"
+            width="16"
+            height="16"
+            class="shrink-0 text-faint transition-colors group-hover/link:text-accent"
+          />
+        </a>
+      ) : (
+        <h2 class="truncate text-heading font-bold">{title}</h2>
+      )
+    }
+  </header>
+  <div class="px-4 pt-0.5 pb-2.5">
+    <slot />
+  </div>
+</section>

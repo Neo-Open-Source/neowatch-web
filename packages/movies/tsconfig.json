@@ -1,0 +1,25 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [
+    ".astro/types.d.ts",
+    "src/**/*.ts",
+    "src/**/*.astro",
+    "../engine/src/**/*.ts",
+    "../engine/src/**/*.astro"
+  ],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": ["astro/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@neowatch/engine/*": ["../engine/src/*"],
+      "@neowatch/module": ["./src/module.ts"],
+      "@neowatch/data": ["./src/detail.ts"]
+    }
+  }
+}

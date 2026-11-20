@@ -1,0 +1,28 @@
+{
+  "name": "@neowatch/anime",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prebuild": "node ../../scripts/build-sw.mjs",
+    "dev": "astro dev --port 4321",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "predev": "node ../../scripts/build-sw.mjs"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.4.2",
+    "@neowatch/engine": "*",
+    "astro": "^7.4.0",
+    "astro-icon": "^1.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@iconify-json/simple-icons": "^1.2.102",
+    "@iconify-json/solar": "^1.2.16",
+    "@tailwindcss/vite": "^4.3.5",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^6.0.3"
+  }
+}

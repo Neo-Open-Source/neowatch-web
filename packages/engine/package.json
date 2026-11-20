@@ -1,0 +1,29 @@
+{
+  "name": "@neowatch/engine",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./integration": "./integration.mjs",
+    "./module": "./src/module.ts",
+    "./actions": "./src/actions/index.ts",
+    "./data/types": "./src/data/types.ts",
+    "./lib/*": ["./src/lib/*.ts", "./src/lib/*"],
+    "./ui/*": ["./src/ui/*.ts", "./src/ui/*"],
+    "./views/*": ["./src/views/*.ts", "./src/views/*"],
+    "./pages/*": ["./src/pages/*.ts", "./src/pages/*"],
+    "./layouts/*": ["./src/layouts/*.ts", "./src/layouts/*"],
+    "./styles/*": ["./src/styles/*.ts", "./src/styles/*"]
+  },
+  "scripts": {},
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.4.2",
+    "astro": "^7.4.0",
+    "astro-icon": "^1.2.0"
+  },
+  "devDependencies": {
+    "@iconify-json/solar": "^1.2.16",
+    "@tailwindcss/vite": "^4.3.5",
+    "tailwindcss": "^4.3.5"
+  }
+}

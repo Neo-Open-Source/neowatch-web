@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  id: string;
+  label: string;
+}
+
+const { id, label } = Astro.props;
+---
+
+<div>
+  <label class="mb-1.5 block text-meta text-faint" for={`${id}-trigger`}>{label}</label>
+  <div class="relative" data-date-picker data-date-id={id}>
+    <button
+      id={`${id}-trigger`}
+      class="flex h-10 w-full items-center gap-2 rounded-sm border border-line bg-field px-3 text-start text-ui text-ink outline-none transition-colors hover:border-line-strong aria-expanded:border-line-strong"
+      type="button"
+      aria-haspopup="dialog"
+      aria-expanded="false"
+      data-date-trigger
+    >
+      <Icon name="solar:calendar-bold" class="shrink-0 text-faint" width="16" height="16" />
+      <span class="truncate" data-date-label>—</span>
+    </button>
+    <input id={id} type="hidden" value="" data-date-value />
+
+    <div
+      class="fixed inset-auto m-0 w-[288px] flex-col overflow-hidden rounded-md border border-line bg-panel p-3 shadow-panel backdrop:bg-transparent [&:popover-open]:flex"
+      popover="manual"
+      role="dialog"
+      data-date-popup
+    ></div>
+  </div>
+</div>

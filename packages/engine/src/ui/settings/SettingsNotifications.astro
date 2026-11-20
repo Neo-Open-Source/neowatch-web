@@ -1,0 +1,42 @@
+---
+import { text } from "../../lib/text";
+
+const options = [
+  { id: "finished", label: text.settings.notifyFinished },
+  { id: "episode", label: text.settings.notifyNewEpisode },
+  { id: "replies", label: text.settings.notifyReplies },
+];
+---
+
+<section class="grid gap-4" aria-label={text.settings.notifications} data-settings-notifications>
+  <div class="flex items-center justify-between gap-3 rounded-md bg-elevated p-4">
+    <div class="min-w-0">
+      <h2 class="text-heading font-semibold text-ink">{text.settings.browserNotifications}</h2>
+      <p class="text-ui text-muted" data-notification-state>{text.settings.disabled}</p>
+    </div>
+    <button
+      class="h-10 shrink-0 rounded-sm bg-accent px-4 text-ui font-semibold text-on-accent transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-40"
+      type="button"
+      data-notification-enable
+    >
+      {text.settings.enable}
+    </button>
+  </div>
+
+  <div class="grid gap-4 rounded-md bg-elevated p-4">
+    <h2 class="text-heading font-semibold text-ink">{text.settings.notifications}</h2>
+    {
+      options.map((option) => (
+        <label class="flex items-center gap-3 text-ui text-ink">
+          <input
+            class="size-5 shrink-0 accent-accent"
+            type="checkbox"
+            checked={option.id !== "replies"}
+            data-notify-option={option.id}
+          />
+          {option.label}
+        </label>
+      ))
+    }
+  </div>
+</section>

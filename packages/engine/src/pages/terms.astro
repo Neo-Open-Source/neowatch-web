@@ -1,0 +1,35 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import { termsIntro, termsSections, termsUpdated } from "@neowatch/engine/data/terms";
+import { buildId, siteOrigin } from "@neowatch/engine/lib/config";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { text } from "@neowatch/engine/lib/text";
+import { module } from "@neowatch/module";
+
+const meta = buildMeta({
+  site: siteOrigin(Astro.request),
+  siteName: module.brand,
+  path: "/terms",
+  title: text.pages.terms,
+  description: module.description,
+  noindex: true,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <section class="grid gap-4 py-5">
+    <h1 class="text-heading font-semibold text-ink">{text.pages.terms}</h1>
+    <div class="grid gap-4 rounded-md bg-elevated p-4">
+      <p class="text-caption text-faint">{termsUpdated}</p>
+      <p class="text-ui leading-relaxed text-ink">{termsIntro}</p>
+      {
+        termsSections.map((section) => (
+          <div class="grid gap-1.5">
+            <h2 class="text-ui font-semibold text-ink">{section.heading}</h2>
+            <p class="text-ui leading-relaxed text-muted">{section.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Page>

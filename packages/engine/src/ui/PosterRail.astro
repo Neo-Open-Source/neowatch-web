@@ -1,0 +1,22 @@
+---
+import type { PosterItem } from "../lib/poster-item";
+import Carousel from "./Carousel.astro";
+import PosterCard from "./PosterCard.astro";
+
+interface Props {
+  cards: PosterItem[];
+  favorites?: Set<string>;
+  showKind?: boolean;
+  badge?: string;
+}
+
+const { cards, favorites = new Set<string>(), showKind = false, badge } = Astro.props;
+---
+
+<Carousel>
+  {
+    cards.map((card) => (
+      <PosterCard card={card} favorite={favorites.has(card.key)} showKind={showKind} badge={badge} />
+    ))
+  }
+</Carousel>

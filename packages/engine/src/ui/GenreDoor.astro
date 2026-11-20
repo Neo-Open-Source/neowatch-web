@@ -1,0 +1,49 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+---
+
+<div
+  class="absolute inset-0 flex flex-col bg-elevated transition-[transform,opacity] duration-[240ms] ease-(--nw-ease) data-[state=closed]:pointer-events-none data-[state=closed]:translate-x-full data-[state=closed]:opacity-0"
+  data-filters-genres
+  data-state="closed"
+>
+  <header class="flex h-11 shrink-0 items-center gap-2 px-3">
+    <button
+      class="grid size-8 place-items-center rounded-md text-muted transition-colors hover:text-ink"
+      type="button"
+      data-filters-back
+      aria-label={text.filters.back}
+    >
+      <Icon name="solar:arrow-left-linear" width="20" height="20" />
+    </button>
+    <span class="flex-1 text-ui font-semibold">{text.filters.genres}</span>
+    <button class="text-meta text-faint transition-colors hover:text-ink" type="button" disabled>
+      {text.filters.resetSmall}
+    </button>
+  </header>
+
+  <div class="px-4 py-3">
+    <div class="flex h-9 items-center gap-2 rounded-md border border-line bg-field px-2.5 text-meta text-faint" aria-hidden="true">
+      <Icon name="solar:magnifier-linear" width="15" height="15" />
+      {text.filters.searchGenres}
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto px-4 py-2 [scrollbar-width:thin]" aria-hidden="true">
+    {
+      Array.from({ length: 14 }, () => (
+        <div class="flex items-center gap-2.5 py-2.5">
+          <span class="size-[17px] shrink-0 animate-pulse rounded-sm border border-line-strong bg-skeleton" />
+          <span class="h-3 w-1/3 animate-pulse rounded-sm bg-skeleton" />
+        </div>
+      ))
+    }
+  </div>
+
+  <footer class="shrink-0 px-4 py-3">
+    <button class="h-10 w-full rounded-md bg-accent text-ui font-semibold text-on-accent" type="button" disabled>
+      {text.filters.choose}
+    </button>
+  </footer>
+</div>

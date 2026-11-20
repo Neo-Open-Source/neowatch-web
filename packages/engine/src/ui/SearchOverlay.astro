@@ -1,0 +1,187 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import FilterRail from "./FilterRail.astro";
+
+interface Props {
+  placeholder: string;
+}
+
+const { placeholder } = Astro.props;
+
+const trigger =
+  "grid size-7 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-surface-hover hover:text-ink max-[600px]:size-11";
+---
+
+<div
+  class="fixed inset-0 z-overlay flex items-start justify-center bg-scrim-strong px-4 pt-[calc(72px+env(safe-area-inset-top))] pb-[calc(24px+env(safe-area-inset-bottom)+var(--keyboard-inset,0px))] animate-search-fade max-[600px]:items-stretch max-[600px]:px-0 max-[600px]:pt-[calc(env(safe-area-inset-top)+var(--keyboard-inset,0px))]"
+  data-search-overlay
+  hidden
+>
+  <section
+    class="flex max-h-[calc(min(84dvh,860px)-var(--keyboard-inset,0px))] w-full max-w-[720px] flex-col overflow-hidden rounded-md bg-elevated shadow-panel animate-search-panel max-[600px]:h-full max-[600px]:max-h-none max-[600px]:max-w-none max-[600px]:rounded-none"
+    data-search-panel
+    role="dialog"
+    aria-modal="true"
+    aria-label={text.nav.search}
+  >
+    <div class="flex shrink-0 items-center gap-2 px-3 py-2">
+      <Icon name="solar:magnifier-linear" width="20" height="20" class="shrink-0 text-muted" />
+      <input
+        type="text"
+        inputmode="search"
+        class="h-9 min-w-0 flex-1 border-0 bg-transparent p-0 text-base text-ink outline-none placeholder:text-faint"
+        data-search-input
+        placeholder={placeholder}
+        aria-label={text.nav.search}
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button type="button" class={trigger} data-search-clear aria-label={text.search.clear} hidden>
+        <Icon name="solar:close-circle-linear" width="18" height="18" />
+      </button>
+      <button
+        type="button"
+        class={trigger}
+        data-search-filters-open
+        aria-label={text.filters.filter}
+        aria-expanded="false"
+        aria-controls="search-filters"
+      >
+        <Icon name="solar:tuning-2-linear" width="18" height="18" />
+      </button>
+      <button type="button" class={trigger} data-search-close aria-label={text.search.close}>
+        <Icon name="solar:close-bold" width="18" height="18" />
+      </button>
+    </div>
+
+    <div
+      class="min-h-[280px] flex-1 overflow-y-auto overscroll-contain p-2 [scrollbar-color:var(--color-line)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-2.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-line"
+      data-search-body
+    >
+      <div class="flex min-h-[200px] flex-col items-center justify-center gap-2 p-4 text-center text-muted" role="status">
+        <Icon name="solar:magnifier-linear" width="32" height="32" class="opacity-50" />
+        <p>{text.search.startTyping}</p>
+      </div>
+    </div>
+
+    <footer
+      class="flex flex-wrap items-center gap-3 border-t border-line px-3 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] text-caption text-muted"
+    >
+      <span class="inline-flex items-center gap-1">
+        <kbd class="rounded-sm border border-line bg-surface px-1.5 text-caption text-muted">↵</kbd>
+        {text.search.hintSelect}
+      </span>
+      <span class="inline-flex items-center gap-1">
+        <kbd class="rounded-sm border border-line bg-surface px-1.5 text-caption text-muted">↑↓</kbd>
+        {text.search.hintNavigate}
+      </span>
+      <span class="inline-flex items-center gap-1">
+        <kbd class="rounded-sm border border-line bg-surface px-1.5 text-caption text-muted">ESC</kbd>
+        {text.search.hintClose}
+      </span>
+    </footer>
+
+    <template data-search-source-template>
+      <section class="flex flex-col gap-1" data-source-section>
+        <div class="flex items-center gap-2 px-1 pt-1">
+          <span
+            class="grid size-6 shrink-0 place-items-center rounded-sm bg-field text-[10px] font-bold tracking-tight text-muted"
+            data-source-mark
+          />
+          <h3 class="text-ui font-semibold" data-source-name />
+        </div>
+        <div class="flex flex-col gap-1" data-source-list />
+        <button
+          class="mt-1 inline-flex w-fit items-center gap-1.5 rounded-sm bg-surface px-3 py-1.5 text-meta font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink disabled:text-faint"
+          type="button"
+          data-source-more
+          hidden
+        >
+          <Icon name="solar:add-bold" width="13" height="13" />
+          <span data-source-more-label />
+        </button>
+      </section>
+    </template>
+
+    <template data-search-skeleton-row-template>
+      <div class="flex min-h-[84px] items-center gap-3.5 rounded-sm px-2 py-1.5">
+        <span class="block aspect-[var(--nw-poster-ratio)] w-[56px] shrink-0 animate-pulse rounded-[4px] bg-skeleton" />
+        <span class="flex min-w-0 flex-1 flex-col gap-2">
+          <span class="h-4 w-2/3 animate-pulse rounded-sm bg-skeleton-strong" />
+          <span class="h-3 w-1/3 animate-pulse rounded-sm bg-skeleton-strong" />
+        </span>
+      </div>
+    </template>
+
+    <template data-search-result-template>
+      <a
+        class="flex min-h-[84px] items-center gap-3.5 rounded-sm px-2 py-1.5 transition-colors hover:bg-surface-hover focus-visible:bg-surface-hover"
+        href="#"
+        data-result-row
+      >
+        <span class="block aspect-[var(--nw-poster-ratio)] w-[56px] shrink-0 overflow-hidden rounded-[4px] bg-skeleton">
+          <img class="size-full object-cover" alt="" loading="lazy" decoding="async" />
+        </span>
+        <span class="flex min-w-0 flex-1 flex-col gap-1">
+          <span class="truncate text-heading font-semibold" data-result-title />
+          <span class="truncate text-meta text-faint" data-result-meta />
+        </span>
+      </a>
+    </template>
+
+    <template data-search-history-template>
+      <li class="flex items-center gap-1">
+        <button
+          class="flex min-h-9 min-w-0 flex-1 items-center gap-2 rounded-sm px-2 text-start text-ui text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+          type="button"
+          data-history-open
+        >
+          <Icon name="solar:clock-circle-bold" width="18" height="18" class="shrink-0 opacity-65" />
+          <span class="truncate" data-history-text />
+        </button>
+        <button
+          class="grid size-7 shrink-0 place-items-center rounded-sm text-faint transition-colors hover:bg-surface-hover hover:text-ink"
+          type="button"
+          data-history-remove
+          aria-label={text.search.removeHistory}
+        >
+          <Icon name="solar:close-bold" width="16" height="16" />
+        </button>
+      </li>
+    </template>
+
+    <template data-search-recent-template>
+      <a class="flex min-w-0 flex-col gap-1" href="#" data-result-row>
+        <span class="block aspect-[var(--nw-poster-ratio)] overflow-hidden rounded-poster bg-skeleton">
+          <img class="size-full object-cover" alt="" loading="lazy" decoding="async" />
+        </span>
+        <span class="truncate text-ui text-muted transition-colors group-hover:text-ink" data-recent-title />
+      </a>
+    </template>
+  </section>
+
+  <div
+    id="search-filters"
+    class="fixed inset-y-0 end-0 z-overlay flex w-[340px] max-w-[86vw] translate-x-full flex-col border-s border-line bg-elevated shadow-panel transition-transform duration-200 ease-[var(--nw-ease)] data-[open=true]:translate-x-0"
+    data-search-filters
+    data-open="false"
+  >
+    <header class="flex h-11 shrink-0 items-center justify-between border-b border-line px-3">
+      <span class="text-ui font-semibold">{text.filters.filter}</span>
+      <button
+        class="grid size-8 place-items-center rounded-sm text-muted transition-colors hover:text-ink"
+        type="button"
+        data-search-filters-close
+        aria-label={text.search.close}
+      >
+        <Icon name="solar:close-bold" width="18" height="18" />
+      </button>
+    </header>
+    <FilterRail className="min-h-0 flex-1" />
+  </div>
+</div>
+
+<script>
+  import "../scripts/search-filters-drawer";
+</script>

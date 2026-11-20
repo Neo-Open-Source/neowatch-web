@@ -1,0 +1,41 @@
+---
+import { Icon } from "astro-icon/components";
+import { watchEpisodes } from "../../data/watch";
+import { text } from "../../lib/text";
+import CarouselArrow from "../CarouselArrow.astro";
+
+const arrowOffset = "-translate-y-[calc(50%+11px)]";
+---
+
+<section class="bg-bg px-4 py-5 sm:px-6" aria-label={text.watch.episodes}>
+  <div class="group/carousel relative -mx-4 sm:-mx-6">
+    <CarouselArrow side="prev" offset={arrowOffset} data-watch-episode-prev hidden />
+    <ul
+      class="flex gap-3 overflow-x-auto px-4 py-1 sm:px-6 [scrollbar-width:none] [scroll-padding-inline:var(--nw-space-4)] [&::-webkit-scrollbar]:hidden"
+      data-watch-episodes
+    >
+      {
+        watchEpisodes.map((episode) => (
+          <li class="shrink-0">
+            <button
+              class="group w-[220px] text-start disabled:cursor-not-allowed"
+              type="button"
+              disabled={!episode.available}
+              aria-label={`${text.watch.episode} ${episode.number}${episode.available ? "" : `, ${text.watch.unavailable}`}`}
+              aria-pressed={episode.number === 1}
+              data-watch-episode={episode.number}
+            >
+              <span class="grid aspect-video w-full place-items-center rounded-poster bg-surface text-muted transition-colors group-enabled:group-hover:bg-surface-hover group-aria-pressed:bg-surface-hover group-aria-pressed:text-ink group-disabled:opacity-35">
+                {episode.available && <Icon name="solar:play-bold" width="24" height="24" />}
+              </span>
+              <span class="block pt-2 text-ui text-muted group-aria-pressed:font-semibold group-aria-pressed:text-ink">
+                {text.watch.episode} {episode.number}
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+    <CarouselArrow side="next" offset={arrowOffset} data-watch-episode-next hidden />
+  </div>
+</section>

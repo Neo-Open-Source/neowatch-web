@@ -1,0 +1,93 @@
+---
+import { Icon } from "astro-icon/components";
+import { text, type EntryStatus } from "../../lib/text";
+import EntryStepper from "./EntryStepper.astro";
+import EntryDate from "./EntryDate.astro";
+import EntryStatusSelect from "./EntryStatusSelect.astro";
+
+interface Props {
+  title: string;
+  totalEpisodes?: number | undefined;
+  statuses: { key: EntryStatus; label: string }[];
+}
+
+const { title, totalEpisodes, statuses } = Astro.props;
+---
+
+<dialog
+  class="w-[min(94vw,760px)] rounded-md border border-line bg-elevated p-0 shadow-panel backdrop:bg-scrim-strong"
+  data-entry-dialog
+>
+  <div class="flex max-h-[92vh] flex-col">
+    <div class="flex shrink-0 items-center gap-3 border-b border-line px-5 py-3.5">
+      <h2 class="min-w-0 flex-1 truncate text-heading font-semibold text-ink">{title}</h2>
+      <button
+        class="grid size-8 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-surface-hover aria-pressed:text-danger"
+        type="button"
+        aria-label={text.card.bookmark}
+        aria-pressed="false"
+        data-entry-favorite
+      >
+        <Icon name="solar:heart-bold" width="17" height="17" />
+      </button>
+      <button
+        class="grid size-8 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+        type="button"
+        data-entry-close
+        aria-label={text.search.close}
+      >
+        <Icon name="solar:close-bold" width="16" height="16" />
+      </button>
+    </div>
+
+    <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5">
+      <div class="grid grid-cols-3 gap-x-4 gap-y-4 max-md:grid-cols-2 max-sm:grid-cols-1">
+        <div>
+          <span class="mb-1.5 block text-meta text-faint">{text.detail.status}</span>
+          <EntryStatusSelect statuses={statuses} value={null} />
+        </div>
+        <EntryStepper id="entry-eps-input" label={text.detail.episodesSeen} max={totalEpisodes} />
+        <EntryStepper id="entry-score-input" label={text.detail.score} max={10} />
+
+        <EntryDate id="entry-start-input" label={text.detail.startDate} />
+        <EntryDate id="entry-finish-input" label={text.detail.finishDate} />
+        <EntryStepper id="entry-rewatch-input" label={text.detail.rewatches} />
+
+        <div class="col-span-3 max-md:col-span-2 max-sm:col-span-1">
+          <label class="mb-1.5 block text-meta text-faint" for="entry-notes-input">
+            {text.detail.notes}
+          </label>
+          <textarea
+            id="entry-notes-input"
+            class="h-10 w-full resize-none overflow-hidden rounded-sm border border-line bg-field px-3 py-2.5 text-ui leading-relaxed text-ink outline-none transition-[height,border-color] duration-200 placeholder:text-faint focus:h-24 focus:border-line-strong data-[filled=true]:h-24"
+            rows="1"
+            data-filled="false"
+            placeholder={text.detail.notesPlaceholder}></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-3 border-t border-line px-5 py-3">
+      <button
+        class="flex h-9 shrink-0 items-center gap-2 rounded-sm px-2.5 text-ui font-medium text-danger transition-colors hover:bg-danger/10"
+        type="button"
+        data-entry-remove
+      >
+        <Icon name="solar:trash-bin-trash-bold" width="15" height="15" class="shrink-0" />
+        {text.detail.delete}
+      </button>
+      <label class="ms-auto flex shrink-0 cursor-pointer items-center gap-2 text-ui text-muted">
+        <input class="size-4 accent-accent" type="checkbox" data-entry-private />
+        <span>{text.detail.private}</span>
+      </label>
+      <button
+        class="flex h-9 shrink-0 items-center gap-2 rounded-sm bg-ink px-5 text-ui font-semibold text-bg transition-opacity hover:opacity-90"
+        type="button"
+        data-entry-save
+      >
+        <Icon name="solar:check-bold" width="15" height="15" class="shrink-0" />
+        {text.detail.save}
+      </button>
+    </div>
+  </div>
+</dialog>

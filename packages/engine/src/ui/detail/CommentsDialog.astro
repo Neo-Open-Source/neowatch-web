@@ -1,0 +1,22 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../../lib/text";
+---
+
+<dialog
+  class="w-[min(92vw,460px)] rounded-md border border-line bg-panel p-0 shadow-panel backdrop:bg-scrim-strong"
+  data-comments-dialog
+>
+  <div class="flex items-center justify-between border-b border-line px-4 py-3">
+    <h2 class="text-ui font-semibold text-ink">{text.detail.comment}</h2>
+    <button
+      class="grid size-8 place-items-center rounded-sm text-faint transition-colors hover:bg-surface-hover hover:text-ink"
+      type="button"
+      data-comments-close
+      aria-label={text.search.close}
+    >
+      <Icon name="solar:close-bold" width="14" height="14" />
+    </button>
+  </div>
+  <p class="px-4 py-6 text-center text-ui text-faint">{text.detail.commentsEmpty}</p>
+</dialog>

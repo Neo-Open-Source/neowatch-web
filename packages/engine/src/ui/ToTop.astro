@@ -1,0 +1,15 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+---
+
+<button
+  class="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-menu inline-flex h-9 translate-y-2 items-center gap-1.5 rounded-full bg-elevated px-3 text-caption font-medium text-muted opacity-0 shadow-small transition-[opacity,translate] duration-150 ease-[var(--nw-ease)] data-[open=true]:translate-y-0 data-[open=true]:opacity-100 data-[open=true]:text-ink hover:text-accent"
+  type="button"
+  aria-label={text.nav.toTop}
+  data-to-top
+  inert
+>
+  <Icon name="solar:alt-arrow-up-linear" width="16" height="16" />
+  {text.nav.toTop}
+</button>

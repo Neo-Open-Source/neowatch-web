@@ -1,0 +1,24 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+
+interface Props {
+  label: string;
+  door?: "genres" | undefined;
+}
+
+const { label, door } = Astro.props;
+---
+
+<button
+  class="flex w-full items-center justify-between gap-3 py-2.5 text-ui transition-colors hover:text-accent disabled:cursor-not-allowed disabled:hover:text-ink"
+  type="button"
+  disabled={!door}
+  data-filters-open={door}
+>
+  <span class="font-medium">{label}</span>
+  <span class="inline-flex items-center gap-1 text-caption text-faint">
+    {text.filters.any}
+    <Icon name="solar:alt-arrow-right-linear" width="13" height="13" />
+  </span>
+</button>

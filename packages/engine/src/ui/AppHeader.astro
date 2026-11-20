@@ -1,0 +1,91 @@
+---
+import { Icon } from "astro-icon/components";
+import { readSession } from "../lib/auth/session";
+import type { ModuleConfig } from "../module";
+import { text } from "../lib/text";
+import UserMenu from "./UserMenu.astro";
+
+interface Props {
+  module: ModuleConfig;
+}
+
+const { module } = Astro.props;
+const path = Astro.url.pathname;
+const session = readSession(Astro.cookies);
+
+const isActive = (href: string): boolean => {
+  const target = new URL(href, Astro.url);
+  if (href.includes("?")) return path === target.pathname && Astro.url.search === target.search;
+  return path === target.pathname || (target.pathname !== "/" && path.startsWith(`${target.pathname}/`));
+};
+---
+
+<header class="sticky top-0 z-header bg-header pt-[env(safe-area-inset-top)]">
+  <div class="mx-auto flex h-[var(--nw-header-height)] w-full max-w-page items-center gap-3 px-4">
+    <a href="/" class="shrink-0 text-heading font-bold text-ink" aria-label={module.title}>
+      {module.title}
+    </a>
+
+    <nav class="ms-auto max-lg:hidden" aria-label={module.title}>
+      <ul class="flex items-center gap-1">
+        {
+          module.nav.map((link) => (
+            <li>
+              <a
+                class:list={[
+                  "flex h-[var(--nw-header-height)] items-center gap-2 px-3 text-ui whitespace-nowrap transition-colors",
+                  isActive(link.href)
+                    ? "font-semibold text-accent"
+                    : "font-medium text-muted hover:text-ink",
+                ]}
+                href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
+              >
+                {link.icon && <Icon name={link.icon} width="17" height="17" />}
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <button
+      class="grid size-9 max-lg:size-11 shrink-0 place-items-center rounded-md text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+      type="button"
+      data-search-open
+      aria-label={text.nav.search}
+    >
+      <Icon name="solar:magnifier-linear" width="20" height="20" />
+    </button>
+
+    <UserMenu user={session?.user ?? null} />
+  </div>
+
+  <nav
+    class="mx-auto hidden w-full max-w-page overflow-x-auto px-4 pb-1.5 [scrollbar-width:none] max-lg:block [&::-webkit-scrollbar]:hidden"
+    aria-label={module.title}
+  >
+    <ul class="flex gap-5">
+      {
+        module.nav.map((link) => (
+          <li>
+            <a
+              class:list={[
+                "flex items-center gap-1.5 pb-1 text-meta whitespace-nowrap transition-colors",
+                isActive(link.href)
+                  ? "font-semibold text-accent"
+                  : "font-medium text-muted hover:text-ink",
+              ]}
+              href={link.href}
+              aria-current={isActive(link.href) ? "page" : undefined}
+            >
+              {link.icon && <Icon name={link.icon} width="15" height="15" />}
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

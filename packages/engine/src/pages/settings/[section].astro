@@ -1,0 +1,29 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import SettingsView from "@neowatch/engine/views/SettingsView.astro";
+import { createApi } from "@neowatch/engine/lib/api";
+import { resolveSession } from "@neowatch/engine/lib/auth/session";
+import { buildId, siteOrigin } from "@neowatch/engine/lib/config";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { text } from "@neowatch/engine/lib/text";
+import { module } from "@neowatch/module";
+
+export function getStaticPaths() {
+  return ["info", "appearance", "notifications"].map((section) => ({ params: { section } }));
+}
+
+const session = await resolveSession(Astro.cookies, createApi());
+const section = Astro.params.section ?? "info";
+const meta = buildMeta({
+  site: siteOrigin(Astro.request),
+  siteName: module.brand,
+  path: `/settings/${section}`,
+  title: text.settings.title,
+  description: module.description,
+  noindex: true,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()} toTop={false}>
+  <SettingsView user={session?.user ?? null} section={section} />
+</Page>

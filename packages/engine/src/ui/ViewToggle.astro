@@ -1,0 +1,25 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+---
+
+<div class="flex items-center gap-1">
+  <button
+    class="grid size-8 place-items-center rounded-sm text-accent transition-colors hover:bg-surface-hover"
+    type="button"
+    data-view-set="grid"
+    aria-pressed="true"
+    aria-label={text.filters.viewGrid}
+  >
+    <Icon name="solar:grid-2x2-bold" width="18" height="18" />
+  </button>
+  <button
+    class="grid size-8 place-items-center rounded-sm text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+    type="button"
+    data-view-set="list"
+    aria-pressed="false"
+    aria-label={text.filters.viewList}
+  >
+    <Icon name="solar:list-bold" width="18" height="18" />
+  </button>
+</div>

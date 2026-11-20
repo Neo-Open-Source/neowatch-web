@@ -1,0 +1,34 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import CatalogView from "@neowatch/engine/views/CatalogView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { text } from "@neowatch/engine/lib/text";
+import { module } from "@neowatch/module";
+
+export const prerender = false;
+
+const sorts = Object.keys(text.sorts) as (keyof typeof text.sorts)[];
+const raw = Astro.url.searchParams.get("sort") ?? "";
+const sort = sorts.find((key) => key === raw) ?? "popular";
+
+const query: Record<string, string> = {};
+for (const [key, value] of Astro.url.searchParams) {
+  if (key !== "sort") query[key] = value;
+}
+
+const path = sort === "popular" ? "/catalog" : `/catalog?sort=${sort}`;
+const { site } = await requestContext(Astro);
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path,
+  title: text.sorts[sort],
+  description: `${text.sorts[sort]} — ${module.description}`,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <CatalogView sort={sort} query={query} />
+</Page>

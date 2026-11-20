@@ -1,0 +1,63 @@
+---
+import { Icon } from "astro-icon/components";
+import { text, type EntryStatus } from "../../lib/text";
+
+interface Props {
+  statuses: { key: EntryStatus; label: string }[];
+  value?: EntryStatus | null;
+}
+
+const { statuses, value = null } = Astro.props;
+const current = statuses.find((item) => item.key === value)?.label ?? text.detail.choose;
+---
+
+<div class="relative" data-status-select data-value={value ?? ""}>
+  <button
+    class="flex h-10 w-full items-center justify-between gap-2 rounded-sm border border-line bg-field px-3 text-start text-ui text-ink outline-none transition-colors hover:border-line-strong aria-expanded:border-line-strong"
+    type="button"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    data-status-trigger
+  >
+    <span data-status-label>{current}</span>
+    <Icon name="solar:alt-arrow-down-bold" class="shrink-0 text-faint" width="16" height="16" data-chevron />
+  </button>
+
+  <ul
+    class="fixed inset-auto m-0 w-[var(--nw-select-w,220px)] flex-col overflow-hidden rounded-md border border-line bg-panel p-1 shadow-panel [&:popover-open]:flex"
+    role="listbox"
+    popover="manual"
+    data-status-list
+  >
+    <li>
+      <button
+        class="flex w-full items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-start text-ui text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+        type="button"
+        role="option"
+        aria-selected={value === null ? "true" : "false"}
+        data-status-option=""
+      >
+        {text.detail.choose}
+        <span class="hidden" data-check><Icon name="solar:check-bold" width="14" height="14" /></span>
+      </button>
+    </li>
+    {
+      statuses.map(({ key, label }) => (
+        <li>
+          <button
+            class="flex w-full items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-start text-ui text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+            type="button"
+            role="option"
+            aria-selected={value === key ? "true" : "false"}
+            data-status-option={key}
+          >
+            {label}
+            <span class="hidden text-accent" data-check>
+              <Icon name="solar:check-bold" width="14" height="14" />
+            </span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</div>

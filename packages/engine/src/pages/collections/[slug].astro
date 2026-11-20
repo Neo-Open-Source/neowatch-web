@@ -1,0 +1,26 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import CollectionDetailView from "@neowatch/engine/views/CollectionDetailView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { module } from "@neowatch/module";
+
+export function getStaticPaths(): { params: { slug: string } }[] {
+  return [];
+}
+
+const { site } = await requestContext(Astro);
+const slug = Astro.params.slug ?? "";
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: `/collections/${slug}`,
+  title: module.title,
+  description: module.description,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <CollectionDetailView slug={slug} />
+</Page>

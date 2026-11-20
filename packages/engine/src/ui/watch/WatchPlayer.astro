@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../../lib/text";
+import WatchControls from "./WatchControls.astro";
+
+interface Props {
+  still?: string | undefined;
+}
+
+const { still } = Astro.props;
+---
+
+<section
+  class="relative isolate grid h-[100dvh] min-h-[320px] place-items-center overflow-hidden bg-black"
+  aria-label={text.watch.player}
+  data-watch-player
+>
+  {
+    still && (
+      <img
+        class="absolute inset-0 size-full object-cover opacity-40"
+        src={still}
+        alt=""
+        width="1280"
+        height="720"
+        fetchpriority="high"
+      />
+    )
+  }
+  <div class="absolute inset-0 bg-scrim" aria-hidden="true"></div>
+  <div class="relative flex flex-col items-center gap-4 px-4 text-center">
+    <button
+      class="grid size-20 place-items-center rounded-md border border-on-overlay/40 text-on-overlay transition-colors hover:bg-on-overlay/10"
+      type="button"
+      aria-label={text.detail.watch}
+      data-watch-play
+    >
+      <Icon name="solar:play-bold" width="30" height="30" />
+    </button>
+    <p class="max-w-sm text-ui text-on-overlay/80" data-watch-status hidden>
+      {text.watch.videoSoon}
+    </p>
+  </div>
+  <WatchControls />
+</section>

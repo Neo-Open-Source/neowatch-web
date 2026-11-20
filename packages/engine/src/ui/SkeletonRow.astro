@@ -1,0 +1,15 @@
+---
+interface Props {
+  withPoster?: boolean;
+}
+
+const { withPoster = true } = Astro.props;
+---
+
+<li class="flex items-center gap-3 border-b border-line py-2">
+  {withPoster && <div class="h-14 w-10 shrink-0 animate-pulse rounded-sm bg-skeleton" />}
+  <div class="flex min-w-0 flex-1 flex-col gap-1.5">
+    <div class="h-3 w-2/3 animate-pulse rounded-sm bg-skeleton-strong" />
+    <div class="h-2.5 w-1/4 animate-pulse rounded-sm bg-skeleton-strong" />
+  </div>
+</li>

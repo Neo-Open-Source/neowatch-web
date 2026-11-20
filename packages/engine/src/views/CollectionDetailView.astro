@@ -1,0 +1,33 @@
+---
+import { text } from "../lib/text";
+import Section from "../ui/Section.astro";
+import SkeletonCard from "../ui/SkeletonCard.astro";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<div class="py-5 pb-10">
+  <nav class="flex items-center gap-2 text-xs text-faint" aria-label={text.nav.breadcrumbs}>
+    <a class="transition-colors hover:text-ink" href="/collections">{text.nav.collections}</a>
+    <span aria-hidden="true">/</span>
+    <span class="truncate text-muted">{slug}</span>
+  </nav>
+
+  <header class="mt-4 flex flex-col gap-2">
+    <h1 class="h-7 w-72 animate-pulse rounded-sm bg-surface-hover" />
+    <div class="h-3 w-full max-w-2xl animate-pulse rounded-sm bg-surface" />
+    <div class="h-3 w-2/3 max-w-xl animate-pulse rounded-sm bg-surface" />
+  </header>
+
+  <div class="mt-8">
+    <Section title={text.nav.catalog}>
+      <ol class="grid grid-cols-[repeat(auto-fill,minmax(135px,1fr))] gap-x-3 gap-y-5 pt-3">
+        {Array.from({ length: 24 }, () => <SkeletonCard />)}
+      </ol>
+    </Section>
+  </div>
+</div>

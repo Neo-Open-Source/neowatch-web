@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  items: { badge: string; name: string; meta: string; href: string }[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="pt-5">
+  <h2 class="text-heading font-bold text-ink">{title}</h2>
+  <ul class="grid grid-cols-2 gap-x-3 gap-y-4 pt-2.5 sm:grid-cols-4">
+    {
+      items.map((item) => (
+        <li class="group/card min-w-0">
+          <a class="block select-none" href={item.href}>
+            <div class="relative overflow-hidden rounded-poster bg-skeleton">
+              <div class="aspect-[5/7] w-full transition-opacity group-hover/card:opacity-90" />
+              <span class="absolute bottom-1.5 left-1.5 max-w-[calc(100%-12px)] truncate rounded-sm bg-overlay px-1.5 py-0.5 text-caption font-medium text-on-overlay">
+                {item.badge}
+              </span>
+            </div>
+            <p class="line-clamp-2 pt-1.5 text-sm font-medium leading-snug text-ink">{item.name}</p>
+            <p class="pt-0.5 text-caption text-muted">{item.meta}</p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

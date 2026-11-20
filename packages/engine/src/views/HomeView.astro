@@ -1,0 +1,60 @@
+---
+import type { ModuleConfig } from "../module";
+import type { HomeData } from "../data/types";
+import { text } from "../lib/text";
+import CalendarWidget from "../ui/CalendarWidget.astro";
+import CollectionsWidget from "../ui/CollectionsWidget.astro";
+import NewsBanner from "../ui/NewsBanner.astro";
+import Panel from "../ui/Panel.astro";
+import PopularList from "../ui/PopularList.astro";
+import PosterRail from "../ui/PosterRail.astro";
+import SkeletonRail from "../ui/SkeletonRail.astro";
+
+interface Props {
+  module: ModuleConfig;
+  data: HomeData | null;
+}
+
+const { module, data } = Astro.props;
+
+const block = <T extends ModuleConfig["home"][number]["type"]>(type: T) =>
+  module.home.find((item): item is Extract<ModuleConfig["home"][number], { type: T }> => item.type === type);
+
+const recent = block("recent");
+const popular = block("popular");
+const collections = block("collections");
+---
+
+<div class="flex flex-col gap-3 py-2 pb-5">
+  <Panel title={recent?.title ?? text.nav.updates} icon="solar:refresh-bold" class="mx-auto w-full max-w-panels">
+    {
+      data ? (
+        <PosterRail cards={data.recent.slice(0, recent?.limit ?? 18)} showKind />
+      ) : (
+        <SkeletonRail />
+      )
+    }
+  </Panel>
+
+  <Panel title={text.home.history} icon="solar:clock-circle-bold" href="/history" class="mx-auto w-full max-w-panels">
+    <SkeletonRail count={16} backdrop />
+  </Panel>
+
+  <div class="mx-auto grid w-full max-w-panels grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+    <Panel class="min-w-0" title={popular?.title ?? text.home.popular} icon="solar:fire-bold" href={popular?.href ?? "/catalog?sort=popular"}>
+      <PopularList items={data?.popular ?? null} limit={popular?.limit ?? 8} />
+    </Panel>
+
+    <div class="flex min-w-0 flex-col gap-3">
+      <Panel title={text.home.calendar} icon="solar:calendar-bold" href="/calendar">
+        <CalendarWidget episodes={data?.episodes ?? null} />
+      </Panel>
+
+      <Panel title={collections?.title ?? text.nav.collections} icon="solar:bookmark-square-bold" href={collections?.href ?? "/collections"}>
+        <CollectionsWidget collections={data?.collections ?? null} />
+      </Panel>
+
+      <NewsBanner />
+    </div>
+  </div>
+</div>

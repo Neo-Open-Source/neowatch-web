@@ -1,0 +1,27 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import DetailView from "@neowatch/engine/views/DetailView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { module } from "@neowatch/module";
+import { detailMock, detailSlug, detailAliases } from "@neowatch/data";
+
+export function getStaticPaths() {
+  return [detailSlug, ...detailAliases].map((slug) => ({ params: { slug } }));
+}
+
+const { site } = await requestContext(Astro);
+const slug = Astro.params.slug ?? "";
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: `/${slug}`,
+  title: module.title,
+  description: module.description,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()} toTop={false}>
+  <DetailView {...detailMock} slug={slug} />
+</Page>

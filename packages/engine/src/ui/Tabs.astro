@@ -1,0 +1,36 @@
+---
+interface Tab {
+  href: string;
+  label: string;
+  active?: boolean;
+}
+
+interface Props {
+  tabs: Tab[];
+  ariaLabel: string;
+  class?: string;
+}
+
+const { tabs, ariaLabel, class: className = "" } = Astro.props;
+---
+
+<nav class={className} aria-label={ariaLabel}>
+  <ul class="flex gap-5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    {
+      tabs.map((tab) => (
+        <li class="shrink-0">
+          <a
+            class:list={[
+              "block border-b-2 border-transparent py-2 text-meta font-medium whitespace-nowrap transition-colors hover:text-ink",
+              tab.active ? "border-accent text-ink" : "text-muted",
+            ]}
+            href={tab.href}
+            aria-current={tab.active ? "page" : undefined}
+          >
+            {tab.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

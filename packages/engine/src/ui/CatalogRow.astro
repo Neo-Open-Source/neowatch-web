@@ -1,0 +1,60 @@
+---
+import { Icon } from "astro-icon/components";
+import type { PosterItem } from "../lib/poster-item";
+import { mediaUrl } from "../lib/media-url";
+import { text } from "../lib/text";
+import RankBadge from "./RankBadge.astro";
+
+interface Props {
+  card: PosterItem;
+  rank?: number | undefined;
+}
+
+const { card, rank } = Astro.props;
+const href = mediaUrl(card.key, card.titleEnglish, card.titleOriginal, card.title);
+const rating = card.rating > 0 ? card.rating.toFixed(1) : null;
+const meta = [text.kinds[card.kind], card.year ? String(card.year) : null, ...card.genresRu.slice(0, 3)]
+  .filter(Boolean)
+  .join(" · ");
+---
+
+<li class="flex gap-4 px-1 py-4" data-key={card.key} data-kind={card.kind} data-title={card.title}>
+  <a class="relative block w-[110px] shrink-0 overflow-hidden rounded-poster bg-skeleton sm:w-[150px]" href={href}>
+    {
+      card.poster ? (
+        <img
+          class="aspect-[5/7] w-full object-cover"
+          src={card.poster}
+          alt=""
+          width="150"
+          height="210"
+          loading="lazy"
+          data-card-poster
+        />
+      ) : (
+        <div class="aspect-[5/7] w-full" />
+      )
+    }
+    {rank !== undefined && (
+      <span class="absolute top-1.5 left-1.5">
+        <RankBadge rank={rank} />
+      </span>
+    )}
+  </a>
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <a class="text-ui font-medium text-ink transition-colors hover:text-accent-strong" href={href} data-card-title>
+      {card.title}
+    </a>
+    {meta && <p class="mt-1 truncate text-caption text-faint">{meta}</p>}
+    {rating && (
+      <p class="mt-2 inline-flex items-center gap-1 text-meta font-semibold text-ink">
+        <Icon name="solar:star-bold" width="13" height="13" class="text-accent" />
+        {rating}
+      </p>
+    )}
+    {card.description && (
+      <p class="mt-2 line-clamp-3 text-meta leading-relaxed text-muted">{card.description}</p>
+    )}
+  </div>
+</li>

@@ -1,0 +1,56 @@
+---
+import { text } from "../lib/text";
+
+interface Props {
+  main: { name: string; role: string; va: string }[];
+  side: { name: string; role: string; va: string }[];
+  voiceLanguage: string;
+}
+
+const { main, side, voiceLanguage } = Astro.props;
+---
+
+<section class="pt-5">
+  <div class="flex items-center justify-between gap-3">
+    <h2 class="text-heading font-bold text-ink">{text.detail.characters}</h2>
+    <span class="shrink-0 rounded-sm bg-elevated px-2.5 py-1 text-caption text-muted lg:px-3 lg:py-1.5 lg:text-meta">
+      {text.detail.voiceLanguage}: {voiceLanguage}
+    </span>
+  </div>
+
+  <ul class="grid gap-2 pt-2.5 lg:grid-cols-2">
+    {
+      main.map((char) => (
+        <li class="flex h-20 divide-x divide-line overflow-hidden rounded-md bg-elevated">
+          <div class="flex min-w-0 flex-1 items-center">
+            <div class="aspect-[5/7] h-full shrink-0 bg-skeleton" />
+            <div class="min-w-0 flex-1 px-3">
+              <p class="truncate text-ui font-medium text-ink">{char.name}</p>
+              <p class="truncate text-caption text-faint">{char.role}</p>
+            </div>
+          </div>
+          <div class="flex min-w-0 flex-1 items-center">
+            <div class="aspect-[5/7] h-full shrink-0 bg-skeleton" />
+            <div class="min-w-0 flex-1 px-3">
+              <p class="truncate text-meta text-muted">{char.va}</p>
+            </div>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <ul class="grid gap-2 pt-2 lg:grid-cols-2">
+    {
+      side.map((char) => (
+        <li class="flex h-20 items-center overflow-hidden rounded-md bg-elevated">
+          <div class="aspect-[5/7] h-full shrink-0 bg-skeleton" />
+          <div class="min-w-0 flex-1 px-3">
+            <p class="truncate text-ui font-medium text-ink">{char.name}</p>
+            <p class="truncate text-caption text-faint">{char.role}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>

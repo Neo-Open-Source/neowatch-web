@@ -1,0 +1,44 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../../lib/text";
+
+interface Props {
+  names: { ru: string; en: string; original: string; alternatives: string[] };
+}
+
+const { names } = Astro.props;
+---
+
+<dialog
+  class="w-[min(92vw,460px)] rounded-md border border-line bg-panel p-0 shadow-panel backdrop:bg-scrim-strong"
+  data-names-dialog
+>
+  <button
+    class="absolute top-2 right-2 z-10 grid size-8 place-items-center rounded-sm text-faint transition-colors hover:bg-surface-hover hover:text-ink"
+    type="button"
+    data-names-close
+    aria-label={text.search.close}
+  >
+    <Icon name="solar:close-bold" width="14" height="14" />
+  </button>
+  <dl class="px-5 py-2">
+    <div class="border-b border-line py-3">
+      <dt class="text-meta text-faint">{text.detail.nameRu}</dt>
+      <dd class="pt-1 text-ui text-ink">{names.ru}</dd>
+    </div>
+    <div class="border-b border-line py-3">
+      <dt class="text-meta text-faint">{text.detail.nameEn}</dt>
+      <dd class="pt-1 text-ui text-ink">{names.en}</dd>
+    </div>
+    <div class="border-b border-line py-3">
+      <dt class="text-meta text-faint">{text.detail.nameOriginal}</dt>
+      <dd class="pt-1 text-ui text-ink">{names.original}</dd>
+    </div>
+    <div class="py-3">
+      <dt class="text-meta text-faint">{text.detail.altNames}</dt>
+      <dd class="space-y-1 pt-1 text-ui text-ink">
+        {names.alternatives.map((name) => <div>{name}</div>)}
+      </dd>
+    </div>
+  </dl>
+</dialog>

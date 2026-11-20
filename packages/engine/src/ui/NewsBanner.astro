@@ -1,0 +1,26 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+---
+
+<div class="relative overflow-hidden rounded-md bg-elevated">
+  <a
+    class="flex items-center gap-3 px-4 py-3"
+    href={text.banner.tgUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Icon name="simple-icons:telegram" width="22" height="22" class="shrink-0 text-ink" />
+    <span class="min-w-0 flex-1">
+      <span class="block text-ui font-semibold">{text.banner.tg}</span>
+      <span class="block truncate text-caption text-faint">{text.banner.tgNote}</span>
+    </span>
+  </a>
+  <button
+    class="absolute top-1.5 right-1.5 grid size-6 max-lg:size-11 place-items-center rounded-sm text-faint transition-colors hover:text-ink"
+    type="button"
+    aria-label={text.banner.close}
+  >
+    <Icon name="solar:close-bold" width="12" height="12" />
+  </button>
+</div>

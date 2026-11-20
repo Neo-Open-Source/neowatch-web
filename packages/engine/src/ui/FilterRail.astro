@@ -1,0 +1,52 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import FilterCheckGroup from "./FilterCheckGroup.astro";
+import FilterDoorRow from "./FilterDoorRow.astro";
+import FilterRange from "./FilterRange.astro";
+import GenreDoor from "./GenreDoor.astro";
+
+const doorRows = [
+  { label: text.filters.genres, door: "genres" as const },
+  { label: text.filters.tags },
+  { label: text.filters.country },
+];
+const rangeFields = [text.filters.year];
+const checkGroups = [
+  { label: text.filters.age, count: 6 },
+  { label: text.filters.kind, count: 10 },
+  { label: text.filters.statusTitle, count: 4 },
+];
+const { className } = Astro.props;
+---
+
+<aside class:list={["relative flex flex-col overflow-hidden bg-elevated", className]} data-filters>
+  <div class="flex min-h-0 flex-1 flex-col" data-filters-main>
+    <div class="flex-1 overflow-y-auto px-4 py-2 [scrollbar-width:thin]">
+      {doorRows.map((row) => <FilterDoorRow label={row.label} door={row.door} />)}
+      {rangeFields.map((label) => <FilterRange label={label} />)}
+      {checkGroups.map((group) => <FilterCheckGroup label={group.label} count={group.count} />)}
+    </div>
+
+    <footer class="flex shrink-0 gap-2.5 px-4 py-3">
+      <button
+        class="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-md border border-line text-ui font-medium text-muted transition-colors hover:text-ink"
+        type="button"
+        disabled
+      >
+        <Icon name="solar:refresh-bold" width="15" height="15" />
+        {text.filters.reset}
+      </button>
+      <button
+        class="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-md border border-transparent bg-accent text-ui font-semibold text-on-accent transition-opacity hover:opacity-90"
+        type="button"
+        disabled
+      >
+        <Icon name="solar:check-bold" width="15" height="15" />
+        {text.filters.apply}
+      </button>
+    </footer>
+  </div>
+
+  <GenreDoor />
+</aside>

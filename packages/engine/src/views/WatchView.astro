@@ -1,0 +1,40 @@
+---
+import WatchEpisodes from "../ui/watch/WatchEpisodes.astro";
+import WatchHeader from "../ui/watch/WatchHeader.astro";
+import WatchPlayer from "../ui/watch/WatchPlayer.astro";
+import WatchSources from "../ui/watch/WatchSources.astro";
+
+interface Props {
+  title: string;
+  meta: string;
+  rating: number;
+  votes: string;
+  poster?: string | undefined;
+  banner?: string | undefined;
+  slug: string;
+}
+
+const { title, meta, rating, votes, poster, banner, slug } = Astro.props;
+const still = banner ?? poster;
+---
+
+<div class="flex flex-col" data-watch-view>
+  <WatchHeader title={title} meta={meta} rating={rating} votes={votes} poster={poster} slug={slug} />
+
+  <div
+    class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px] lg:data-[panel=hidden]:grid-cols-[minmax(0,1fr)] xl:grid-cols-[minmax(0,1fr)_380px]"
+    data-watch-body
+  >
+    <WatchPlayer still={still} />
+    <WatchSources />
+  </div>
+
+  <WatchEpisodes />
+</div>
+
+<script>
+  import "../scripts/watch-panel.ts";
+  import "../scripts/watch-player.ts";
+  import "../scripts/watch-sources.ts";
+  import "../scripts/watch-episodes.ts";
+</script>

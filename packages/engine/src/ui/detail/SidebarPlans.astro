@@ -1,0 +1,68 @@
+---
+import { Icon } from "astro-icon/components";
+import { text, type EntryStatus } from "../../lib/text";
+
+interface Props {
+  statuses: { key: EntryStatus; label: string }[];
+}
+
+const { statuses } = Astro.props;
+---
+
+<div class="relative">
+  <div
+    id="plans-menu"
+    class="absolute top-full left-0 z-20 mt-1 flex w-full flex-col overflow-hidden rounded-md border border-line bg-panel p-1 shadow-panel"
+    role="menu"
+    aria-labelledby="plans-button"
+    data-menu
+    data-open="false"
+    data-plans-menu
+  >
+    {
+      statuses.map(({ key, label }) => (
+        <button
+          class="w-full whitespace-nowrap rounded-sm px-2.5 py-1.5 text-start text-ui font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+          type="button"
+          role="menuitem"
+          data-status={key}
+        >
+          {label}
+        </button>
+      ))
+    }
+    <button
+      class="mt-1 flex w-full items-center gap-2 whitespace-nowrap rounded-sm border-t border-line px-2.5 pt-2 pb-1.5 text-start text-ui font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+      type="button"
+      role="menuitem"
+      data-entry-edit-menu
+    >
+      <Icon name="solar:pen-bold" width="14" height="14" class="shrink-0" />
+      {text.detail.openEdit}
+    </button>
+    <button
+      class="hidden w-full items-center gap-2 whitespace-nowrap rounded-sm px-2.5 pt-1 pb-1.5 text-start text-ui font-medium text-danger transition-colors hover:bg-surface-hover"
+      type="button"
+      role="menuitem"
+      data-entry-remove-menu
+    >
+      <Icon name="solar:trash-bin-trash-bold" width="14" height="14" class="shrink-0" />
+      {text.detail.planRemove}
+    </button>
+  </div>
+
+  <button
+    id="plans-button"
+    class="flex h-9 w-full items-center gap-2.5 rounded-b-md px-2.5 text-ui font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink"
+    type="button"
+    data-plans-button
+    aria-haspopup="menu"
+    aria-controls="plans-menu"
+    aria-expanded="false"
+  >
+    <Icon name="solar:add-bold" width="17" height="17" class="shrink-0" data-icon-add />
+    <Icon name="solar:bookmark-bold" width="17" height="17" class="hidden shrink-0" data-icon-bookmark />
+    <span class="truncate text-start" data-plans-label>{text.detail.plan}</span>
+    <Icon name="solar:alt-arrow-down-bold" width="15" height="15" class="ms-auto shrink-0" data-chevron />
+  </button>
+</div>

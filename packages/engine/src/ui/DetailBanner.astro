@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  banner?: string | undefined;
+  rating: number;
+  votes: string;
+}
+
+const { banner, rating, votes } = Astro.props;
+---
+
+<div class="relative -mx-4 h-56 overflow-hidden rounded-md bg-surface-hover md:-mx-6 md:h-72">
+  {
+    banner ? (
+      <img
+        class="absolute inset-0 h-full w-full object-cover"
+        src={banner}
+        alt=""
+        width="1400"
+        height="288"
+        loading="eager"
+      />
+    ) : (
+      <div class="absolute inset-0 bg-skeleton" aria-hidden="true" />
+    )
+  }
+  <div class="nw-banner-fade absolute inset-x-0 bottom-0 h-2/3" aria-hidden="true" />
+
+  <div class="absolute right-3 top-3 flex items-center gap-1.5 rounded-sm bg-overlay px-2 py-1 text-caption text-on-overlay">
+    <Icon name="solar:star-bold" width="12" height="12" class="text-accent" />
+    <span class="font-semibold">{rating.toFixed(1)}</span>
+    <span class="text-on-overlay/70">{votes}</span>
+  </div>
+</div>

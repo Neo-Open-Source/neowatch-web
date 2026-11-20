@@ -1,0 +1,85 @@
+---
+import { Icon } from "astro-icon/components";
+import { text } from "../lib/text";
+import { isWeekend } from "../lib/dates";
+
+interface Day {
+  key: string;
+  weekday: string;
+  day: string;
+  month?: string | undefined;
+  today?: boolean | undefined;
+  count?: number | undefined;
+}
+
+interface Props {
+  days?: Day[] | undefined;
+  activeKey?: string | undefined;
+}
+
+const { days, activeKey } = Astro.props;
+---
+
+<div class="relative pb-1">
+  <div
+    class="flex gap-1 overflow-x-auto scroll-smooth px-8 pt-2 [scrollbar-width:none] [scroll-padding-inline:2rem] [&::-webkit-scrollbar]:hidden"
+    data-calendar-strip
+  >
+    {
+      days
+        ? days.map((day, index) => {
+            const active = activeKey ? day.key === activeKey : index === 0;
+            return (
+              <button
+                class:list={[
+                  "relative flex h-[54px] min-w-[3.25rem] shrink-0 flex-col items-center justify-center rounded-md bg-surface px-2 font-semibold text-ink transition-colors duration-150 hover:bg-surface-hover data-[active=true]:bg-surface-hover data-[active=true]:font-bold",
+                  day.month && "ml-2",
+                ]}
+                type="button"
+                data-calendar-day={day.key}
+                data-active={active ? "true" : "false"}
+                aria-current={day.today ? "date" : undefined}
+                aria-pressed={active ? "true" : "false"}
+              >
+                {day.count !== undefined && (
+                  <span class="absolute -top-1 -right-1 rounded-sm bg-rating px-1 text-[10.5px] font-semibold text-on-rating">
+                    {day.count}
+                  </span>
+                )}
+                <span
+                  class:list={[
+                    "text-micro leading-none",
+                    isWeekend(day.weekday) ? "text-accent" : "text-faint",
+                  ]}
+                >
+                  {day.month ?? day.weekday}
+                </span>
+                <span class="mt-1 text-subtitle leading-none">{day.day}</span>
+                {day.today && (
+                  <span class="absolute bottom-1 size-1 rounded-full bg-accent" aria-hidden="true" />
+                )}
+              </button>
+            );
+          })
+        : Array.from({ length: 12 }, () => (
+            <span class="h-[54px] w-[52px] shrink-0 animate-pulse rounded-md bg-skeleton" />
+          ))
+    }
+  </div>
+  <button
+    class="absolute top-1/2 left-0 z-10 grid h-10 w-[26px] -translate-y-1/2 place-items-center rounded-sm bg-elevated/90 text-ink transition-colors hover:bg-surface-hover"
+    type="button"
+    data-calendar-scroll="prev"
+    aria-label={text.nav.prev}
+  >
+    <Icon name="solar:alt-arrow-left-bold" width="16" height="16" />
+  </button>
+  <button
+    class="absolute top-1/2 right-0 z-10 grid h-10 w-[26px] -translate-y-1/2 place-items-center rounded-sm bg-elevated/90 text-ink transition-colors hover:bg-surface-hover"
+    type="button"
+    data-calendar-scroll="next"
+    aria-label={text.nav.next}
+  >
+    <Icon name="solar:alt-arrow-right-bold" width="16" height="16" />
+  </button>
+</div>

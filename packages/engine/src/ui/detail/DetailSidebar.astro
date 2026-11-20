@@ -1,0 +1,63 @@
+---
+import { Icon } from "astro-icon/components";
+import { entryStatuses } from "../../lib/entry-status";
+import { text, type EntryStatus } from "../../lib/text";
+import SidebarPoster from "./SidebarPoster.astro";
+import SidebarActions from "./SidebarActions.astro";
+import SidebarPlans from "./SidebarPlans.astro";
+import SidebarNames from "./SidebarNames.astro";
+import SidebarInfo from "./SidebarInfo.astro";
+import EntryDialog from "./EntryDialog.astro";
+import CommentsDialog from "./CommentsDialog.astro";
+
+interface Props {
+  title: string;
+  slug: string;
+  poster?: string | undefined;
+  totalEpisodes?: number | undefined;
+  entry: { status: EntryStatus; eps: number; score: number } | null;
+  info: [string, string][];
+  names: { ru: string; en: string; original: string; alternatives: string[] };
+}
+
+const { title, slug, poster, totalEpisodes, entry, info, names } = Astro.props;
+
+const statuses = entryStatuses.map((key) => ({ key, label: text.entry[key] }));
+---
+
+<aside
+  class="relative z-10 min-w-0"
+  data-detail-entry
+  data-total={totalEpisodes ?? 0}
+  data-entry-status={entry?.status ?? ""}
+  data-entry-eps={entry?.eps ?? 0}
+  data-entry-score={entry?.score ?? 0}
+>
+  <SidebarPoster title={title} poster={poster} />
+
+  <div class="mt-3 rounded-md bg-elevated shadow-card">
+    <SidebarActions />
+    <a
+      class="flex h-9 w-full items-center justify-center gap-2 px-2 text-ui font-semibold text-accent transition-colors hover:bg-surface-hover"
+      href={`/watch/${slug}`}
+      data-watch-button
+    >
+      <Icon name="solar:play-bold" width="15" height="15" class="shrink-0" />
+      <span>{text.detail.watch}</span>
+      <span class="text-faint" aria-hidden="true">·</span>
+      <span class="text-ui font-medium text-muted" data-watch-progress></span>
+    </a>
+    <SidebarPlans statuses={statuses} />
+  </div>
+
+  <SidebarInfo info={info} names={names} />
+
+  <SidebarNames names={names} />
+  <EntryDialog title={title} totalEpisodes={totalEpisodes} statuses={statuses} />
+  <CommentsDialog />
+</aside>
+
+<script>
+  import "../../scripts/date-picker.ts";
+  import "../../scripts/detail-entry.ts";
+</script>

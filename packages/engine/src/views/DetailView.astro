@@ -1,0 +1,122 @@
+---
+import type { DetailData } from "../data/types";
+import { text } from "../lib/text";
+import DetailBanner from "../ui/DetailBanner.astro";
+import DetailSidebar from "../ui/detail/DetailSidebar.astro";
+import DetailPosterGrid from "../ui/DetailPosterGrid.astro";
+import DetailCharacters from "../ui/DetailCharacters.astro";
+
+type Props = DetailData & { slug: string };
+
+const props = Astro.props;
+
+const VISIBLE_CHIPS = 8;
+const hiddenCount = Math.max(0, props.tags.length - VISIBLE_CHIPS);
+---
+
+<div class="pb-10">
+  <div class="mx-auto max-w-6xl px-3">
+    <DetailBanner banner={props.banner} rating={props.rating} votes={props.votes} />
+
+    <div class="grid gap-x-5 gap-y-6 md:grid-cols-[260px_minmax(0,1fr)]">
+      <DetailSidebar
+        title={props.title}
+        slug={props.slug}
+        poster={props.poster}
+        totalEpisodes={props.progress.total}
+        entry={props.entry}
+        info={props.info}
+        names={props.names}
+      />
+
+      <main class="min-w-0 pt-5 md:pt-6">
+        <header class="min-w-0">
+          <h1 class="text-heading font-bold text-ink">{props.title}</h1>
+          {props.titleOriginal && <p class="pt-0.5 text-meta text-muted">{props.titleOriginal}</p>}
+        </header>
+
+        <section class="pt-4">
+          {
+            props.description ? (
+              <div data-expand>
+                <p class="line-clamp-4 text-sm leading-relaxed text-muted" data-description>
+                  {props.description}
+                </p>
+                <button
+                  class="pt-1 text-ui font-medium text-accent-strong transition-colors hover:text-accent"
+                  type="button"
+                  data-read-more
+                  data-label-more={text.detail.readMore}
+                  data-label-less={text.detail.readLess}
+                  aria-expanded="false"
+                  hidden
+                >
+                  {text.detail.readMore}
+                </button>
+              </div>
+            ) : (
+              <p class="text-sm text-faint">{text.detail.noDescription}</p>
+            )
+          }
+
+          {props.tags.length > 0 && (
+            <ul class="flex flex-wrap items-center gap-1.5 pt-3 lg:gap-2" data-chips>
+              <li>
+                <span class="inline-block select-none rounded-sm bg-danger px-2.5 py-1 text-caption font-semibold text-bg lg:px-3 lg:py-1.5 lg:text-meta">
+                  {text.detail.ageRating}
+                </span>
+              </li>
+              {
+                props.tags.slice(0, 3).map((tag, index) => (
+                  <li data-extra={index + 1 > VISIBLE_CHIPS ? "" : undefined} hidden={index + 1 > VISIBLE_CHIPS}>
+                    <a
+                      class="block select-none rounded-sm bg-surface-hover px-2.5 py-1 text-caption font-medium text-ink transition-colors hover:bg-line-strong lg:px-3 lg:py-1.5 lg:text-meta"
+                      href={`/catalog?genre=${encodeURIComponent(tag)}`}
+                    >
+                      {tag}
+                    </a>
+                  </li>
+                ))
+              }
+              {
+                props.tags.slice(3).map((tag, index) => (
+                  <li data-extra={index + 4 > VISIBLE_CHIPS ? "" : undefined} hidden={index + 4 > VISIBLE_CHIPS}>
+                    <a
+                      class="block select-none rounded-sm bg-surface-hover px-2.5 py-1 text-caption font-medium text-muted transition-colors hover:bg-line-strong hover:text-ink lg:px-3 lg:py-1.5 lg:text-meta"
+                      href={`/catalog?tag=${encodeURIComponent(tag)}`}
+                    >
+                      #{tag}
+                    </a>
+                  </li>
+                ))
+              }
+              {
+                hiddenCount > 0 && (
+                  <li>
+                    <button
+                      class="rounded-sm px-2.5 py-1 text-caption text-faint transition-colors hover:text-ink lg:px-3 lg:py-1.5 lg:text-meta"
+                      type="button"
+                      data-chips-more
+                    >
+                      {text.detail.moreTags} {hiddenCount}
+                    </button>
+                  </li>
+                )
+              }
+            </ul>
+          )}
+        </section>
+
+        {props.related.length > 0 && <DetailPosterGrid title={text.detail.related} items={props.related} />}
+        {(props.mainChars.length > 0 || props.sideChars.length > 0) && (
+          <DetailCharacters main={props.mainChars} side={props.sideChars} voiceLanguage={props.voiceLanguage} />
+        )}
+        {props.similar.length > 0 && <DetailPosterGrid title={text.detail.similar} items={props.similar} />}
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+  import "../scripts/detail-expand";
+</script>

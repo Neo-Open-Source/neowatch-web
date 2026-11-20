@@ -1,0 +1,16 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  rating: number;
+}
+
+const { rating } = Astro.props;
+---
+
+<span
+  class="inline-flex h-[24px] items-center justify-center gap-1 rounded-sm bg-rating px-1.5 text-meta font-semibold text-on-rating shadow-chip"
+>
+  <Icon name="solar:star-bold" width="13" height="13" />
+  {rating.toFixed(1)}
+</span>

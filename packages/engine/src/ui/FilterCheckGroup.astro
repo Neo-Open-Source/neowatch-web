@@ -1,0 +1,22 @@
+---
+interface Props {
+  label: string;
+  count?: number;
+}
+
+const { label, count = 6 } = Astro.props;
+---
+
+<div class="py-2.5">
+  <p class="pb-2 text-meta font-semibold text-muted">{label}</p>
+  <div class="grid grid-cols-2 gap-x-4 gap-y-2" aria-hidden="true">
+    {
+      Array.from({ length: count }, () => (
+        <span class="flex items-center gap-2">
+          <span class="size-[16px] shrink-0 animate-pulse rounded-sm border border-line-strong bg-skeleton" />
+          <span class="h-3 w-2/3 animate-pulse rounded-sm bg-skeleton-strong" />
+        </span>
+      ))
+    }
+  </div>
+</div>

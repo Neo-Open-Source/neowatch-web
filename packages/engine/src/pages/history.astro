@@ -1,0 +1,23 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import HistoryView from "@neowatch/engine/views/HistoryView.astro";
+import { buildId } from "@neowatch/engine/lib/config";
+import { requestContext } from "@neowatch/engine/lib/context";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { text } from "@neowatch/engine/lib/text";
+import { module } from "@neowatch/module";
+
+const { site } = await requestContext(Astro);
+const meta = buildMeta({
+  site,
+  siteName: module.brand,
+  path: "/history",
+  title: text.home.history,
+  description: module.description,
+  noindex: true,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <HistoryView />
+</Page>

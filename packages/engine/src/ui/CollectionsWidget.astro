@@ -1,0 +1,16 @@
+---
+import type { CollectionSummary } from "../data/types";
+import CollectionTile from "./CollectionTile.astro";
+
+interface Props {
+  collections: CollectionSummary[] | null;
+  limit?: number;
+}
+
+const { collections, limit = 4 } = Astro.props;
+const items = collections?.slice(0, limit) ?? Array.from({ length: limit }, () => null);
+---
+
+<div class="grid grid-cols-2 gap-3">
+  {items.map((collection) => <CollectionTile collection={collection} />)}
+</div>

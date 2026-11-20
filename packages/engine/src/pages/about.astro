@@ -1,0 +1,26 @@
+---
+import Page from "@neowatch/engine/layouts/Page.astro";
+import { buildId, siteOrigin } from "@neowatch/engine/lib/config";
+import { buildMeta } from "@neowatch/engine/lib/seo/head";
+import { text } from "@neowatch/engine/lib/text";
+import { module } from "@neowatch/module";
+
+const meta = buildMeta({
+  site: siteOrigin(Astro.request),
+  siteName: module.brand,
+  path: "/about",
+  title: text.pages.about,
+  description: module.description,
+  noindex: true,
+});
+---
+
+<Page meta={meta} module={module} build={buildId()}>
+  <section class="grid gap-4 py-5">
+    <h1 class="text-heading font-semibold text-ink">{text.pages.about}</h1>
+    <div class="grid gap-3 rounded-md bg-elevated p-4">
+      <p class="text-ui leading-relaxed text-ink">{text.siteDescription}</p>
+      <p class="text-ui leading-relaxed text-muted">{module.tagline}</p>
+    </div>
+  </section>
+</Page>

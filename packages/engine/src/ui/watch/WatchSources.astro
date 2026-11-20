@@ -1,0 +1,83 @@
+---
+import { watchSources, watchTracks } from "../../data/watch";
+import { text } from "../../lib/text";
+
+const labels = new Map(watchTracks.map((track) => [track.id, track.label]));
+const initialTrack = watchSources[0]?.tracks.voice[0]?.trackId ?? "";
+---
+
+<aside
+  class="flex h-[70dvh] min-h-0 w-full flex-col overflow-hidden bg-elevated data-[panel=hidden]:pointer-events-none data-[panel=hidden]:animate-search-panel-out data-[panel=hidden]:opacity-0 data-[panel=shown]:animate-search-panel max-lg:data-[panel=hidden]:h-0 lg:h-[100dvh] lg:w-[340px] lg:overflow-visible xl:w-[380px]"
+  aria-label={text.watch.sources}
+  data-watch-sidebar
+>
+  <div class="flex h-full min-h-0 w-full flex-col" data-watch-sidebar-inner>
+    <div class="flex h-16 shrink-0 items-center gap-1 px-3">
+    {
+      watchSources.map((source, index) => (
+        <button
+          class="h-10 rounded-sm px-4 text-ui font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink aria-pressed:bg-surface aria-pressed:font-semibold aria-pressed:text-ink"
+          type="button"
+          aria-pressed={index === 0}
+          data-watch-source={source.id}
+        >
+          {source.label}
+        </button>
+      ))
+    }
+  </div>
+  {
+    watchSources.map((source, sourceIndex) => (
+      <div class="flex min-h-0 flex-1 flex-col" data-watch-panel={source.id} hidden={sourceIndex !== 0}>
+        <div class="flex items-center gap-1 border-y border-line px-3 py-2" role="group" aria-label={text.watch.player}>
+          <button
+            class="h-9 rounded-sm px-3 text-ui font-medium text-ink transition-colors hover:bg-surface-hover aria-pressed:bg-surface"
+            type="button"
+            aria-pressed="true"
+            data-watch-tab="voice"
+          >
+            {text.watch.dubbing}
+            <span class="ps-1.5 text-caption text-faint">{source.tracks.voice.length}</span>
+          </button>
+          <button
+            class="h-9 rounded-sm px-3 text-ui font-medium text-muted transition-colors hover:bg-surface-hover hover:text-ink aria-pressed:bg-surface aria-pressed:text-ink"
+            type="button"
+            aria-pressed="false"
+            data-watch-tab="subtitle"
+          >
+            {text.watch.subtitles}
+            <span class="ps-1.5 text-caption text-faint">{source.tracks.subtitle.length}</span>
+          </button>
+        </div>
+        {
+          (["voice", "subtitle"] as const).map((tab) => (
+            <ul
+              class="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              data-watch-list={tab}
+              hidden={tab !== "voice"}
+            >
+              {source.tracks[tab].map((item) => (
+                <li>
+                  <button
+                    class="flex h-11 w-full items-center justify-between gap-3 rounded-sm px-3 text-start text-subtitle text-muted transition-colors hover:bg-surface-hover hover:text-ink aria-pressed:bg-surface aria-pressed:font-semibold aria-pressed:text-ink"
+                    type="button"
+                    aria-pressed={tab === "voice" && item.trackId === initialTrack}
+                    data-watch-track={item.trackId}
+                  >
+                    <span class="min-w-0 truncate">{labels.get(item.trackId) ?? item.trackId}</span>
+                    {item.quality && (
+                      <span class="shrink-0 rounded-sm bg-bg px-2 py-1 text-caption font-medium text-faint">
+                        {item.quality}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ))
+        }
+      </div>
+    ))
+  }
+  </div>
+</aside>

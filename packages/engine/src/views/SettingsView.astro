@@ -1,0 +1,33 @@
+---
+import type { User } from "../lib/api/account-types";
+import { text } from "../lib/text";
+import SettingsAppearance from "../ui/settings/SettingsAppearance.astro";
+import SettingsNav from "../ui/settings/SettingsNav.astro";
+import SettingsNotifications from "../ui/settings/SettingsNotifications.astro";
+import SettingsProfile from "../ui/settings/SettingsProfile.astro";
+
+interface Props {
+  user: User | null;
+  section: string;
+}
+
+const { user, section } = Astro.props;
+const active = section === "appearance" || section === "notifications" ? section : "info";
+---
+
+<div class="grid gap-4">
+  <h1 class="text-heading font-semibold text-ink">{text.settings.title}</h1>
+  <div class="grid items-start gap-4 md:grid-cols-[220px_minmax(0,1fr)]">
+    <SettingsNav active={active} />
+    <div class="grid min-w-0 gap-4">
+      {active === "info" && <SettingsProfile user={user} />}
+      {active === "appearance" && <SettingsAppearance />}
+      {active === "notifications" && <SettingsNotifications />}
+    </div>
+  </div>
+</div>
+
+<script>
+  import "../scripts/settings-appearance.ts";
+  import "../scripts/settings-notifications.ts";
+</script>
